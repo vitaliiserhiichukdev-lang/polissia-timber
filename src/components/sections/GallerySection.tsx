@@ -103,9 +103,9 @@ export default function GallerySection() {
                   />
                   <span
                     aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-t from-ink-900/80 via-ink-900/10 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100"
+                    className="photo-caption-scrim absolute inset-0 bg-gradient-to-t from-ink-900/85 via-ink-900/20 to-transparent"
                   />
-                  <span className="pointer-events-none absolute inset-x-3 bottom-3 flex items-center justify-between gap-2 opacity-0 transition-all duration-400 ease-expo group-hover:translate-y-0 group-hover:opacity-100 md:translate-y-2">
+                  <span className="photo-caption pointer-events-none absolute inset-x-3 bottom-3 flex items-center justify-between gap-2">
                     <span className="text-xs font-medium text-inverse">{photo.caption}</span>
                     <span className="grid size-7 shrink-0 place-items-center rounded-full bg-white/15 text-inverse backdrop-blur">
                       <Icon name="plus" size={14} />

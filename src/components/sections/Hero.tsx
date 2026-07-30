@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import Icon from '../ui/Icon'
+import useMediaQuery from '../../hooks/useMediaQuery'
 import { useI18n } from '../../i18n/useI18n'
 
 const fadeUp = {
@@ -14,7 +15,17 @@ const easeExpo = [0.16, 1, 0.3, 1] as const
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
   const reduceMotion = useReducedMotion()
+  const isDesktop = useMediaQuery('(min-width: 768px)')
   const { t, heroPhoto, heroInsetPhoto } = useI18n()
+
+  /**
+   * Scroll-linked parallax is a desktop-only flourish. On a phone the hero
+   * fills the viewport, so the fade starts on the very first swipe and leaves
+   * the headline sitting on a composited layer at fractional opacity — which
+   * mobile browsers render with different antialiasing, so the text reads as a
+   * slightly wrong colour. Keeping the layer flat on small screens fixes it.
+   */
+  const parallax = isDesktop && !reduceMotion
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -36,7 +47,7 @@ export default function Hero() {
       {/* Parallax background */}
       <motion.div
         className="absolute inset-0 -z-20"
-        style={reduceMotion ? undefined : { y: bgY, scale: bgScale }}
+        style={parallax ? { y: bgY, scale: bgScale } : undefined}
       >
         <img
           src={heroPhoto.src}
@@ -62,7 +73,7 @@ export default function Hero() {
 
       <motion.div
         className="container-page relative"
-        style={reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }}
+        style={parallax ? { y: contentY, opacity: contentOpacity } : undefined}
       >
         <motion.div
           initial="hidden"

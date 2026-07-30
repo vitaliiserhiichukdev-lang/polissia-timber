@@ -25,8 +25,8 @@ export interface ResolvedPhoto {
 export interface ResolvedGradePrice {
   code: GradeCode
   label: string
-  list: number
-  current: number | null
+  /** null → quoted on request. */
+  price: number | null
 }
 
 export interface ResolvedPriceGroup {
@@ -148,8 +148,7 @@ export function buildContent(t: Dictionary): Content {
     prices: group.prices.map((price) => ({
       code: price.grade,
       label: gradeLabel(price.grade),
-      list: price.list,
-      current: price.current,
+      price: price.price,
     })),
   }))
 
