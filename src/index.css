@@ -1,111 +1,419 @@
-/* :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import 'tailwindcss';
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+/* ==========================================================================
+   Design tokens — premium European timber brand.
+   Everything below is exposed to Tailwind as utilities (bg-ink-900,
+   font-display, text-h1, shadow-lift, py-section, max-w-page, …).
+   ========================================================================== */
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme {
+  /* Neutrals: charcoal → warm paper */
+  --color-ink-900: #14120f;
+  --color-ink-800: #1c1915;
+  --color-ink-700: #26221c;
+  --color-ink-600: #35302a;
+  --color-ink-500: #4a443c;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  --color-paper: #fbf9f5;
+  --color-sand-50: #f6f1e8;
+  --color-sand-100: #efe8db;
+  --color-sand-200: #e3d9c7;
+  --color-sand-300: #d2c4ab;
+
+  /* Wood + forest accents */
+  --color-oak-700: #7d5426;
+  --color-oak-600: #9a6a2f;
+  --color-oak-500: #b4813e;
+  --color-oak-400: #c99a5c;
+  --color-oak-200: #e6cda6;
+  --color-forest-800: #16281e;
+  --color-forest-700: #1f3428;
+  --color-forest-500: #2f5340;
+  --color-forest-300: #6d8c78;
+
+  /* Semantic */
+  --color-body: #241f19;
+  --color-muted: #635a4e;
+  --color-inverse: #f5efe4;
+  --color-inverse-muted: #bdb2a0;
+  --color-line: rgba(36, 31, 25, 0.12);
+  --color-line-strong: rgba(36, 31, 25, 0.22);
+  --color-line-inverse: rgba(245, 239, 228, 0.16);
+
+  /* Typography */
+  --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Palatino,
+    'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+
+  --text-h1: clamp(2.75rem, 1.85rem + 4.2vw, 5.5rem);
+  --text-h1--line-height: 1.02;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h2: clamp(2.25rem, 1.7rem + 2.6vw, 4rem);
+  --text-h2--line-height: 1.06;
+  --text-h2--letter-spacing: -0.025em;
+  --text-h3: clamp(1.5rem, 1.32rem + 0.85vw, 2rem);
+  --text-h3--line-height: 1.15;
+  --text-h3--letter-spacing: -0.02em;
+  --text-h4: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --text-h4--line-height: 1.25;
+  --text-h4--letter-spacing: -0.015em;
+  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --text-lead--line-height: 1.6;
+  --text-body: clamp(0.9375rem, 0.91rem + 0.15vw, 1.0625rem);
+  --text-body--line-height: 1.65;
+  --text-tiny: 0.6875rem;
+  --text-tiny--line-height: 1.4;
+
+  /* Shape + depth */
+  --radius-4xl: 2rem;
+  --shadow-soft: 0 1px 2px rgba(20, 18, 15, 0.05), 0 2px 8px rgba(20, 18, 15, 0.04);
+  --shadow-mid: 0 2px 4px rgba(20, 18, 15, 0.05), 0 12px 28px rgba(20, 18, 15, 0.08);
+  --shadow-lift: 0 4px 8px rgba(20, 18, 15, 0.06), 0 28px 60px rgba(20, 18, 15, 0.14);
+
+  /* Rhythm */
+  --spacing-section: clamp(4.5rem, 8vw, 8rem);
+  --spacing-gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --spacing-header: 5rem;
+  --container-page: 80rem;
+  --container-prose: 58rem;
+
+  /* Motion */
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ------------------------------------------------------------------ base */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--spacing-header) + 1rem);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    letter-spacing: 0.01em;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body.is-locked {
+    overflow: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-oak-500);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background-color: var(--color-oak-200);
+    color: var(--color-ink-900);
+  }
+
+  /* Native controls should follow the warm palette, not the OS blue. */
+  input,
+  select,
+  textarea {
+    accent-color: var(--color-oak-600);
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+/* ------------------------------------------------------- component layer */
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
   }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-oak-600);
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  .eyebrow-inverse {
+    color: var(--color-oak-400);
+  }
+
+  /* Buttons — the wipe-fill hover is the site's signature interaction. */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.95rem 1.6rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 550;
+    line-height: 1.2;
+    text-align: center;
+    cursor: pointer;
+    isolation: isolate;
+    overflow: hidden;
+    background-color: var(--color-ink-900);
+    color: var(--color-inverse);
+    transition: transform 0.35s var(--ease-expo), box-shadow 0.35s var(--ease-smooth),
+      color 0.3s var(--ease-smooth), background-color 0.3s var(--ease-smooth),
+      border-color 0.3s var(--ease-smooth);
+  }
+
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--color-oak-600);
+    transform: translateY(101%);
+    transition: transform 0.45s var(--ease-expo);
+  }
+
+  .btn:hover::after,
+  .btn:focus-visible::after {
+    transform: translateY(0);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-mid);
+    color: #fff;
+    border-color: transparent;
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-light {
+    background-color: #fff;
+    color: var(--color-ink-900);
+    border-color: var(--color-line);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: var(--color-body);
+    border-color: var(--color-line-strong);
+  }
+
+  .btn-glass {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--color-inverse);
+    border-color: rgba(255, 255, 255, 0.32);
+    backdrop-filter: blur(8px);
+  }
+
+  .btn-oak {
+    background-color: var(--color-oak-600);
+    color: #fff;
+  }
+
+  .btn-oak::after {
+    background-color: var(--color-ink-900);
+  }
+
+  .btn-sm {
+    padding: 0.65rem 1.15rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-icon {
+    display: inline-flex;
+    transition: transform 0.35s var(--ease-expo);
+  }
+
+  .btn:hover .btn-icon {
+    transform: translateX(3px);
+  }
+
+  /* Underline-on-hover text link */
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 2px;
+    font-weight: 550;
+    color: var(--color-oak-600);
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s var(--ease-expo);
+  }
+
+  .link-arrow:hover {
+    background-size: 100% 1px;
+  }
+
+  .card-surface {
+    background-color: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.5s var(--ease-expo), box-shadow 0.5s var(--ease-smooth),
+      border-color 0.4s var(--ease-smooth);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+    border-color: var(--color-sand-300);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background-color: var(--color-sand-100);
+    color: var(--color-ink-700);
+    font-size: 0.75rem;
+    font-weight: 550;
+    white-space: nowrap;
+  }
+
+  .chip-dark {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--color-line-inverse);
+    color: var(--color-inverse);
+  }
+
+  .field {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 0.75rem;
+    background-color: #fff;
+    font-size: 0.9375rem;
+    transition: border-color 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth);
+  }
+
+  .field::placeholder {
+    color: color-mix(in srgb, var(--color-muted) 65%, transparent);
+  }
+
+  .field:focus {
+    outline: none;
+    border-color: var(--color-oak-500);
+    box-shadow: 0 0 0 4px rgba(180, 129, 62, 0.16);
+  }
+
+  .field-error {
+    border-color: #b4442f;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 200;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0 0 0.75rem 0.75rem;
+    background-color: var(--color-ink-900);
+    color: var(--color-inverse);
+    transform: translate(-50%, -110%);
+    transition: transform 0.2s var(--ease-smooth);
+  }
+
+  .skip-link:focus-visible {
+    transform: translate(-50%, 0);
   }
 }
 
-body {
-  margin: 0;
+/* --------------------------------------------------------------- utilities */
+
+/* Fine dotted overlay that reads as paper / wood grain. */
+@utility grain {
+  position: relative;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+@utility grain-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(180, 129, 62, 0.16) 1px, transparent 1px);
+  background-size: 4px 4px;
+  mix-blend-mode: multiply;
+  opacity: 0.35;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+@utility grain-layer-dark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(201, 154, 92, 0.5) 1px, transparent 1px);
+  background-size: 4px 4px;
+  mix-blend-mode: screen;
+  opacity: 0.12;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+/* Hide scrollbars on horizontal rails without losing scrollability. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-} */

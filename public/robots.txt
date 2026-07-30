@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dubrava-timber.com/sitemap.xml
