@@ -1,11 +1,11 @@
 import Reveal from '../ui/Reveal'
-import type { SpecGroup } from '../../data/products'
+import type { SpecGroupText } from '../../i18n/types'
 
 interface SpecTableProps {
-  groups: SpecGroup[]
+  groups: SpecGroupText[]
 }
 
-/** Technical characteristics, grouped (Material / Dimensions / Delivery). */
+/** Technical characteristics, grouped (material / dimensions / delivery). */
 export default function SpecTable({ groups }: SpecTableProps) {
   return (
     <div className="grid gap-5 md:grid-cols-3">

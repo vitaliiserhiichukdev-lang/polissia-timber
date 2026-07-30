@@ -88,7 +88,11 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: calc(var(--spacing-header) + 1rem);
+    /* Anchor targets land flush with the bottom of the sticky header. The 2px
+       tuck-under stops a sliver of the previous section showing through the
+       seam — visible as a light strip above a dark section. Sections carry
+       their own top padding, so the heading still gets breathing room. */
+    scroll-padding-top: calc(var(--spacing-header) - 2px);
     -webkit-text-size-adjust: 100%;
   }
 

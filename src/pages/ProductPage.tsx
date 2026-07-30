@@ -11,20 +11,26 @@ import Reveal from '../components/ui/Reveal'
 import Icon from '../components/ui/Icon'
 import useSeo from '../hooks/useSeo'
 import useJsonLd from '../hooks/useJsonLd'
-import { company } from '../data/company'
-import { formatPrice, getProduct, products } from '../data/products'
+import { brand, productSlugs, type ProductSlug } from '../data/contact'
+import { formatNumber } from '../data/pricing'
+import { fill } from '../i18n/content'
+import { useI18n } from '../i18n/useI18n'
+
+const isProductSlug = (value: string | undefined): value is ProductSlug =>
+  productSlugs.includes(value as ProductSlug)
 
 export default function ProductPage() {
   const { slug } = useParams()
-  const product = getProduct(slug)
+  const { t, products, productBySlug } = useI18n()
+  const product = isProductSlug(slug) ? productBySlug[slug] : undefined
 
   useSeo({
     title: product
-      ? `${product.name} — ${product.species} | ${company.name}`
-      : `Product not found | ${company.name}`,
-    description: product?.shortDescription ?? '',
+      ? `${product.name} — ${product.species} | ${brand.name}`
+      : t.meta.notFoundTitle,
+    description: product?.shortDescription ?? t.meta.notFoundDescription,
     path: `/products/${slug}`,
-    image: product?.cardImage,
+    image: product?.cardPhoto.src,
   })
 
   const jsonLd = useMemo(
@@ -38,8 +44,8 @@ export default function ProductPage() {
             category: product.category,
             material: product.species,
             countryOfOrigin: 'UA',
-            image: `${company.site}${product.cardImage}`,
-            brand: { '@type': 'Brand', name: company.name },
+            image: `${brand.site}${product.cardPhoto.src}`,
+            brand: { '@type': 'Brand', name: brand.name },
             ...(product.priceFrom
               ? {
                   offers: {
@@ -47,7 +53,7 @@ export default function ProductPage() {
                     priceCurrency: 'EUR',
                     lowPrice: product.priceFrom,
                     availability: 'https://schema.org/InStock',
-                    seller: { '@type': 'Organization', name: company.legalName },
+                    seller: { '@type': 'Organization', name: brand.legalName },
                   },
                 }
               : {}),
@@ -67,25 +73,26 @@ export default function ProductPage() {
       {/* ------------------------------------------------------------ intro */}
       <section className="relative overflow-hidden bg-ink-900 pt-12 pb-section text-inverse">
         <span aria-hidden="true" className="grain-layer-dark" />
-        <img
-          src={product.heroImage}
-          alt=""
+        {/* Decorative echo of the product photo, masked so it has no hard edge */}
+        <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-24 right-0 hidden h-[520px] w-1/2 object-cover opacity-15 blur-[2px] lg:block"
-        />
+          className="pointer-events-none absolute -top-24 right-0 hidden h-[520px] w-1/2 opacity-15 [mask-image:linear-gradient(to_left,black,transparent_75%)] lg:block"
+        >
+          <img src={product.heroPhoto.src} alt="" className="size-full object-cover blur-[2px]" />
+        </div>
 
         <div className="container-page relative">
           <nav aria-label="Breadcrumb" className="mb-10 text-sm text-inverse-muted">
             <ol className="flex flex-wrap items-center gap-2">
               <li>
                 <Link to="/" className="transition-colors hover:text-white">
-                  Home
+                  {t.common.home}
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
               <li>
                 <Link to="/#products" className="transition-colors hover:text-white">
-                  Products
+                  {t.common.products}
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
@@ -133,24 +140,26 @@ export default function ProductPage() {
 
               <div className="rounded-3xl border border-white/12 bg-white/5 p-5">
                 <p className="text-xs font-semibold tracking-[0.12em] text-oak-400 uppercase">
-                  Price information
+                  {t.productPage.priceInformation}
                 </p>
                 <p className="mt-2 font-display text-2xl text-inverse">
-                  {product.priceFrom ? `from € ${formatPrice(product.priceFrom)} / m³` : 'On request'}
+                  {product.priceFrom
+                    ? `${t.common.priceFrom} € ${formatNumber(product.priceFrom)} ${t.common.perCubicMetre}`
+                    : t.common.onRequest}
                 </p>
                 <p className="mt-2 text-sm text-inverse-muted">{product.priceNote}</p>
               </div>
 
               <div className="flex flex-wrap gap-3">
                 <a href="#inquiry" className="btn btn-oak">
-                  Request a quote
+                  {t.common.requestQuote}
                   <span className="btn-icon">
                     <Icon name="arrowRight" size={18} />
                   </span>
                 </a>
                 {product.priceGroups.length > 0 && (
                   <a href="#prices" className="btn btn-glass">
-                    See price list
+                    {t.productPage.seePriceList}
                   </a>
                 )}
               </div>
@@ -174,7 +183,7 @@ export default function ProductPage() {
       <section className="py-section">
         <div className="container-page grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <Reveal>
-            <h2 className="text-h3 text-ink-900">About this product</h2>
+            <h2 className="text-h3 text-ink-900">{t.productPage.aboutTitle}</h2>
           </Reveal>
           <div className="flex flex-col gap-5">
             {product.description.map((paragraph, i) => (
@@ -187,12 +196,12 @@ export default function ProductPage() {
       </section>
 
       {/* -------------------------------------------------- specifications */}
-      <section id="specs" className="scroll-mt-24 bg-sand-50 py-section">
+      <section id="specs" className="bg-sand-50 py-section">
         <div className="container-page">
           <SectionHeader
-            eyebrow="Technical characteristics"
-            title="Specification"
-            lead="Confirmed per order — send your requirement and we will state the exact figures on the offer."
+            eyebrow={t.productPage.specsEyebrow}
+            title={t.productPage.specsTitle}
+            lead={t.productPage.specsLead}
           />
           <SpecTable groups={product.specs} />
         </div>
@@ -200,12 +209,12 @@ export default function ProductPage() {
 
       {/* --------------------------------------------------------- pricing */}
       {product.priceGroups.length > 0 && (
-        <section id="prices" className="scroll-mt-24 py-section">
+        <section id="prices" className="py-section">
           <div className="container-page">
             <SectionHeader
-              eyebrow="Price list"
-              title="Prices by section and grade"
-              lead="Our published price list. Sections are fixed; lengths within each section are available as listed."
+              eyebrow={t.productPage.pricesEyebrow}
+              title={t.productPage.pricesTitle}
+              lead={t.productPage.pricesLead}
             />
             <PriceTable groups={product.priceGroups} />
           </div>
@@ -214,12 +223,12 @@ export default function ProductPage() {
 
       {/* ---------------------------------------------------------- grades */}
       {product.gradeBands.length > 0 && (
-        <section id="grades" className="scroll-mt-24 bg-sand-50 py-section">
+        <section id="grades" className="bg-sand-50 py-section">
           <div className="container-page">
             <SectionHeader
-              eyebrow="Grading"
-              title="What each grade allows"
-              lead="Taken directly from our written specification for edged oak sawn timber. Tolerances differ between the narrow and wide width bands."
+              eyebrow={t.productPage.gradesEyebrow}
+              title={t.productPage.gradesTitle}
+              lead={t.productPage.gradesLead}
             />
             <GradeGuide bands={product.gradeBands} notPermitted={product.notPermitted} />
           </div>
@@ -227,23 +236,23 @@ export default function ProductPage() {
       )}
 
       {/* -------------------------------------------------------- finishes */}
-      {product.finishes && (
-        <section id="finishes" className="scroll-mt-24 py-section">
+      {product.finishes.length > 0 && (
+        <section id="finishes" className="py-section">
           <div className="container-page">
             <SectionHeader
-              eyebrow="Finishes"
-              title="Twelve production tones"
-              lead="Each finish is applied to the same chevron oak board, so you can mix tones across a project without changing supplier or format."
+              eyebrow={t.productPage.finishesEyebrow}
+              title={t.productPage.finishesTitle}
+              lead={t.productPage.finishesLead}
             />
             <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
               {product.finishes.map((finish, i) => (
-                <Reveal as="li" key={finish.id} delay={(i % 6) * 0.05}>
+                <Reveal as="li" key={finish.photo.id} delay={(i % 6) * 0.05}>
                   <figure className="card-surface card-hover group overflow-hidden">
                     <img
-                      src={finish.image}
-                      alt={`Chevron oak parquet, ${finish.name} finish`}
-                      width={1280}
-                      height={1140}
+                      src={finish.photo.src}
+                      alt={finish.photo.alt}
+                      width={finish.photo.width}
+                      height={finish.photo.height}
                       loading="lazy"
                       decoding="async"
                       className="aspect-square w-full object-cover transition-transform duration-[900ms] ease-expo group-hover:scale-105"
@@ -261,32 +270,34 @@ export default function ProductPage() {
       )}
 
       {/* --------------------------------------------------------- inquiry */}
-      <section id="inquiry" className="grain relative scroll-mt-24 bg-ink-900 py-section text-inverse">
+      <section
+        id="inquiry"
+        className="grain relative bg-ink-900 py-section text-inverse"
+      >
         <span aria-hidden="true" className="grain-layer-dark" />
         <div className="container-page relative grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
           <div>
-            <p className="eyebrow eyebrow-inverse">Enquiry</p>
-            <h2 className="mt-5 text-h2 text-inverse">Request a quote for {product.name}</h2>
-            <p className="mt-5 text-lead text-inverse-muted">
-              Tell us the sections, grades and volume you need. We reply with availability, price
-              and delivery time for your destination.
-            </p>
+            <p className="eyebrow eyebrow-inverse">{t.productPage.inquiryEyebrow}</p>
+            <h2 className="mt-5 text-h3 text-inverse">
+              {fill(t.productPage.inquiryTitle, { product: product.name })}
+            </h2>
+            <p className="mt-5 text-lead text-inverse-muted">{t.productPage.inquiryLead}</p>
             <ul className="mt-8 flex flex-col gap-3 text-sm text-inverse-muted">
               <li className="flex items-center gap-3">
                 <Icon name="mail" size={17} className="text-oak-400" />
-                <a href={`mailto:${company.email}`} className="hover:text-white">
-                  {company.email}
+                <a href={`mailto:${brand.email}`} className="hover:text-white">
+                  {brand.email}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Icon name="phone" size={17} className="text-oak-400" />
-                <a href={`tel:${company.phoneHref}`} className="hover:text-white">
-                  {company.phone}
+                <a href={`tel:${brand.phoneHref}`} className="hover:text-white">
+                  {brand.phone}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Icon name="clock" size={17} className="text-oak-400" />
-                {company.hours}
+                {t.contact.values.hours}
               </li>
             </ul>
           </div>
@@ -298,7 +309,10 @@ export default function ProductPage() {
       {/* --------------------------------------------------------- related */}
       <section className="py-section">
         <div className="container-page">
-          <SectionHeader eyebrow="Also produced" title="Other product lines" />
+          <SectionHeader
+            eyebrow={t.productPage.relatedEyebrow}
+            title={t.productPage.relatedTitle}
+          />
           <ul className="grid gap-6 md:grid-cols-2">
             {others.map((other, i) => (
               <Reveal as="li" key={other.slug} delay={i * 0.08}>
@@ -307,8 +321,8 @@ export default function ProductPage() {
                   className="card-surface card-hover group flex items-center gap-5 overflow-hidden p-4"
                 >
                   <img
-                    src={other.cardImage}
-                    alt={other.cardImageAlt}
+                    src={other.cardPhoto.src}
+                    alt={other.cardPhoto.alt}
                     width={320}
                     height={320}
                     loading="lazy"
@@ -321,7 +335,7 @@ export default function ProductPage() {
                     </span>
                     <span className="mt-1 block text-sm text-muted">{other.tagline}</span>
                     <span className="link-arrow mt-3 inline-flex">
-                      View product
+                      {t.common.viewProduct}
                       <Icon name="arrowRight" size={16} />
                     </span>
                   </span>

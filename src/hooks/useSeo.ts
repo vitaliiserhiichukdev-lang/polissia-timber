@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { company } from '../data/company'
+import { brand } from '../data/contact'
 
 const setMeta = (selector: string, attr: string, value: string) => {
   document.head.querySelector(selector)?.setAttribute(attr, value)
@@ -18,7 +18,7 @@ interface SeoOptions {
  */
 export default function useSeo({ title, description, path = '/', image }: SeoOptions) {
   useEffect(() => {
-    const url = `${company.site}${path}`
+    const url = `${brand.site}${path}`
 
     document.title = title
     setMeta('meta[property="og:title"]', 'content', title)
@@ -32,7 +32,7 @@ export default function useSeo({ title, description, path = '/', image }: SeoOpt
     setMeta('meta[property="og:url"]', 'content', url)
 
     if (image) {
-      const absolute = `${company.site}${image}`
+      const absolute = `${brand.site}${image}`
       setMeta('meta[property="og:image"]', 'content', absolute)
       setMeta('meta[name="twitter:image"]', 'content', absolute)
     }

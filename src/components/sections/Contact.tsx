@@ -1,39 +1,38 @@
 import SectionHeader from '../ui/SectionHeader'
 import Reveal from '../ui/Reveal'
-import Icon from '../ui/Icon'
+import Icon, { type IconName } from '../ui/Icon'
 import QuoteForm from '../product/QuoteForm'
-import { company } from '../../data/company'
-import type { IconName } from '../ui/Icon'
-
-const contactRows: { icon: IconName; label: string; value: string; href?: string }[] = [
-  { icon: 'mail', label: 'Email', value: company.email, href: `mailto:${company.email}` },
-  { icon: 'phone', label: 'Phone', value: company.phone, href: `tel:${company.phoneHref}` },
-  {
-    icon: 'pin',
-    label: 'Production & export',
-    value: `${company.address.city}, ${company.address.country}`,
-  },
-  { icon: 'clock', label: 'Office hours', value: company.hours },
-  { icon: 'globe', label: 'We speak', value: company.languages.join(', ') },
-]
+import { brand } from '../../data/contact'
+import { useI18n } from '../../i18n/useI18n'
 
 export default function Contact() {
+  const { t, gallery } = useI18n()
+  const photo = gallery.find((item) => item.id === 'oakGradeB')!
+
+  const rows: { icon: IconName; label: string; value: string; href?: string }[] = [
+    { icon: 'mail', label: t.contact.labels.email, value: brand.email, href: `mailto:${brand.email}` },
+    {
+      icon: 'phone',
+      label: t.contact.labels.phone,
+      value: brand.phone,
+      href: `tel:${brand.phoneHref}`,
+    },
+    { icon: 'pin', label: t.contact.labels.production, value: t.contact.values.address },
+    { icon: 'clock', label: t.contact.labels.hours, value: t.contact.values.hours },
+    { icon: 'globe', label: t.contact.labels.languages, value: t.contact.values.languages },
+  ]
+
   return (
-    <section id="contact" className="grain relative scroll-mt-24 bg-sand-50 py-section">
+    <section id="contact" className="grain relative bg-sand-50 py-section">
       <span aria-hidden="true" className="grain-layer" />
 
       <div className="container-page relative">
-        <SectionHeader
-          eyebrow="Request a quote"
-          title="Tell us what you need — we quote in one business day"
-          lead="Send your sections, grades and volumes. If you are not sure yet, describe the application and we will propose the most economical specification."
-        />
+        <SectionHeader eyebrow={t.contact.eyebrow} title={t.contact.title} lead={t.contact.lead} />
 
         <div className="grid gap-8 lg:grid-cols-[1fr_1.35fr] lg:gap-12">
-          {/* Contact details */}
           <Reveal variant="right" className="flex flex-col gap-6">
             <ul className="flex flex-col divide-y divide-line border-y border-line">
-              {contactRows.map((row) => (
+              {rows.map((row) => (
                 <li key={row.label} className="flex items-start gap-4 py-4">
                   <span className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl border border-line bg-white text-oak-600">
                     <Icon name={row.icon} size={17} />
@@ -43,10 +42,7 @@ export default function Contact() {
                       {row.label}
                     </span>
                     {row.href ? (
-                      <a
-                        href={row.href}
-                        className="link-arrow mt-0.5 inline-block text-ink-900 hover:text-oak-600"
-                      >
+                      <a href={row.href} className="link-arrow mt-0.5 inline-block text-ink-900">
                         {row.value}
                       </a>
                     ) : (
@@ -59,10 +55,10 @@ export default function Contact() {
 
             <div className="overflow-hidden rounded-3xl border border-line">
               <img
-                src="/board/sortC.jpg"
-                alt="Oak edged boards laid out for grade inspection"
-                width={676}
-                height={1280}
+                src={photo.src}
+                alt={photo.alt}
+                width={photo.width}
+                height={photo.height}
                 loading="lazy"
                 decoding="async"
                 className="h-56 w-full object-cover"
@@ -70,15 +66,14 @@ export default function Contact() {
             </div>
 
             <p className="text-sm text-muted">
-              Prefer email? Write directly to{' '}
-              <a href={`mailto:${company.email}`} className="font-medium text-oak-600 underline">
-                {company.email}
-              </a>{' '}
-              and attach your specification — we reply in English, German or Polish.
+              {t.contact.noteBefore}
+              <a href={`mailto:${brand.email}`} className="font-medium text-oak-600 underline">
+                {brand.email}
+              </a>
+              {t.contact.noteAfter}
             </p>
           </Reveal>
 
-          {/* Form */}
           <Reveal variant="left">
             <QuoteForm />
           </Reveal>

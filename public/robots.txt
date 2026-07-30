@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dubrava-timber.com/sitemap.xml
+Sitemap: https://polissia-timber.com/sitemap.xml

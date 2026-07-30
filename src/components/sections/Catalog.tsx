@@ -3,19 +3,21 @@ import SectionHeader from '../ui/SectionHeader'
 import ProductCard from '../product/ProductCard'
 import Icon from '../ui/Icon'
 import Reveal from '../ui/Reveal'
-import { products } from '../../data/products'
+import { useI18n } from '../../i18n/useI18n'
 
 export default function Catalog() {
+  const { t, products } = useI18n()
+
   return (
-    <section id="products" className="scroll-mt-24 bg-sand-50 py-section">
+    <section id="products" className="bg-sand-50 py-section">
       <div className="container-page">
         <SectionHeader
-          eyebrow="Product catalogue"
-          title="Three product lines, one standard"
-          lead="Oak edged boards are our main direction. Alongside them we supply pine construction materials and natural oak parquet — all produced, graded and packed by us."
+          eyebrow={t.catalog.eyebrow}
+          title={t.catalog.title}
+          lead={t.catalog.lead}
           actions={
             <Link to="/#contact" className="btn btn-outline btn-sm">
-              Request the full price list
+              {t.catalog.action}
               <span className="btn-icon">
                 <Icon name="arrowRight" size={16} />
               </span>
@@ -30,10 +32,9 @@ export default function Catalog() {
         </div>
 
         <Reveal delay={0.15} className="mt-8">
-          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted">
-            <Icon name="ruler" size={16} className="text-oak-500" />
-            Non-standard sections, lengths or grade mixes are produced to order — send us your
-            specification and we will confirm feasibility and price.
+          <p className="flex items-start gap-2 text-sm text-muted">
+            <Icon name="ruler" size={16} className="mt-1 shrink-0 text-oak-500" />
+            {t.catalog.footnote}
           </p>
         </Reveal>
       </div>

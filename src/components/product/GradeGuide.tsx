@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import Icon from '../ui/Icon'
 import Reveal from '../ui/Reveal'
-import type { GradeBand } from '../../data/products'
+import { useI18n } from '../../i18n/useI18n'
+import type { ResolvedGradeBand } from '../../i18n/content'
 import { cn } from '../../lib/cn'
 
 interface GradeGuideProps {
-  bands: GradeBand[]
+  bands: ResolvedGradeBand[]
   notPermitted: string[]
 }
 
@@ -15,6 +16,7 @@ interface GradeGuideProps {
  * the same grade number allows different defects at 150/170 mm and at 230 mm.
  */
 export default function GradeGuide({ bands, notPermitted }: GradeGuideProps) {
+  const { t } = useI18n()
   const [active, setActive] = useState(0)
   const band = bands[active]
 
@@ -22,7 +24,7 @@ export default function GradeGuide({ bands, notPermitted }: GradeGuideProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap gap-2" role="tablist" aria-label="Width band">
+      <div className="flex flex-wrap gap-2" role="tablist" aria-label={t.productPage.gradesEyebrow}>
         {bands.map((item, i) => (
           <button
             key={item.widths}
@@ -55,27 +57,27 @@ export default function GradeGuide({ bands, notPermitted }: GradeGuideProps) {
             <li key={grade.code} className="card-surface flex flex-col overflow-hidden">
               <div className="relative">
                 <img
-                  src={grade.image}
-                  alt={`${grade.name} oak board surface`}
-                  width={691}
-                  height={1280}
+                  src={grade.photo.src}
+                  alt={grade.photo.alt}
+                  width={grade.photo.width}
+                  height={grade.photo.height}
                   loading="lazy"
                   decoding="async"
                   className="h-36 w-full object-cover"
                 />
                 <span className="absolute top-3 left-3 grid size-9 place-items-center rounded-full bg-ink-900/85 font-display text-sm text-inverse backdrop-blur">
-                  {grade.code}
+                  {grade.code === 'mixed' ? '±' : grade.code}
                 </span>
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <h4 className="font-display text-lg text-ink-900">{grade.name}</h4>
                 <p className="mt-1 text-xs font-semibold tracking-[0.1em] text-muted uppercase">
-                  Permitted
+                  {t.productPage.permitted}
                 </p>
                 <ul className="mt-3 flex flex-col gap-2 text-sm text-muted">
                   {grade.allowances.map((allowance) => (
                     <li key={allowance} className="flex gap-2">
-                      <span className="mt-1.5 text-oak-500">
+                      <span className="mt-1.5 shrink-0 text-oak-500">
                         <Icon name="check" size={13} />
                       </span>
                       {allowance}
@@ -91,7 +93,7 @@ export default function GradeGuide({ bands, notPermitted }: GradeGuideProps) {
       {notPermitted.length > 0 && (
         <Reveal className="rounded-3xl border border-line bg-sand-50 p-6">
           <h4 className="text-xs font-semibold tracking-[0.14em] text-oak-700 uppercase">
-            Not permitted in any grade
+            {t.productPage.notPermitted}
           </h4>
           <ul className="mt-4 flex flex-wrap gap-2">
             {notPermitted.map((defect) => (

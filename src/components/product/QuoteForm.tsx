@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import Icon from '../ui/Icon'
-import { company } from '../../data/company'
-import { productOptions } from '../../data/products'
+import { brand } from '../../data/contact'
+import { fill } from '../../i18n/content'
+import { useI18n } from '../../i18n/useI18n'
 import { cn } from '../../lib/cn'
 
 /**
@@ -45,6 +46,7 @@ const emptyForm = (defaultProduct: string): FormState => ({
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 export default function QuoteForm({ defaultProduct = '', compact = false }: QuoteFormProps) {
+  const { t, productOptions } = useI18n()
   const [form, setForm] = useState<FormState>(emptyForm(defaultProduct))
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [status, setStatus] = useState<Status>('idle')
@@ -56,32 +58,34 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
 
   const validate = () => {
     const next: Partial<Record<keyof FormState, string>> = {}
-    if (!form.name.trim()) next.name = 'Please tell us your name.'
-    if (!form.company.trim()) next.company = 'Company name helps us quote correctly.'
-    if (!EMAIL_PATTERN.test(form.email)) next.email = 'Enter a valid email address.'
-    if (form.message.trim().length < 10) next.message = 'A few words about your requirement, please.'
+    if (!form.name.trim()) next.name = t.form.errors.name
+    if (!form.company.trim()) next.company = t.form.errors.company
+    if (!EMAIL_PATTERN.test(form.email)) next.email = t.form.errors.email
+    if (form.message.trim().length < 10) next.message = t.form.errors.message
     setErrors(next)
     return Object.keys(next).length === 0
   }
 
   const composeMail = () => {
     const productLabel =
-      productOptions.find((option) => option.value === form.product)?.label ?? 'Not specified'
+      productOptions.find((option) => option.value === form.product)?.label ??
+      t.form.mailFields.notSpecified
+    const f = t.form.mailFields
+    const dash = '—'
     const body = [
-      `Name: ${form.name}`,
-      `Company: ${form.company}`,
-      `Country: ${form.country || '—'}`,
-      `Email: ${form.email}`,
-      `Phone: ${form.phone || '—'}`,
-      `Product: ${productLabel}`,
-      `Volume: ${form.volume || '—'}`,
+      `${f.name}: ${form.name}`,
+      `${f.company}: ${form.company}`,
+      `${f.country}: ${form.country || dash}`,
+      `${f.email}: ${form.email}`,
+      `${f.phone}: ${form.phone || dash}`,
+      `${f.product}: ${productLabel}`,
+      `${f.volume}: ${form.volume || dash}`,
       '',
       form.message,
     ].join('\n')
 
-    return `mailto:${company.email}?subject=${encodeURIComponent(
-      `Quote request — ${productLabel}`,
-    )}&body=${encodeURIComponent(body)}`
+    const subject = fill(t.form.mailSubject, { product: productLabel })
+    return `mailto:${brand.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   }
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -99,7 +103,7 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
       const response = await fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, locale: t.locale }),
       })
       if (!response.ok) throw new Error(`Request failed: ${response.status}`)
       setStatus('sent')
@@ -122,15 +126,13 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
           <Icon name="check" size={24} />
         </span>
         <h3 className="text-h4 text-ink-900">
-          {status === 'sent' ? 'Enquiry received' : 'Your email is ready to send'}
+          {status === 'sent' ? t.form.sentTitle : t.form.mailTitle}
         </h3>
         <p className="text-sm text-muted">
-          {status === 'sent'
-            ? 'Thank you — our export team will come back to you with a quotation and current availability.'
-            : `We opened a pre-filled message in your mail client. If nothing appeared, write to us directly at ${company.email}.`}
+          {status === 'sent' ? t.form.sentBody : fill(t.form.mailBody, { email: brand.email })}
         </p>
         <button type="button" className="btn btn-outline btn-sm" onClick={() => setStatus('idle')}>
-          Send another enquiry
+          {t.form.sendAnother}
         </button>
       </motion.div>
     )
@@ -149,7 +151,7 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
       <div className="grid gap-5 sm:grid-cols-2">
         <div className={fieldWrap}>
           <label className={labelClass} htmlFor="qf-name">
-            Name *
+            {t.form.name}
           </label>
           <input
             id="qf-name"
@@ -158,14 +160,14 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
             onChange={update('name')}
             autoComplete="name"
             aria-invalid={Boolean(errors.name)}
-            placeholder="Jan Kowalski"
+            placeholder={t.form.namePlaceholder}
           />
           {errors.name && <p className={errorClass}>{errors.name}</p>}
         </div>
 
         <div className={fieldWrap}>
           <label className={labelClass} htmlFor="qf-company">
-            Company *
+            {t.form.company}
           </label>
           <input
             id="qf-company"
@@ -174,14 +176,14 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
             onChange={update('company')}
             autoComplete="organization"
             aria-invalid={Boolean(errors.company)}
-            placeholder="Drewno Sp. z o.o."
+            placeholder={t.form.companyPlaceholder}
           />
           {errors.company && <p className={errorClass}>{errors.company}</p>}
         </div>
 
         <div className={fieldWrap}>
           <label className={labelClass} htmlFor="qf-country">
-            Country
+            {t.form.country}
           </label>
           <input
             id="qf-country"
@@ -189,13 +191,13 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
             value={form.country}
             onChange={update('country')}
             autoComplete="country-name"
-            placeholder="Poland"
+            placeholder={t.form.countryPlaceholder}
           />
         </div>
 
         <div className={fieldWrap}>
           <label className={labelClass} htmlFor="qf-email">
-            Email *
+            {t.form.email}
           </label>
           <input
             id="qf-email"
@@ -205,14 +207,14 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
             onChange={update('email')}
             autoComplete="email"
             aria-invalid={Boolean(errors.email)}
-            placeholder="purchasing@company.eu"
+            placeholder={t.form.emailPlaceholder}
           />
           {errors.email && <p className={errorClass}>{errors.email}</p>}
         </div>
 
         <div className={fieldWrap}>
           <label className={labelClass} htmlFor="qf-phone">
-            Phone
+            {t.form.phone}
           </label>
           <input
             id="qf-phone"
@@ -221,46 +223,51 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
             value={form.phone}
             onChange={update('phone')}
             autoComplete="tel"
-            placeholder="+48 000 000 000"
+            placeholder={t.form.phonePlaceholder}
           />
         </div>
 
         <div className={fieldWrap}>
           <label className={labelClass} htmlFor="qf-product">
-            Product
+            {t.form.product}
           </label>
-          <select
-            id="qf-product"
-            className="field appearance-none bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23635a4e%22 stroke-width=%221.6%22 stroke-linecap=%22round%22><path d=%22m6 9 6 6 6-6%22/></svg>')] bg-[length:18px_18px] bg-[position:right_0.9rem_center] bg-no-repeat pr-10"
-            value={form.product}
-            onChange={update('product')}
-          >
-            <option value="">Select a product…</option>
-            {productOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-            <option value="mixed">Mixed / several products</option>
-          </select>
+          <div className="relative">
+            <select
+              id="qf-product"
+              className="field appearance-none pr-11"
+              value={form.product}
+              onChange={update('product')}
+            >
+              <option value="">{t.form.productPlaceholder}</option>
+              {productOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+              <option value="mixed">{t.form.productMixed}</option>
+            </select>
+            <span className="pointer-events-none absolute inset-y-0 right-3.5 grid place-items-center text-muted">
+              <Icon name="chevronDown" size={18} />
+            </span>
+          </div>
         </div>
 
         <div className={cn(fieldWrap, 'sm:col-span-2')}>
           <label className={labelClass} htmlFor="qf-volume">
-            Required volume
+            {t.form.volume}
           </label>
           <input
             id="qf-volume"
             className="field"
             value={form.volume}
             onChange={update('volume')}
-            placeholder="e.g. 40 m³ per month, grade II, 230 × 30 mm"
+            placeholder={t.form.volumePlaceholder}
           />
         </div>
 
         <div className={cn(fieldWrap, 'sm:col-span-2')}>
           <label className={labelClass} htmlFor="qf-message">
-            Message *
+            {t.form.message}
           </label>
           <textarea
             id="qf-message"
@@ -269,7 +276,7 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
             value={form.message}
             onChange={update('message')}
             aria-invalid={Boolean(errors.message)}
-            placeholder="Sections, grades, moisture, delivery terms and destination…"
+            placeholder={t.form.messagePlaceholder}
           />
           {errors.message && <p className={errorClass}>{errors.message}</p>}
         </div>
@@ -277,23 +284,19 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
 
       {status === 'error' && (
         <p className="mt-5 rounded-xl border border-[#b4442f]/30 bg-[#b4442f]/8 px-4 py-3 text-sm text-[#8f351f]">
-          Something went wrong sending the form. Please write to{' '}
-          <a href={`mailto:${company.email}`} className="underline">
-            {company.email}
-          </a>
-          .
+          {fill(t.form.failed, { email: brand.email })}
         </p>
       )}
 
       <div className="mt-6 flex flex-wrap items-center gap-4">
         <button type="submit" className="btn btn-oak" disabled={status === 'sending'}>
-          {status === 'sending' ? 'Sending…' : 'Send request'}
+          {status === 'sending' ? t.form.sending : t.form.submit}
           <span className="btn-icon">
             <Icon name="arrowRight" size={18} />
           </span>
         </button>
-        <p className="text-xs text-muted">
-          Fields marked * are required. We use your details only to answer this enquiry.
+        <p className="max-w-xs text-xs text-muted">
+          {t.form.required} {t.form.privacy}
         </p>
       </div>
     </form>

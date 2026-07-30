@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Icon from './Icon'
 import useBodyLock from '../../hooks/useBodyLock'
+import { useI18n } from '../../i18n/useI18n'
 
 export interface LightboxImage {
   src: string
@@ -25,6 +26,7 @@ const controlClass =
  * Arrow keys navigate, Escape closes, backdrop click closes.
  */
 export default function Lightbox({ images, index, onClose, onNavigate }: LightboxProps) {
+  const { t } = useI18n()
   const isOpen = index !== null
   const closeRef = useRef<HTMLButtonElement>(null)
   const lastFocused = useRef<Element | null>(null)
@@ -85,7 +87,7 @@ export default function Lightbox({ images, index, onClose, onNavigate }: Lightbo
               type="button"
               className={controlClass}
               onClick={onClose}
-              aria-label="Close image viewer"
+              aria-label={t.common.closeViewer}
             >
               <Icon name="close" size={22} />
             </button>
@@ -101,7 +103,7 @@ export default function Lightbox({ images, index, onClose, onNavigate }: Lightbo
               type="button"
               className={controlClass}
               onClick={() => step(-1)}
-              aria-label="Previous image"
+              aria-label={t.common.previousImage}
             >
               <Icon name="chevronLeft" size={24} />
             </button>
@@ -129,7 +131,7 @@ export default function Lightbox({ images, index, onClose, onNavigate }: Lightbo
               type="button"
               className={controlClass}
               onClick={() => step(1)}
-              aria-label="Next image"
+              aria-label={t.common.nextImage}
             >
               <Icon name="chevronRight" size={24} />
             </button>

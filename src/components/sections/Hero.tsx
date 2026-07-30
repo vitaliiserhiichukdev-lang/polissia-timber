@@ -2,19 +2,19 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import Icon from '../ui/Icon'
-import { company, stats } from '../../data/company'
-
-const HERO_IMAGE = '/building_materials/pine_tree_1.jpg'
-const INSET_IMAGE = '/board/sortA.jpg'
+import { useI18n } from '../../i18n/useI18n'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   show: { opacity: 1, y: 0 },
 }
 
+const easeExpo = [0.16, 1, 0.3, 1] as const
+
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
   const reduceMotion = useReducedMotion()
+  const { t, heroPhoto, heroInsetPhoto } = useI18n()
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -24,12 +24,13 @@ export default function Hero() {
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
   const bgScale = useTransform(scrollYProgress, [0, 1], [1.04, 1.14])
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -60])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0])
 
   return (
     <section
       ref={sectionRef}
-      className="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-ink-900 pt-32 pb-12 md:min-h-svh md:pb-16"
+      // -mt-header pulls the hero under the sticky header so the image runs edge to edge.
+      className="relative isolate -mt-header flex min-h-[94svh] items-end overflow-hidden bg-ink-900 pt-40 pb-12 md:min-h-svh md:pb-16"
       aria-labelledby="hero-title"
     >
       {/* Parallax background */}
@@ -38,10 +39,10 @@ export default function Hero() {
         style={reduceMotion ? undefined : { y: bgY, scale: bgScale }}
       >
         <img
-          src={HERO_IMAGE}
-          alt="Packs of Ukrainian sawn timber stacked in the export yard at dawn"
-          width={1280}
-          height={960}
+          src={heroPhoto.src}
+          alt={heroPhoto.alt}
+          width={heroPhoto.width}
+          height={heroPhoto.height}
           fetchPriority="high"
           decoding="async"
           className="size-full object-cover"
@@ -51,11 +52,11 @@ export default function Hero() {
       {/* Legibility scrim — warm, not grey */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-t from-ink-900 via-ink-900/80 to-ink-900/35"
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-ink-900 via-ink-900/72 to-ink-900/45"
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-[radial-gradient(120%_80%_at_20%_10%,rgba(20,18,15,0)_0%,rgba(20,18,15,0.55)_70%)]"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(120%_85%_at_15%_5%,rgba(20,18,15,0)_0%,rgba(20,18,15,0.5)_75%)]"
       />
       <span aria-hidden="true" className="grain-layer-dark -z-10" />
 
@@ -71,45 +72,43 @@ export default function Hero() {
         >
           <motion.p
             variants={fadeUp}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: easeExpo }}
             className="eyebrow eyebrow-inverse"
           >
-            {company.country} · Producer &amp; exporter
+            {t.hero.eyebrow}
           </motion.p>
 
           <motion.h1
             id="hero-title"
             variants={fadeUp}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.9, ease: easeExpo }}
             className="mt-5 text-h1 text-inverse"
           >
-            Premium Ukrainian Timber
-            <span className="block text-oak-400 italic">for European Markets</span>
+            {t.hero.titleLead}
+            <span className="block text-oak-400 italic">{t.hero.titleAccent}</span>
           </motion.h1>
 
           <motion.p
             variants={fadeUp}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: easeExpo }}
             className="mt-7 max-w-2xl text-lead text-inverse-muted"
           >
-            We produce and export high-quality timber to European countries: oak edged boards
-            graded to a written specification, pine construction materials and natural oak
-            parquet. Quality controlled at every stage, packed and documented ready for export.
+            {t.hero.lead}
           </motion.p>
 
           <motion.div
             variants={fadeUp}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: easeExpo }}
             className="mt-10 flex flex-wrap items-center gap-3"
           >
             <Link to="/#contact" className="btn btn-oak">
-              Request a quote
+              {t.common.requestQuote}
               <span className="btn-icon">
                 <Icon name="arrowRight" size={18} />
               </span>
             </Link>
             <Link to="/#products" className="btn btn-glass">
-              View products
+              {t.common.viewProducts}
               <span className="btn-icon">
                 <Icon name="arrowUpRight" size={18} />
               </span>
@@ -117,15 +116,15 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* Stats + inset product image */}
+        {/* Stats + inset product photo */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.9, delay: 0.55, ease: easeExpo }}
           className="mt-14 grid gap-6 border-t border-line-inverse pt-8 lg:grid-cols-[1fr_auto] lg:items-end"
         >
           <dl className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
-            {stats.map((stat) => (
+            {t.stats.map((stat) => (
               <div key={stat.label}>
                 <dt className="font-display text-4xl leading-none text-oak-400">{stat.value}</dt>
                 <dd className="mt-2">
@@ -140,16 +139,16 @@ export default function Hero() {
 
           <figure className="hidden w-56 shrink-0 overflow-hidden rounded-2xl border border-white/15 shadow-lift xl:block">
             <img
-              src={INSET_IMAGE}
-              alt="Grade I oak edged boards, clean face with even grain"
-              width={691}
-              height={1280}
+              src={heroInsetPhoto.src}
+              alt={heroInsetPhoto.alt}
+              width={heroInsetPhoto.width}
+              height={heroInsetPhoto.height}
               loading="lazy"
               decoding="async"
-              className="h-40 w-full object-cover"
+              className="h-36 w-full object-cover"
             />
             <figcaption className="bg-ink-800/90 px-4 py-3 text-xs text-inverse-muted backdrop-blur">
-              Oak edged board · Grade I · 30 mm
+              {t.hero.insetCaption}
             </figcaption>
           </figure>
         </motion.div>
@@ -158,7 +157,7 @@ export default function Hero() {
       {/* Scroll cue */}
       <motion.a
         href="#about"
-        aria-label="Scroll to about section"
+        aria-label={t.hero.scrollLabel}
         className="absolute right-gutter bottom-8 hidden size-12 place-items-center rounded-full border border-white/25 text-inverse transition-colors duration-300 hover:bg-white/10 md:grid"
         animate={reduceMotion ? undefined : { y: [0, 7, 0] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}

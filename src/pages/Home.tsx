@@ -7,13 +7,14 @@ import GallerySection from '../components/sections/GallerySection'
 import ExportSection from '../components/sections/ExportSection'
 import Contact from '../components/sections/Contact'
 import useSeo from '../hooks/useSeo'
-import { company } from '../data/company'
+import { useI18n } from '../i18n/useI18n'
 
 export default function Home() {
+  const { t } = useI18n()
+
   useSeo({
-    title: `${company.name} — ${company.tagline}`,
-    description:
-      'Ukrainian producer and exporter of premium timber: oak edged boards in grades I–IV, pine construction materials and natural oak parquet. Stable large-volume supply and delivery throughout Europe.',
+    title: t.meta.homeTitle,
+    description: t.meta.homeDescription,
     path: '/',
   })
 

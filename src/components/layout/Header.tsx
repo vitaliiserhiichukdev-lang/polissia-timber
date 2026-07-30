@@ -2,22 +2,28 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import Logo from './Logo'
+import LanguageSwitcher from './LanguageSwitcher'
 import Icon from '../ui/Icon'
 import useBodyLock from '../../hooks/useBodyLock'
-import { company, navLinks } from '../../data/company'
+import { brand } from '../../data/contact'
+import { useI18n } from '../../i18n/useI18n'
 import { cn } from '../../lib/cn'
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const { pathname } = useLocation()
+  const { pathname, hash, key } = useLocation()
   const { scrollY } = useScroll()
+  const { t } = useI18n()
 
   useBodyLock(menuOpen)
   useMotionValueEvent(scrollY, 'change', (value) => setScrolled(value > 24))
 
-  // Close the drawer whenever the route changes.
-  useEffect(() => setMenuOpen(false), [pathname])
+  // Close the drawer on any navigation — including hash-only links such as
+  // /#gallery, which keep the pathname unchanged. Leaving it open would also
+  // leave the body scroll-locked, so the section jump would appear to do
+  // nothing.
+  useEffect(() => setMenuOpen(false), [pathname, hash, key])
 
   // Only the top of the home page sits over the dark hero.
   const transparent = pathname === '/' && !scrolled && !menuOpen
@@ -32,18 +38,18 @@ export default function Header() {
         scrolled && !transparent && 'shadow-[0_1px_20px_rgba(20,18,15,0.07)]',
       )}
     >
-      <div className="container-page flex min-h-header items-center gap-4 py-3 lg:gap-10">
-        <Link to="/" aria-label={`${company.name} — home`} className="shrink-0">
+      <div className="container-page flex min-h-header items-center gap-4 py-3 lg:gap-8">
+        <Link to="/" aria-label={`${brand.name} — ${t.common.home}`} className="shrink-0">
           <Logo inverse={transparent} />
         </Link>
 
-        <nav className="mx-auto hidden items-center gap-6 xl:flex xl:gap-8" aria-label="Main">
-          {navLinks.map((link) => (
+        <nav className="mx-auto hidden items-center gap-6 xl:flex xl:gap-7" aria-label="Main">
+          {t.nav.map((link) => (
             <Link
-              key={link.href}
+              key={link.key}
               to={link.href}
               className={cn(
-                'group relative py-1 text-sm font-medium transition-colors duration-300',
+                'group relative py-1 text-sm font-medium whitespace-nowrap transition-colors duration-300',
                 transparent ? 'text-inverse/80 hover:text-white' : 'text-muted hover:text-oak-600',
               )}
             >
@@ -55,18 +61,20 @@ export default function Header() {
 
         <div className="ml-auto flex shrink-0 items-center gap-3">
           <a
-            href={`tel:${company.phoneHref}`}
+            href={`tel:${brand.phoneHref}`}
             className={cn(
-              'hidden items-center gap-2 text-sm font-medium transition-colors duration-300 xl:inline-flex',
+              'hidden items-center gap-2 text-sm font-medium transition-colors duration-300 2xl:inline-flex',
               transparent ? 'text-inverse/80 hover:text-white' : 'text-muted hover:text-oak-600',
             )}
           >
             <Icon name="phone" size={16} />
-            {company.phone}
+            {brand.phone}
           </a>
 
+          <LanguageSwitcher inverse={transparent} />
+
           <Link to="/#contact" className="btn btn-sm hidden sm:inline-flex">
-            Request a quote
+            {t.common.requestQuote}
             <span className="btn-icon">
               <Icon name="arrowRight" size={16} />
             </span>
@@ -77,7 +85,7 @@ export default function Header() {
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={menuOpen ? t.common.closeMenu : t.common.openMenu}
             className={cn(
               'grid size-11 place-items-center rounded-xl border transition-colors duration-300 xl:hidden',
               transparent
@@ -101,9 +109,9 @@ export default function Header() {
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
           >
             <nav className="flex flex-col" aria-label="Mobile">
-              {navLinks.map((link, i) => (
+              {t.nav.map((link, i) => (
                 <motion.div
-                  key={link.href}
+                  key={link.key}
                   initial={{ opacity: 0, x: -14 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.05 + i * 0.04, duration: 0.35 }}
@@ -121,21 +129,21 @@ export default function Header() {
 
             <div className="mt-7 flex flex-col gap-3">
               <a
-                href={`mailto:${company.email}`}
+                href={`mailto:${brand.email}`}
                 className="inline-flex items-center gap-2 text-sm text-muted"
               >
                 <Icon name="mail" size={16} />
-                {company.email}
+                {brand.email}
               </a>
               <a
-                href={`tel:${company.phoneHref}`}
+                href={`tel:${brand.phoneHref}`}
                 className="inline-flex items-center gap-2 text-sm text-muted"
               >
                 <Icon name="phone" size={16} />
-                {company.phone}
+                {brand.phone}
               </a>
               <Link to="/#contact" className="btn btn-oak mt-2 w-full">
-                Request a quote
+                {t.common.requestQuote}
               </Link>
             </div>
           </motion.div>
