@@ -42,7 +42,7 @@ export default function PriceTable({ groups }: PriceTableProps) {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[26rem] border-t border-line text-sm">
+              <table className="w-full border-t border-line text-sm">
                 <caption className="sr-only">
                   {group.section} — {t.productPage.pricesTitle} ({t.common.priceUnit})
                 </caption>
@@ -51,11 +51,8 @@ export default function PriceTable({ groups }: PriceTableProps) {
                     <th scope="col" className="px-5 py-3 font-semibold">
                       {t.productPage.gradeColumn}
                     </th>
-                    <th scope="col" className="px-5 py-3 font-semibold">
-                      {t.productPage.listPrice}
-                    </th>
-                    <th scope="col" className="px-5 py-3 font-semibold">
-                      {t.productPage.currentPrice}
+                    <th scope="col" className="px-5 py-3 text-right font-semibold">
+                      {t.productPage.priceColumn}
                     </th>
                   </tr>
                 </thead>
@@ -65,16 +62,13 @@ export default function PriceTable({ groups }: PriceTableProps) {
                       <th scope="row" className="px-5 py-3.5 text-left font-medium text-ink-900">
                         {row.label}
                       </th>
-                      <td className="px-5 py-3.5 tabular-nums text-muted">
-                        € {formatNumber(row.list)}
-                      </td>
-                      <td className="px-5 py-3.5 tabular-nums">
-                        {row.current ? (
-                          <span className="font-semibold text-ink-900">
-                            € {formatNumber(row.current)}
-                          </span>
-                        ) : (
+                      <td className="px-5 py-3.5 text-right tabular-nums">
+                        {row.price === null ? (
                           <span className="chip">{t.common.onRequest}</span>
+                        ) : (
+                          <span className="font-semibold text-ink-900">
+                            € {formatNumber(row.price)}
+                          </span>
                         )}
                       </td>
                     </tr>

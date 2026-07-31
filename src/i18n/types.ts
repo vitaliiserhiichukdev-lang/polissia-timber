@@ -267,8 +267,7 @@ export interface Dictionary {
     permitted: string
     notPermitted: string
     availableLengths: string
-    listPrice: string
-    currentPrice: string
+    priceColumn: string
     gradeColumn: string
     gradeLabel: string
     mixedGrade: string

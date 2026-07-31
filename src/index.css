@@ -104,8 +104,9 @@
     line-height: 1.65;
     letter-spacing: 0.01em;
     overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    /* No font-smoothing override on purpose: forcing `antialiased` thins the
+       glyphs and renders text lighter than the colour it is given, which is
+       most obvious on phones and next to animated (composited) blocks. */
   }
 
   body.is-locked {
@@ -351,6 +352,36 @@
 
   .field-error {
     border-color: #b4442f;
+  }
+
+  /* Gallery caption + its scrim. Always legible on touch devices, where there
+     is no hover to reveal them; hover-revealed on pointer devices only. */
+  .photo-caption,
+  .photo-caption-scrim {
+    opacity: 1;
+    transition: opacity 0.4s var(--ease-expo), transform 0.4s var(--ease-expo);
+  }
+
+  @media (hover: hover) {
+    .photo-caption-scrim {
+      opacity: 0;
+    }
+
+    .photo-caption {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .group:hover .photo-caption-scrim,
+    .group:focus-visible .photo-caption-scrim {
+      opacity: 1;
+    }
+
+    .group:hover .photo-caption,
+    .group:focus-visible .photo-caption {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .skip-link {

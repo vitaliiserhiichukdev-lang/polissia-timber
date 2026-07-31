@@ -360,13 +360,12 @@ export const en: Dictionary = {
     permitted: 'Permitted',
     notPermitted: 'Not permitted in any grade',
     availableLengths: 'Available lengths',
-    listPrice: 'List price',
-    currentPrice: 'Current price',
+    priceColumn: 'Price',
     gradeColumn: 'Grade',
     gradeLabel: 'Grade {code}',
     mixedGrade: 'Mixed grade',
     priceFootnote:
-      'Prices are per cubic metre, indicative and quoted per batch — “list price” is the printed price list, “current price” the latest revision where one has been issued. Final price depends on volume, moisture regime and delivery terms; confirm on enquiry.',
+      'Prices are per cubic metre and indicative: the final figure depends on volume, moisture regime and delivery terms, and is confirmed per batch on the offer.',
   },
 
   footer: {
@@ -405,7 +404,7 @@ export const en: Dictionary = {
         { label: 'Lengths', value: '320 – 2 450 mm' },
         { label: 'Grades', value: 'I, II, III, IV' },
       ],
-      priceNote: 'From €400 / m³ (80 × 30 mm, mixed grade). Grade I in 230 mm from €1 800 / m³.',
+      priceNote: 'From €700 / m³ (80 × 30 mm, mixed grade). Grade I in 230 mm from €2 650 / m³.',
       sizesSummary: '30 × 80–230 mm, lengths 320–2 450 mm',
       gradesSummary: 'Grades I–IV and mixed-grade packs',
       advantages: [
