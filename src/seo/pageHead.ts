@@ -65,7 +65,7 @@ function organization(t: Dictionary): Record<string, unknown> {
     },
     email: brand.email,
     telephone: brand.phoneHref,
-    areaServed: t.exportSection.markets,
+    areaServed: Object.values(t.exportSection.countries),
     knowsLanguage: locales,
   }
 }

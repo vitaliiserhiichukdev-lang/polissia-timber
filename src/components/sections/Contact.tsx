@@ -7,8 +7,8 @@ import { brand } from '../../data/contact'
 import { useI18n } from '../../i18n/useI18n'
 
 export default function Contact() {
-  const { t, gallery } = useI18n()
-  const photo = gallery.find((item) => item.id === 'oakGradeB')!
+  const { t, photo } = useI18n()
+  const sidePhoto = photo.oakGradeB
 
   const rows: { icon: IconName; label: string; value: string; href?: string }[] = [
     { icon: 'mail', label: t.contact.labels.email, value: brand.email, href: `mailto:${brand.email}` },
@@ -56,10 +56,10 @@ export default function Contact() {
 
             <div className="overflow-hidden rounded-3xl border border-line">
               <img
-                src={photo.src}
-                alt={photo.alt}
-                width={photo.width}
-                height={photo.height}
+                src={sidePhoto.src}
+                alt={sidePhoto.alt}
+                width={sidePhoto.width}
+                height={sidePhoto.height}
                 loading="lazy"
                 decoding="async"
                 className="h-56 w-full object-cover"

@@ -188,6 +188,11 @@
     max-width: var(--container-page);
     margin-inline: auto;
     padding-inline: var(--spacing-gutter);
+    /* Reveal's `left`/`right` variants slide content in by 40px, which is wider
+       than the 20px gutter on a phone — so mid-animation it hangs past the page
+       edge. `clip` contains it; unlike `hidden` it creates no scroll container,
+       so sticky positioning and scroll anchoring are unaffected. */
+    overflow-x: clip;
   }
 
   .eyebrow {
@@ -419,6 +424,38 @@
     }
   }
 
+  /*
+    Animated disclosure for the FAQ.
+
+    Deliberately CSS on a native `<details>` rather than React state: the element
+    keeps the answer in the prerendered HTML — which the FAQPage schema and AI
+    answer engines both read — and gives keyboard support and correct semantics
+    for free. `::details-content` animates it without a line of JavaScript.
+
+    `interpolate-size` is scoped to the item rather than set on `:root`, so
+    enabling keyword interpolation cannot quietly change height transitions
+    elsewhere on the site. Browsers without `::details-content` ignore all of
+    this and snap open, exactly as before — no fallback needed.
+  */
+  details.faq-item {
+    interpolate-size: allow-keywords;
+  }
+
+  details.faq-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      block-size 0.42s var(--ease-expo),
+      opacity 0.32s var(--ease-smooth),
+      content-visibility 0.42s allow-discrete;
+  }
+
+  details.faq-item[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+
   .skip-link {
     position: absolute;
     top: 0;
@@ -484,6 +521,12 @@
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  /* The wildcard above does not match `::details-content`, so the FAQ would keep
+     animating open while everything else stopped. */
+  details.faq-item::details-content {
     transition-duration: 0.001ms !important;
   }
 }

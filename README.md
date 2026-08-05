@@ -167,8 +167,20 @@ src/
 Routes: `/` and `/products/:slug` (`oak-edged-boards`,
 `pine-construction-timber`, `oak-parquet-boards`), each mirrored under `/uk`.
 
-Home page order is deliberate: `Compliance` sits directly under the hero because
-an EU buyer cannot act on price or grade until the EUDR question is answered.
+Home page order is deliberate: `Catalog` comes first, then `Compliance`. Products
+lead because a visitor has to know what is sold before EUDR means anything, and
+compliance follows immediately because it is the filter that decides whether a
+shipment is possible at all. `nav` in each dictionary mirrors this order — keep
+them in step.
+
+**Never use Framer Motion's `whileInView` prop here.** It does not fire for
+elements that mount during the `AnimatePresence mode="wait"` page transition in
+`App.tsx`, so switching language or returning from a product page left content
+stranded at its hidden start state — permanently, for the gallery. Use `useInView`
+with a ref on a **plain container** element instead: per-tile `useInView` on a
+`motion.figure` also failed (its effect saw no node and its dependency array gave
+it no reason to retry), which is why the gallery drives all seven tiles from one
+observer on the mosaic wrapper.
 
 **The header row is width-constrained.** Eight nav items, four languages and a CTA
 have to coexist inside an 80rem container; German and Ukrainian labels run ~30%
@@ -179,8 +191,43 @@ rather than a segmented control, `common.quoteShort` for the CTA, and a nav that
 is the only flexible zone and may scroll rather than push the actions off-screen.
 Adding a nav item or a long label means re-checking this at 1280px.
 
+**The gallery is a curated seven, not the library.** `galleryTileIds` in
+`src/data/media.ts` picks them and the order *is* the composition — the two widest
+mosaic cells need the landscape frames. The photographs range from 691×1280
+portrait to 1280×960 landscape, so the cell owns the shape: a fixed height per
+band plus `object-cover`, which is what stopped the old masonry layout coming out
+ragged. Parquet is excluded on purpose (studio shots on white crop to empty
+backdrop, and they have a proper grid on the parquet page, which the section links
+to). Swapping a photo needs no layout change; adding an eighth means giving a band
+a fourth `count`.
+
+**The shipping map is projected, not drawn.** `src/data/destinations.ts` holds
+lat/long; `ShippingMap.tsx` projects them equirectangularly with longitude
+squeezed by cos(50°), so markers land in their true relative positions and the
+reference rings mean something. Adding a country is a data edit — the only
+hand-tuned part is `anchor`/`dy`, which keeps labels off each other (Vienna and
+Bratislava are 60 km apart, so four of the sixteen are marked but not labelled;
+the country list beside the map names all of them). Distances are straight-line,
+which the caption says.
+
 **Motion.** `Reveal` animates individual items; `SectionReveal` lifts a whole
-section as it scrolls in. `SectionReveal` is transform-only on purpose — most of
+section as it scrolls in; gallery tiles wipe up via `clip-path`; map routes draw
+via `pathLength` with SMIL `animateMotion` cargo along them.
+
+The FAQ accordion is the exception — pure CSS on a native `<details>`, animated
+with `::details-content` (see `.faq-item` in `index.css`). React state would have
+had to unmount the answer to animate it out, and the answers must stay in the
+prerendered HTML for the FAQPage schema. This way the element also keeps keyboard
+support and correct semantics for free, and browsers without `::details-content`
+just snap open. `interpolate-size` is scoped to the item, not `:root`, so keyword
+interpolation cannot alter height transitions elsewhere; the reduced-motion block
+has to name the pseudo-element explicitly, because the `*` wildcard misses it.
+
+Because of that spread, the `<noscript>` block in `index.html` has to undo three
+different serialisations — Framer Motion writes an inline style for faded HTML, a
+`clip-path` for the gallery, and inside SVG an `opacity` **attribute** rather than
+a style, plus a zero-length `stroke-dasharray` for `pathLength`. Miss one and that
+piece is invisible without JS. Verified with `javaScriptEnabled: false`. `SectionReveal` is transform-only on purpose — most of
 its content is already inside a `Reveal` that fades, and fading the parent too
 multiplies the two — and it wraps `.container-page`, never the `<section>`, because
 a transform would become the containing block for the `position: fixed` lightbox.

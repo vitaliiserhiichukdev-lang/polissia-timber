@@ -27,9 +27,11 @@ export default function Faq() {
         <ul className="mx-auto flex max-w-prose flex-col gap-3">
           {items.map((item, i) => (
             <Reveal as="li" key={item.question} delay={Math.min(i, 6) * 0.04}>
-              <details className="card-surface group overflow-hidden [&[open]]:border-sand-300">
-                <summary className="flex cursor-pointer list-none items-start gap-4 px-5 py-4.5 md:px-6">
-                  <span className="flex-1 font-display text-lg leading-snug text-ink-900 transition-colors group-hover:text-oak-600">
+              <details className="card-surface faq-item group overflow-hidden [&[open]]:border-sand-300">
+                {/* `list-none` covers Firefox and Chrome; Safari needs the
+                    vendor pseudo-element to drop the disclosure triangle. */}
+                <summary className="flex cursor-pointer list-none items-start gap-4 px-5 py-4.5 md:px-6 [&::-webkit-details-marker]:hidden">
+                  <span className="flex-1 font-display text-lg leading-snug text-ink-900 transition-colors group-hover:text-oak-600 group-open:text-oak-700">
                     {item.question}
                   </span>
                   <span

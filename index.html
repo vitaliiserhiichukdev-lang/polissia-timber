@@ -36,10 +36,27 @@
           Scroll-reveal blocks are prerendered in their hidden start state,
           because that is the first frame the client will hydrate to. With no JS
           nothing ever reveals them, so show everything instead.
+
+          Three shapes to undo, because Framer Motion serialises each differently:
+          faded HTML uses an inline style, gallery tiles a clip-path, and inside
+          SVG it writes an `opacity` *attribute* rather than a style.
         */
-        [style*='opacity:0'] {
+        [style*='opacity:0'],
+        [style*='clip-path'],
+        [opacity='0'] {
           opacity: 1 !important;
+          clip-path: none !important;
           transform: none !important;
+        }
+
+        /*
+          The shipping-map routes are drawn by animating `pathLength`, which
+          serialises to a zero-length dash — invisible until the animation runs.
+          Scoped to `path` so the reference rings keep their intended dashes.
+        */
+        path[stroke-dasharray] {
+          stroke-dasharray: none !important;
+          stroke-dashoffset: 0 !important;
         }
       </style>
     </noscript>

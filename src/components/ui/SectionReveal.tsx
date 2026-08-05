@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { useRef, type ReactNode } from 'react'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
 
 interface SectionRevealProps {
   children: ReactNode
@@ -21,6 +21,8 @@ interface SectionRevealProps {
  *   the containing block for `position: fixed` descendants, which would break
  *   the gallery lightbox. The lightbox is a sibling of the container, so keeping
  *   the transform inside is what makes this safe.
+ * - **`useInView`, not `whileInView`** — see the note in `Reveal`; the prop does
+ *   not fire for elements mounted during a page transition.
  */
 export default function SectionReveal({
   children,
@@ -28,16 +30,18 @@ export default function SectionReveal({
   distance = 40,
 }: SectionRevealProps) {
   const reduceMotion = useReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  // Fires early: a tall section would otherwise be half-read before it moves.
+  const inView = useInView(ref, { once: true, amount: 0.05 })
 
   if (reduceMotion) return <div className={className}>{children}</div>
 
   return (
     <motion.div
+      ref={ref}
       className={className}
       initial={{ y: distance }}
-      whileInView={{ y: 0 }}
-      // Fires early: a tall section would otherwise be half-read before it moves.
-      viewport={{ once: true, amount: 0.05 }}
+      animate={{ y: inView ? 0 : distance }}
       transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}

@@ -1,6 +1,6 @@
 import { brand, productSlugs, type ProductSlug } from '../data/contact'
 import {
-  galleryOrder,
+  galleryTileIds,
   parquetFinishPhotos,
   photos,
   processPhotos,
@@ -85,7 +85,15 @@ export interface Content {
   t: Dictionary
   products: ResolvedProduct[]
   productBySlug: Record<ProductSlug, ResolvedProduct>
-  gallery: ResolvedPhoto[]
+  /**
+   * Every photo with its localised text, keyed by id. Sections that want one
+   * specific picture read `photo.oakEdge` — previously they searched the gallery
+   * array and asserted a hit, which broke silently the moment that array became
+   * a curated subset.
+   */
+  photo: Record<PhotoId, ResolvedPhoto>
+  /** The curated home-page gallery, in mosaic order. */
+  galleryTiles: ResolvedPhoto[]
   processSteps: ResolvedProcessStep[]
   heroPhoto: ResolvedPhoto
   heroInsetPhoto: ResolvedPhoto
@@ -190,7 +198,10 @@ export function buildContent(t: Dictionary): Content {
       ProductSlug,
       ResolvedProduct
     >,
-    gallery: galleryOrder.map(resolvePhoto),
+    photo: Object.fromEntries(
+      (Object.keys(photos) as PhotoId[]).map((id) => [id, resolvePhoto(id)]),
+    ) as Record<PhotoId, ResolvedPhoto>,
+    galleryTiles: galleryTileIds.map(resolvePhoto),
     processSteps: t.process.steps.map((step, i) => ({
       ...step,
       step: `0${i + 1}`,

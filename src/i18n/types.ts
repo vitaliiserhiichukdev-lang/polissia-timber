@@ -1,5 +1,6 @@
 import type { IconName } from '../components/ui/Icon'
-import type { PhotoCategory, PhotoId } from '../data/media'
+import type { DestinationCode } from '../data/destinations'
+import type { PhotoId } from '../data/media'
 import type { GradeCode } from '../data/pricing'
 import type { ProductSlug } from '../data/contact'
 
@@ -226,10 +227,8 @@ export interface Dictionary {
     eyebrow: string
     title: string
     lead: string
-    filterLabel: string
-    filters: Record<'all' | PhotoCategory, string>
-    /** e.g. "{shown} of {total} photos" */
-    count: string
+    /** Points at the parquet page, which holds the full range of finishes. */
+    action: string
   }
 
   exportSection: {
@@ -237,11 +236,19 @@ export interface Dictionary {
     title: string
     lead: string
     points: (LabelledText & { icon: IconName })[]
+    /** Heading for the shipping map. */
     panelTitle: string
     /** "…Delivery terms available: {terms}." */
     panelBody: string
     cta: string
-    markets: string[]
+    /** Destination country names, keyed to `src/data/destinations.ts`. */
+    countries: Record<DestinationCode, string>
+    /** Marker for the yard the routes start from. */
+    originLabel: string
+    /** Reference ring label, e.g. "{km} km". */
+    ringLabel: string
+    /** Caveat about the rings being straight-line, not road, distance. */
+    mapNote: string
     loadsTitle: string
     loadsLead: string
     loads: Metric[]

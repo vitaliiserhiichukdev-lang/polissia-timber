@@ -16,11 +16,16 @@ export default function Home() {
   return (
     <>
       <Hero />
-      {/* Directly under the hero: an EU buyer cannot act on price or grade
-          until the EUDR question is answered. */}
+      {/*
+        Products first. The audit argued for compliance directly under the hero,
+        and EUDR is the filter that decides whether a shipment is possible at all
+        — but a first-time visitor has to know what is being sold before any of
+        that means anything, and the three lines were previously four sections
+        down where nobody found them. Compliance follows immediately.
+      */}
+      <Catalog />
       <Compliance />
       <About />
-      <Catalog />
       <Process />
       <Advantages />
       <GallerySection />

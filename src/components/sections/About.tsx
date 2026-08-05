@@ -7,9 +7,9 @@ import { brand } from '../../data/contact'
 import { useI18n } from '../../i18n/useI18n'
 
 export default function About() {
-  const { t, gallery } = useI18n()
-  const edgePhoto = gallery.find((photo) => photo.id === 'oakEdge')!
-  const yardPhoto = gallery.find((photo) => photo.id === 'pineYard')!
+  const { t, photo } = useI18n()
+  const edgePhoto = photo.oakEdge
+  const yardPhoto = photo.pineYard
 
   return (
     <section id="about" className="grain relative py-section">
