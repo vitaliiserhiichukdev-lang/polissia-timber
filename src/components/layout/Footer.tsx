@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from '../ui/LocaleLink'
 import Logo from './Logo'
 import Icon from '../ui/Icon'
 import { brand } from '../../data/contact'

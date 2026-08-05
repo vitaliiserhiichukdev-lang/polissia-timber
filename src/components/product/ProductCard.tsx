@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from '../ui/LocaleLink'
 import Icon from '../ui/Icon'
 import Reveal from '../ui/Reveal'
 import { formatNumber } from '../../data/pricing'

@@ -1,14 +1,14 @@
 import { createContext, useContext } from 'react'
+import { de } from './de'
 import { en } from './en'
+import { pl } from './pl'
 import { uk } from './uk'
 import type { Content } from './content'
 import type { Dictionary, Locale } from './types'
 
-export const dictionaries: Record<Locale, Dictionary> = { en, uk }
+export const dictionaries: Record<Locale, Dictionary> = { en, de, pl, uk }
 
-/** Order of the language toggle. */
-export const locales: Locale[] = ['en', 'uk']
-
+/** Remembers a deliberate language choice; see `LocaleProvider`. */
 export const LOCALE_STORAGE_KEY = 'polissia.locale'
 
 export interface LocaleContextValue extends Content {

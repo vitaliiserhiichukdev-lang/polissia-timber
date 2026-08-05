@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import Link from '../ui/LocaleLink'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import Icon from '../ui/Icon'
 import useMediaQuery from '../../hooks/useMediaQuery'
@@ -167,7 +167,7 @@ export default function Hero() {
 
       {/* Scroll cue */}
       <motion.a
-        href="#about"
+        href="#compliance"
         aria-label={t.hero.scrollLabel}
         className="absolute right-gutter bottom-8 hidden size-12 place-items-center rounded-full border border-white/25 text-inverse transition-colors duration-300 hover:bg-white/10 md:grid"
         animate={reduceMotion ? undefined : { y: [0, 7, 0] }}

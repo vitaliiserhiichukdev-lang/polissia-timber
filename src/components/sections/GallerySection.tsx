@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import SectionHeader from '../ui/SectionHeader'
 import Lightbox from '../ui/Lightbox'
 import Icon from '../ui/Icon'
+import SectionReveal from '../ui/SectionReveal'
 import { fill } from '../../i18n/content'
 import { useI18n } from '../../i18n/useI18n'
 import type { PhotoCategory } from '../../data/media'
@@ -24,7 +25,7 @@ export default function GallerySection() {
 
   return (
     <section id="gallery" className="bg-sand-50 py-section">
-      <div className="container-page">
+      <SectionReveal className="container-page">
         <SectionHeader
           eyebrow={t.gallery.eyebrow}
           title={t.gallery.title}
@@ -116,7 +117,7 @@ export default function GallerySection() {
             ))}
           </AnimatePresence>
         </motion.div>
-      </div>
+      </SectionReveal>
 
       <Lightbox
         images={visible}

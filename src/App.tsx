@@ -6,6 +6,7 @@ import ScrollManager from './components/layout/ScrollManager'
 import Home from './pages/Home'
 import ProductPage from './pages/ProductPage'
 import NotFound from './pages/NotFound'
+import { defaultLocale, locales } from './i18n/routing'
 import { useI18n } from './i18n/useI18n'
 
 export default function App() {
@@ -32,9 +33,20 @@ export default function App() {
             exit={reduceMotion ? undefined : { opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
+            {/* One set of routes per locale: the default locale keeps the bare
+                paths, the rest are prefixed. See `i18n/routing.ts`. */}
             <Routes location={location}>
-              <Route path="/" element={<Home />} />
-              <Route path="/products/:slug" element={<ProductPage />} />
+              {locales.flatMap((code) => {
+                const prefix = code === defaultLocale ? '' : `/${code}`
+                return [
+                  <Route key={`${code}-home`} path={prefix || '/'} element={<Home />} />,
+                  <Route
+                    key={`${code}-product`}
+                    path={`${prefix}/products/:slug`}
+                    element={<ProductPage />}
+                  />,
+                ]
+              })}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </motion.div>

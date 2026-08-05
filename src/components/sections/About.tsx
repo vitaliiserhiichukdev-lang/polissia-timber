@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom'
+import Link from '../ui/LocaleLink'
 import Reveal from '../ui/Reveal'
 import SectionHeader from '../ui/SectionHeader'
 import Icon from '../ui/Icon'
+import SectionReveal from '../ui/SectionReveal'
 import { brand } from '../../data/contact'
 import { useI18n } from '../../i18n/useI18n'
 
@@ -14,7 +15,7 @@ export default function About() {
     <section id="about" className="grain relative py-section">
       <span aria-hidden="true" className="grain-layer" />
 
-      <div className="container-page relative">
+      <SectionReveal className="container-page relative">
         <SectionHeader
           eyebrow={t.about.eyebrow}
           title={t.about.title}
@@ -89,7 +90,7 @@ export default function About() {
             </Reveal>
           </div>
         </div>
-      </div>
+      </SectionReveal>
     </section>
   )
 }

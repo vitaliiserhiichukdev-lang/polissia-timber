@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom'
+import Link from '../ui/LocaleLink'
 import SectionHeader from '../ui/SectionHeader'
 import ProductCard from '../product/ProductCard'
 import Icon from '../ui/Icon'
 import Reveal from '../ui/Reveal'
+import SectionReveal from '../ui/SectionReveal'
 import { useI18n } from '../../i18n/useI18n'
 
 export default function Catalog() {
@@ -10,7 +11,7 @@ export default function Catalog() {
 
   return (
     <section id="products" className="bg-sand-50 py-section">
-      <div className="container-page">
+      <SectionReveal className="container-page">
         <SectionHeader
           eyebrow={t.catalog.eyebrow}
           title={t.catalog.title}
@@ -37,7 +38,7 @@ export default function Catalog() {
             {t.catalog.footnote}
           </p>
         </Reveal>
-      </div>
+      </SectionReveal>
     </section>
   )
 }
