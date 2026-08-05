@@ -14,6 +14,13 @@ dist-ssr
 .ssr-build
 *.local
 
+# Local environment files — real keys live here and must never be committed.
+# `.env.example` is the tracked template and holds placeholders only, so the
+# negation below keeps it committable.
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

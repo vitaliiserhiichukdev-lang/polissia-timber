@@ -8,7 +8,6 @@ styled with Tailwind CSS v4, animated with Framer Motion.
 yarn install
 yarn dev          # http://localhost:5173
 yarn build        # typecheck → client build → SSR build → prerender to static HTML
-yarn build:spa    # client build only, no prerendering
 yarn typecheck
 yarn lint
 ```
@@ -31,6 +30,12 @@ node scripts/prerender.mjs              → dist/**/index.html, 404.html, sitema
 `scripts/prerender.mjs` splices each render into the `<!--app-head-->` and
 `<!--app-html-->` slots in `index.html`. The client then **hydrates** that markup
 (`src/main.tsx`) instead of repainting.
+
+**All three steps are required — `vite build` alone is not a deployable site.** On
+its own it emits one page whose root is still the literal `<!--app-html-->`
+placeholder, with no `sitemap.xml` and no `404.html`, while `public/robots.txt`
+goes on advertising a sitemap that would 404. Use `yarn dev` for local work and
+`yarn build` for anything that ships.
 
 Two constraints follow, and breaking either is easy:
 
