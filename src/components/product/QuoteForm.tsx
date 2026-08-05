@@ -21,6 +21,11 @@ interface QuoteFormProps {
 
 type Status = 'idle' | 'sending' | 'sent' | 'mail' | 'error'
 
+/**
+ * An RFQ, not a contact form. Every field here is something we would otherwise
+ * have to ask for by email before the request can be priced at all — so asking
+ * up front turns five rounds of correspondence into one quotable brief.
+ */
 interface FormState {
   name: string
   company: string
@@ -28,7 +33,12 @@ interface FormState {
   email: string
   phone: string
   product: string
+  grade: string
+  dimensions: string
   volume: string
+  moisture: string
+  destination: string
+  incoterms: string
   message: string
 }
 
@@ -39,9 +49,17 @@ const emptyForm = (defaultProduct: string): FormState => ({
   email: '',
   phone: '',
   product: defaultProduct,
+  grade: '',
+  dimensions: '',
   volume: '',
+  moisture: '',
+  destination: '',
+  incoterms: '',
   message: '',
 })
+
+/** Grades the oak specification defines, plus a mixed-grade pack. */
+const GRADES = ['I', 'II', 'III', 'IV', 'mixed'] as const
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
@@ -66,6 +84,17 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
     return Object.keys(next).length === 0
   }
 
+  const gradeLabel = (code: string) => {
+    if (!code) return t.form.mailFields.notSpecified
+    if (code === 'mixed') return t.productPage.mixedGrade
+    return t.productPage.gradeLabel.replace('{code}', code)
+  }
+
+  const moistureLabel = (value: string) =>
+    value
+      ? t.form.moistureOptions[value as keyof typeof t.form.moistureOptions]
+      : t.form.mailFields.notSpecified
+
   const composeMail = () => {
     const productLabel =
       productOptions.find((option) => option.value === form.product)?.label ??
@@ -78,8 +107,14 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
       `${f.country}: ${form.country || dash}`,
       `${f.email}: ${form.email}`,
       `${f.phone}: ${form.phone || dash}`,
+      '',
       `${f.product}: ${productLabel}`,
+      `${f.grade}: ${gradeLabel(form.grade)}`,
+      `${f.dimensions}: ${form.dimensions || dash}`,
       `${f.volume}: ${form.volume || dash}`,
+      `${f.moisture}: ${moistureLabel(form.moisture)}`,
+      `${f.destination}: ${form.destination || dash}`,
+      `${f.incoterms}: ${form.incoterms || dash}`,
       '',
       form.message,
     ].join('\n')
@@ -141,6 +176,8 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
   const fieldWrap = 'flex flex-col gap-1.5'
   const labelClass = 'text-xs font-semibold tracking-[0.1em] text-muted uppercase'
   const errorClass = 'text-xs text-[#b4442f]'
+  const selectChevron =
+    'pointer-events-none absolute inset-y-0 right-3.5 grid place-items-center text-muted'
 
   return (
     <form
@@ -252,17 +289,113 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
           </div>
         </div>
 
-        <div className={cn(fieldWrap, 'sm:col-span-2')}>
+        <div className={fieldWrap}>
+          <label className={labelClass} htmlFor="qf-grade">
+            {t.form.grade}
+          </label>
+          <div className="relative">
+            <select
+              id="qf-grade"
+              className="field appearance-none pr-11"
+              value={form.grade}
+              onChange={update('grade')}
+            >
+              <option value="">{t.form.gradeAny}</option>
+              {GRADES.map((code) => (
+                <option key={code} value={code}>
+                  {gradeLabel(code)}
+                </option>
+              ))}
+            </select>
+            <span className={selectChevron}>
+              <Icon name="chevronDown" size={18} />
+            </span>
+          </div>
+        </div>
+
+        <div className={fieldWrap}>
+          <label className={labelClass} htmlFor="qf-dimensions">
+            {t.form.dimensions}
+          </label>
+          <input
+            id="qf-dimensions"
+            className="field tabular-nums"
+            value={form.dimensions}
+            onChange={update('dimensions')}
+            placeholder={t.form.dimensionsPlaceholder}
+          />
+        </div>
+
+        <div className={fieldWrap}>
           <label className={labelClass} htmlFor="qf-volume">
             {t.form.volume}
           </label>
           <input
             id="qf-volume"
-            className="field"
+            className="field tabular-nums"
             value={form.volume}
             onChange={update('volume')}
             placeholder={t.form.volumePlaceholder}
           />
+        </div>
+
+        <div className={fieldWrap}>
+          <label className={labelClass} htmlFor="qf-moisture">
+            {t.form.moisture}
+          </label>
+          <div className="relative">
+            <select
+              id="qf-moisture"
+              className="field appearance-none pr-11"
+              value={form.moisture}
+              onChange={update('moisture')}
+            >
+              <option value="">{t.form.moistureOptions.any}</option>
+              <option value="kd">{t.form.moistureOptions.kd}</option>
+              <option value="ad">{t.form.moistureOptions.ad}</option>
+              <option value="fresh">{t.form.moistureOptions.fresh}</option>
+            </select>
+            <span className={selectChevron}>
+              <Icon name="chevronDown" size={18} />
+            </span>
+          </div>
+        </div>
+
+        <div className={fieldWrap}>
+          <label className={labelClass} htmlFor="qf-destination">
+            {t.form.destination}
+          </label>
+          <input
+            id="qf-destination"
+            className="field"
+            value={form.destination}
+            onChange={update('destination')}
+            placeholder={t.form.destinationPlaceholder}
+          />
+        </div>
+
+        <div className={fieldWrap}>
+          <label className={labelClass} htmlFor="qf-incoterms">
+            {t.form.incoterms}
+          </label>
+          <div className="relative">
+            <select
+              id="qf-incoterms"
+              className="field appearance-none pr-11"
+              value={form.incoterms}
+              onChange={update('incoterms')}
+            >
+              <option value="">{t.form.incotermsAny}</option>
+              {brand.incoterms.map((term) => (
+                <option key={term} value={term}>
+                  {term}
+                </option>
+              ))}
+            </select>
+            <span className={selectChevron}>
+              <Icon name="chevronDown" size={18} />
+            </span>
+          </div>
         </div>
 
         <div className={cn(fieldWrap, 'sm:col-span-2')}>

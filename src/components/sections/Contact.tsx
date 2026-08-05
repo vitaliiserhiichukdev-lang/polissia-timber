@@ -1,13 +1,14 @@
 import SectionHeader from '../ui/SectionHeader'
 import Reveal from '../ui/Reveal'
 import Icon, { type IconName } from '../ui/Icon'
+import SectionReveal from '../ui/SectionReveal'
 import QuoteForm from '../product/QuoteForm'
 import { brand } from '../../data/contact'
 import { useI18n } from '../../i18n/useI18n'
 
 export default function Contact() {
-  const { t, gallery } = useI18n()
-  const photo = gallery.find((item) => item.id === 'oakGradeB')!
+  const { t, photo } = useI18n()
+  const sidePhoto = photo.oakGradeB
 
   const rows: { icon: IconName; label: string; value: string; href?: string }[] = [
     { icon: 'mail', label: t.contact.labels.email, value: brand.email, href: `mailto:${brand.email}` },
@@ -26,7 +27,7 @@ export default function Contact() {
     <section id="contact" className="grain relative bg-sand-50 py-section">
       <span aria-hidden="true" className="grain-layer" />
 
-      <div className="container-page relative">
+      <SectionReveal className="container-page relative">
         <SectionHeader eyebrow={t.contact.eyebrow} title={t.contact.title} lead={t.contact.lead} />
 
         <div className="grid gap-8 lg:grid-cols-[1fr_1.35fr] lg:gap-12">
@@ -55,10 +56,10 @@ export default function Contact() {
 
             <div className="overflow-hidden rounded-3xl border border-line">
               <img
-                src={photo.src}
-                alt={photo.alt}
-                width={photo.width}
-                height={photo.height}
+                src={sidePhoto.src}
+                alt={sidePhoto.alt}
+                width={sidePhoto.width}
+                height={sidePhoto.height}
                 loading="lazy"
                 decoding="async"
                 className="h-56 w-full object-cover"
@@ -78,7 +79,7 @@ export default function Contact() {
             <QuoteForm />
           </Reveal>
         </div>
-      </div>
+      </SectionReveal>
     </section>
   )
 }

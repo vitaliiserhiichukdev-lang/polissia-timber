@@ -31,11 +31,14 @@
   --color-forest-500: #2f5340;
   --color-forest-300: #6d8c78;
 
-  /* Semantic */
+  /* Semantic.
+     Contrast on the dark sections is the constraint here, not taste: body text
+     is read by purchasing staff on office monitors, so `inverse-muted` is held
+     at ~9:1 on ink-900 rather than the ~4:1 a lighter grey would give. */
   --color-body: #241f19;
-  --color-muted: #635a4e;
+  --color-muted: #5c5346;
   --color-inverse: #f5efe4;
-  --color-inverse-muted: #bdb2a0;
+  --color-inverse-muted: #cfc7b9;
   --color-line: rgba(36, 31, 25, 0.12);
   --color-line-strong: rgba(36, 31, 25, 0.22);
   --color-line-inverse: rgba(245, 239, 228, 0.16);
@@ -58,9 +61,12 @@
   --text-h4: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
   --text-h4--line-height: 1.25;
   --text-h4--letter-spacing: -0.015em;
-  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  /* Body copy is set at 17–18px, not the 15px a consumer site would use: this
+     is specification text read by purchasing staff, often on an office monitor
+     at arm's length, and the difference shows in how far people read. */
+  --text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.375rem);
   --text-lead--line-height: 1.6;
-  --text-body: clamp(0.9375rem, 0.91rem + 0.15vw, 1.0625rem);
+  --text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.125rem);
   --text-body--line-height: 1.65;
   --text-tiny: 0.6875rem;
   --text-tiny--line-height: 1.4;
@@ -113,17 +119,46 @@
     overflow: hidden;
   }
 
+  /* 600, not the 300–400 a display serif is usually set at. Thin Fraunces looks
+     elegant on a mock-up and disappears on a real monitor in a lit office. */
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 600;
     text-wrap: balance;
   }
 
   p {
     text-wrap: pretty;
+  }
+
+  /* Figures in a spec or price column have to line up, so digits get fixed
+     advance width wherever they appear in a table. */
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* German compounds (Schnittholzlieferant, Trocknungskammer) overrun narrow
+     columns. Hyphenation needs the property *and* a lang to hyphenate by, which
+     the locale sets on <html>. */
+  :lang(de) {
+    hyphens: auto;
+  }
+
+  /* Nothing should be able to push the page sideways. */
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  li,
+  dt,
+  dd,
+  th,
+  td {
+    overflow-wrap: break-word;
   }
 
   :focus-visible {
@@ -153,6 +188,11 @@
     max-width: var(--container-page);
     margin-inline: auto;
     padding-inline: var(--spacing-gutter);
+    /* Reveal's `left`/`right` variants slide content in by 40px, which is wider
+       than the 20px gutter on a phone — so mid-animation it hangs past the page
+       edge. `clip` contains it; unlike `hidden` it creates no scroll container,
+       so sticky positioning and scroll anchoring are unaffected. */
+    overflow-x: clip;
   }
 
   .eyebrow {
@@ -384,6 +424,38 @@
     }
   }
 
+  /*
+    Animated disclosure for the FAQ.
+
+    Deliberately CSS on a native `<details>` rather than React state: the element
+    keeps the answer in the prerendered HTML — which the FAQPage schema and AI
+    answer engines both read — and gives keyboard support and correct semantics
+    for free. `::details-content` animates it without a line of JavaScript.
+
+    `interpolate-size` is scoped to the item rather than set on `:root`, so
+    enabling keyword interpolation cannot quietly change height transitions
+    elsewhere on the site. Browsers without `::details-content` ignore all of
+    this and snap open, exactly as before — no fallback needed.
+  */
+  details.faq-item {
+    interpolate-size: allow-keywords;
+  }
+
+  details.faq-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      block-size 0.42s var(--ease-expo),
+      opacity 0.32s var(--ease-smooth),
+      content-visibility 0.42s allow-discrete;
+  }
+
+  details.faq-item[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+
   .skip-link {
     position: absolute;
     top: 0;
@@ -449,6 +521,12 @@
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  /* The wildcard above does not match `::details-content`, so the FAQ would keep
+     animating open while everything else stopped. */
+  details.faq-item::details-content {
     transition-duration: 0.001ms !important;
   }
 }

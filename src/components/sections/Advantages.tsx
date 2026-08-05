@@ -1,6 +1,7 @@
 import SectionHeader from '../ui/SectionHeader'
 import Reveal from '../ui/Reveal'
 import Icon from '../ui/Icon'
+import SectionReveal from '../ui/SectionReveal'
 import { useI18n } from '../../i18n/useI18n'
 
 export default function Advantages() {
@@ -8,7 +9,7 @@ export default function Advantages() {
 
   return (
     <section id="advantages" className="py-section">
-      <div className="container-page">
+      <SectionReveal className="container-page">
         <SectionHeader
           align="center"
           eyebrow={t.advantages.eyebrow}
@@ -33,7 +34,7 @@ export default function Advantages() {
             </Reveal>
           ))}
         </ul>
-      </div>
+      </SectionReveal>
     </section>
   )
 }

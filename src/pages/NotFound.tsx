@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from '../components/ui/LocaleLink'
 import Icon from '../components/ui/Icon'
 import useSeo from '../hooks/useSeo'
 import { useI18n } from '../i18n/useI18n'
@@ -6,11 +6,7 @@ import { useI18n } from '../i18n/useI18n'
 export default function NotFound() {
   const { t, products } = useI18n()
 
-  useSeo({
-    title: t.meta.notFoundTitle,
-    description: t.meta.notFoundDescription,
-    path: '/404',
-  })
+  useSeo('/404')
 
   return (
     <section className="flex min-h-[70svh] items-center py-section">

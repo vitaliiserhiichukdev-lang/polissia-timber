@@ -1,9 +1,10 @@
 import type { IconName } from '../components/ui/Icon'
-import type { PhotoCategory, PhotoId } from '../data/media'
+import type { DestinationCode } from '../data/destinations'
+import type { PhotoId } from '../data/media'
 import type { GradeCode } from '../data/pricing'
 import type { ProductSlug } from '../data/contact'
 
-export type Locale = 'en' | 'uk'
+export type Locale = 'en' | 'de' | 'pl' | 'uk'
 
 export interface LabelledText {
   title: string
@@ -18,6 +19,43 @@ export interface KeyFact {
 export interface SpecGroupText {
   group: string
   items: KeyFact[]
+}
+
+/** One export document or compliance scheme, with its current standing. */
+export interface ComplianceDocument {
+  icon: IconName
+  title: string
+  body: string
+  /** Short chip, e.g. "Issued per shipment" — never a bare claim of holding it. */
+  status: string
+}
+
+/** A metric shown as a number + unit, so the figure carries the sentence. */
+export interface Metric {
+  value: string
+  unit: string
+  label: string
+  detail: string
+}
+
+export interface LeadTime {
+  destination: string
+  days: string
+  mode: string
+}
+
+/** An anonymised past shipment, quoted as evidence rather than a promise. */
+export interface ShipmentCase {
+  volume: string
+  spec: string
+  destination: string
+  terms: string
+  days: string
+}
+
+export interface FaqItem {
+  question: string
+  answer: string
 }
 
 export interface GradeText {
@@ -77,6 +115,8 @@ export interface Dictionary {
 
   common: {
     requestQuote: string
+    /** Header CTA. Must stay short — the top bar has eight nav items beside it. */
+    quoteShort: string
     viewProducts: string
     viewDetails: string
     viewProduct: string
@@ -143,6 +183,37 @@ export interface Dictionary {
     lead: string
     steps: (LabelledText & { icon: IconName })[]
     callout: LabelledText & { action: string }
+    capacityTitle: string
+    capacityLead: string
+    capacity: Metric[]
+    capacityNote: string
+  }
+
+  /**
+   * EUDR and the export document set. This is the first filter an EU importer
+   * applies, so it sits directly under the hero.
+   */
+  compliance: {
+    eyebrow: string
+    title: string
+    lead: string
+    eudr: {
+      badge: string
+      title: string
+      body: string
+      points: string[]
+      note: string
+    }
+    documentsTitle: string
+    documents: ComplianceDocument[]
+    disclaimer: string
+  }
+
+  faq: {
+    eyebrow: string
+    title: string
+    lead: string
+    items: FaqItem[]
   }
 
   advantages: {
@@ -156,10 +227,8 @@ export interface Dictionary {
     eyebrow: string
     title: string
     lead: string
-    filterLabel: string
-    filters: Record<'all' | PhotoCategory, string>
-    /** e.g. "{shown} of {total} photos" */
-    count: string
+    /** Points at the parquet page, which holds the full range of finishes. */
+    action: string
   }
 
   exportSection: {
@@ -167,11 +236,31 @@ export interface Dictionary {
     title: string
     lead: string
     points: (LabelledText & { icon: IconName })[]
+    /** Heading for the shipping map. */
     panelTitle: string
     /** "…Delivery terms available: {terms}." */
     panelBody: string
     cta: string
-    markets: string[]
+    /** Destination country names, keyed to `src/data/destinations.ts`. */
+    countries: Record<DestinationCode, string>
+    /** Marker for the yard the routes start from. */
+    originLabel: string
+    /** Reference ring label, e.g. "{km} km". */
+    ringLabel: string
+    /** Caveat about the rings being straight-line, not road, distance. */
+    mapNote: string
+    loadsTitle: string
+    loadsLead: string
+    loads: Metric[]
+    leadTimesTitle: string
+    leadTimesLead: string
+    leadTimes: LeadTime[]
+    leadTimeColumns: { destination: string; days: string; mode: string }
+    leadTimeNote: string
+    casesTitle: string
+    casesLead: string
+    cases: ShipmentCase[]
+    caseLabels: { volume: string; spec: string; destination: string; terms: string; days: string }
   }
 
   contact: {
@@ -209,8 +298,18 @@ export interface Dictionary {
     product: string
     productPlaceholder: string
     productMixed: string
+    grade: string
+    gradeAny: string
+    dimensions: string
+    dimensionsPlaceholder: string
     volume: string
     volumePlaceholder: string
+    moisture: string
+    moistureOptions: { any: string; kd: string; ad: string; fresh: string }
+    destination: string
+    destinationPlaceholder: string
+    incoterms: string
+    incotermsAny: string
     message: string
     messagePlaceholder: string
     submit: string
@@ -238,7 +337,12 @@ export interface Dictionary {
       email: string
       phone: string
       product: string
+      grade: string
+      dimensions: string
       volume: string
+      moisture: string
+      destination: string
+      incoterms: string
       notSpecified: string
     }
   }
