@@ -289,10 +289,19 @@ file, **no SPA catch-all rewrite is needed** — and adding one would shadow the
 prerendered pages with the home page. Point the host at `dist/` and let the
 filesystem resolve; use `404.html` for unknown paths.
 
-`vercel.json` sets the build command, long-lived caching for hashed assets, and
-`X-Robots-Tag: noindex` on `*.vercel.app`. That last rule matters: without it
-preview deployments get crawled and split ranking signals across duplicate
-copies of every page.
+`vercel.json` sets the build command, `outputDirectory`, `trailingSlash: false`
+and two header rules:
+
+- **`X-Robots-Tag: noindex, nofollow` on `*.vercel.app`.** Without it, preview
+  deployments get crawled and split ranking signals across duplicate copies of
+  every page. Matched with a `has` host condition so the production domain is
+  unaffected.
+- **A one-year immutable `Cache-Control` on `/assets/*`**, which is safe because
+  Vite fingerprints those filenames.
+
+**Do not add comments to `vercel.json`.** It is strict JSON *and* Vercel validates
+it against a closed schema — a `comment` key fails the build outright with
+`should NOT have additional property`. Explanations belong here instead.
 
 Images in `public/` are served as-is (JPEG, ≤1280 px, ~100–200 kB each) with
 `loading="lazy"`, `decoding="async"` and intrinsic dimensions set to avoid
