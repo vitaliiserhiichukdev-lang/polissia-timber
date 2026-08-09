@@ -1,15 +1,20 @@
 import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import Link from '../ui/LocaleLink'
 import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import SectionHeader from '../ui/SectionHeader'
 import Reveal from '../ui/Reveal'
 import Icon from '../ui/Icon'
+import SectionReveal from '../ui/SectionReveal'
+import { confirmed } from '../../data/pending'
 import { useI18n } from '../../i18n/useI18n'
 
 export default function Process() {
   const trackRef = useRef<HTMLOListElement>(null)
   const reduceMotion = useReducedMotion()
   const { t, processSteps } = useI18n()
+  // Photographs of a sawmill are not an argument; throughput figures are. Any
+  // metric production has not confirmed stays hidden rather than being guessed.
+  const capacity = confirmed(t.process.capacity, (metric) => [metric.value])
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
@@ -25,7 +30,7 @@ export default function Process() {
     >
       <span aria-hidden="true" className="grain-layer-dark" />
 
-      <div className="container-page relative">
+      <SectionReveal className="container-page relative">
         <SectionHeader
           inverse
           eyebrow={t.process.eyebrow}
@@ -84,6 +89,38 @@ export default function Process() {
           ))}
         </ol>
 
+        {capacity.length > 0 && (
+          <div className="mt-20 border-t border-line-inverse pt-12">
+            <Reveal>
+              <h3 className="text-h3 text-inverse">{t.process.capacityTitle}</h3>
+              <p className="mt-4 max-w-2xl text-inverse-muted">{t.process.capacityLead}</p>
+            </Reveal>
+
+            <dl className="mt-10 grid gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
+              {capacity.map((metric, i) => (
+                <Reveal key={metric.label} delay={(i % 3) * 0.06}>
+                  <dt className="font-display text-4xl leading-none text-oak-400 tabular-nums">
+                    {metric.value}
+                    <span className="ml-1.5 font-sans text-sm font-medium tracking-normal text-inverse-muted">
+                      {metric.unit}
+                    </span>
+                  </dt>
+                  <dd className="mt-2.5">
+                    <span className="block text-sm font-medium text-inverse">{metric.label}</span>
+                    <span className="mt-1 block text-xs leading-snug text-inverse-muted">
+                      {metric.detail}
+                    </span>
+                  </dd>
+                </Reveal>
+              ))}
+            </dl>
+
+            <Reveal delay={0.12}>
+              <p className="mt-9 max-w-2xl text-sm text-inverse-muted">{t.process.capacityNote}</p>
+            </Reveal>
+          </div>
+        )}
+
         <Reveal delay={0.1} className="mt-16 rounded-3xl border border-white/12 bg-white/4 p-6 md:p-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl">
@@ -98,7 +135,7 @@ export default function Process() {
             </Link>
           </div>
         </Reveal>
-      </div>
+      </SectionReveal>
     </section>
   )
 }

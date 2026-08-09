@@ -16,16 +16,19 @@ export const en: Dictionary = {
   },
 
   nav: [
-    { key: 'about', label: 'About', href: '/#about' },
     { key: 'products', label: 'Products', href: '/#products' },
+    { key: 'compliance', label: 'Compliance', href: '/#compliance' },
+    { key: 'about', label: 'About', href: '/#about' },
     { key: 'production', label: 'Production', href: '/#production' },
     { key: 'gallery', label: 'Gallery', href: '/#gallery' },
     { key: 'export', label: 'Export', href: '/#export' },
+    { key: 'faq', label: 'FAQ', href: '/#faq' },
     { key: 'contact', label: 'Contact', href: '/#contact' },
   ],
 
   common: {
     requestQuote: 'Request a quote',
+    quoteShort: 'Get a quote',
     viewProducts: 'View products',
     viewDetails: 'View details',
     viewProduct: 'View product',
@@ -57,7 +60,7 @@ export const en: Dictionary = {
     titleAccent: 'for European Markets',
     lead: 'We produce and export high-quality timber to European countries: oak edged boards graded to a written specification, pine construction materials and natural oak parquet. Quality controlled at every stage, packed and documented ready for export.',
     insetCaption: 'Oak edged board · Grade I · 30 mm',
-    scrollLabel: 'Scroll to the about section',
+    scrollLabel: 'Scroll to the products section',
     imageAlt: 'Packs of Ukrainian sawn timber stacked in the export yard',
   },
 
@@ -122,6 +125,67 @@ export const en: Dictionary = {
     },
   },
 
+  /**
+   * REVIEW BEFORE PUBLISHING. This block makes regulatory statements. Every
+   * line must be confirmed by the company — an EUDR or certification claim the
+   * exporter cannot substantiate blocks the buyer's customs clearance and is a
+   * liability for both sides. Documents whose status is still `TBC` are hidden
+   * automatically; see `src/data/pending.ts`.
+   */
+  compliance: {
+    eyebrow: 'Compliance and documentation',
+    title: 'EUDR-ready: geolocation data and DDS reference per consignment',
+    lead: 'Since the EU Deforestation Regulation applies, an importer cannot place timber on the EU market without plot-level origin data and a Due Diligence Statement. We prepare that pack with the shipment, not after you ask for it.',
+    eudr: {
+      badge: 'EUDR',
+      title: 'What you receive with every consignment',
+      body: 'Regulation (EU) 2023/1115 makes the importer responsible for proving the timber is deforestation-free and legally harvested. That proof has to come from the supplier, so we assemble it as part of the order rather than treating it as paperwork at the end.',
+      points: [
+        'Geolocation coordinates of the harvesting plots for the batch',
+        'Species, volume and country of harvest per pack, matching the packing list',
+        'Legality evidence for the harvest, traceable from the log to the pack',
+        'Due Diligence Statement reference for your EU TRACES submission',
+      ],
+      note: 'Send the specification and destination and we will confirm the exact document set for your import route before you order.',
+    },
+    documentsTitle: 'Export document set',
+    documents: [
+      {
+        icon: 'shield',
+        title: 'Phytosanitary certificate',
+        body: 'Issued by the state phytosanitary service for each consignment of sawn timber leaving Ukraine.',
+        status: 'Issued per shipment',
+      },
+      {
+        icon: 'box',
+        title: 'ISPM-15 heat treatment',
+        body: 'Marking for wood packaging, dunnage and pallets used to secure the load.',
+        status: 'Issued per shipment',
+      },
+      {
+        icon: 'globe',
+        title: 'EUR.1 / origin declaration',
+        body: 'Preferential origin proof under the EU–Ukraine agreement, so the goods clear at the preferential rate.',
+        status: 'Issued per shipment',
+      },
+      {
+        icon: 'stack',
+        title: 'Packing list and specification',
+        body: 'Volume, section and grade per pack, matching the marking on the strapping, so goods-in can check a delivery against the invoice.',
+        status: 'With every load',
+      },
+      {
+        // TO CONFIRM — do not publish until the certificate number is on file.
+        icon: 'leaf',
+        title: 'FSC / PEFC chain of custody',
+        body: 'Certified material on request, quoted separately from uncertified stock.',
+        status: 'TBC',
+      },
+    ],
+    disclaimer:
+      'Document requirements differ by member state and import route. Nothing here replaces your own due diligence — we supply the evidence, you file the statement.',
+  },
+
   process: {
     eyebrow: 'Quality and production',
     title: 'Five controlled stages, from log to loading',
@@ -158,6 +222,51 @@ export const en: Dictionary = {
       body: 'Our oak grading rules define exactly what each grade allows — knot size and type, sapwood, ingrown bark — and what is never accepted: pith, steam damage, woodworm, micro-cracks, end cracks and double sapwood.',
       action: 'Read the grading rules',
     },
+    capacityTitle: 'Production capacity',
+    capacityLead:
+      'The figures worth checking before you commit a season of production to a supplier.',
+    // TO CONFIRM — production must supply these before launch. Metrics left at
+    // `TBC` do not render, so the block simply stays hidden until then.
+    capacity: [
+      {
+        value: 'TBC',
+        unit: 'm³ / month',
+        label: 'Sawn oak output',
+        detail: 'Edged boards at 30 mm across all five standard sections.',
+      },
+      {
+        value: 'TBC',
+        unit: 'm³ / shift',
+        label: 'Saw line throughput',
+        detail: 'Log intake to edged, trimmed board.',
+      },
+      {
+        value: 'TBC',
+        unit: 'chambers',
+        label: 'Drying capacity',
+        detail: 'Kiln chambers in operation, with the volume per charge.',
+      },
+      {
+        value: 'TBC',
+        unit: 'm³ / charge',
+        label: 'Kiln load',
+        detail: 'Volume dried per cycle, which sets the batch size we can hold to one moisture regime.',
+      },
+      {
+        value: '5',
+        unit: 'sections',
+        label: 'Standard oak sections',
+        detail: 'Widths 80, 115, 150, 170 and 230 mm — held in rotation, not cut to order.',
+      },
+      {
+        value: '4',
+        unit: 'grades',
+        label: 'Graded classes',
+        detail: 'Grades I–IV assessed piece by piece against the written specification.',
+      },
+    ],
+    capacityNote:
+      'Every piece is graded against the written specification before packing, so a repeat order at the same grade gives the same yield in your workshop.',
   },
 
   advantages: {
@@ -201,15 +310,8 @@ export const en: Dictionary = {
   gallery: {
     eyebrow: 'Gallery',
     title: 'Our timber, photographed as it ships',
-    lead: 'Boards by grade, pine sections in the yard and twelve parquet finishes — photographed in our own yard and workshop, not bought from a stock library.',
-    filterLabel: 'Filter gallery by category',
-    filters: {
-      all: 'All photos',
-      oak: 'Oak boards',
-      pine: 'Pine timber',
-      parquet: 'Parquet',
-    },
-    count: '{shown} of {total} photos',
+    lead: 'Seven pictures rather than a contact sheet: the edge of a graded board, the packs it leaves the yard in, the stock behind a repeat order. Shot in our own yard and workshop, not bought from a stock library.',
+    action: 'See all twelve parquet finishes',
   },
 
   exportSection: {
@@ -241,24 +343,149 @@ export const en: Dictionary = {
     panelTitle: 'Destinations we ship to',
     panelBody: 'Full-truck and container loads across the EU. Delivery terms available: {terms}.',
     cta: 'Discuss a delivery',
-    // TO CONFIRM — indicative destination list
-    markets: [
-      'Poland',
-      'Germany',
-      'Czechia',
-      'Slovakia',
-      'Austria',
-      'Hungary',
-      'Romania',
-      'Italy',
-      'Netherlands',
-      'Belgium',
-      'France',
-      'Spain',
-      'Lithuania',
-      'Latvia',
-      'Estonia',
-      'Denmark',
+    countries: {
+      PL: 'Poland',
+      DE: 'Germany',
+      CZ: 'Czechia',
+      SK: 'Slovakia',
+      AT: 'Austria',
+      HU: 'Hungary',
+      RO: 'Romania',
+      IT: 'Italy',
+      NL: 'Netherlands',
+      BE: 'Belgium',
+      FR: 'France',
+      ES: 'Spain',
+      LT: 'Lithuania',
+      LV: 'Latvia',
+      EE: 'Estonia',
+      DK: 'Denmark',
+    },
+    originLabel: 'Our yard',
+    ringLabel: '{km} km',
+    mapNote:
+      'Rings are straight-line distance from the yard, not road distance — they show reach, not a quote. Ask for a lead time to your exact address and we will confirm it.',
+    loadsTitle: 'What fits in a load',
+    loadsLead:
+      'Freight is charged by the load, not the cubic metre, so the cheapest order is usually a full one.',
+    loads: [
+      {
+        value: '22–24',
+        unit: 'm³',
+        label: 'Full truck',
+        detail: 'Standard 13.6 m curtainsider of strapped packs — the usual EU road shipment.',
+      },
+      {
+        value: '25–28',
+        unit: 'm³',
+        label: "40 ft container",
+        detail: 'For onward sea freight or destinations beyond road range.',
+      },
+      {
+        // TO CONFIRM — commercial decision, not a measurement.
+        value: 'TBC',
+        unit: 'm³',
+        label: 'Minimum order',
+        detail: 'Below a full load we consolidate with another shipment to the same direction.',
+      },
+    ],
+    leadTimesTitle: 'Lead times and Incoterms',
+    leadTimesLead:
+      'Counted from confirmed order and cleared payment terms to unloading at your address.',
+    // TO CONFIRM — route-specific; hidden until logistics confirms each figure.
+    leadTimes: [
+      { destination: 'Poland', days: 'TBC', mode: 'Road, full truck' },
+      { destination: 'Germany', days: 'TBC', mode: 'Road, full truck' },
+      { destination: 'Czechia / Slovakia', days: 'TBC', mode: 'Road, full truck' },
+      { destination: 'Italy', days: 'TBC', mode: 'Road, full truck' },
+      { destination: 'Netherlands / Belgium', days: 'TBC', mode: 'Road, full truck' },
+      { destination: 'Overseas', days: 'TBC', mode: "Sea, 40 ft container" },
+    ],
+    leadTimeColumns: { destination: 'Destination', days: 'Transit', mode: 'Mode' },
+    leadTimeNote:
+      'Border crossing and customs clearance are included in the figures above. Delivery terms available: EXW, FCA, CPT and DAP — DAP puts the goods at your gate with duties handled.',
+    casesTitle: 'Recent shipments',
+    casesLead: 'Anonymised, but real: the sections, volumes and routes we actually load.',
+    // TO CONFIRM — populate from dispatch records. Hidden while set to `TBC`.
+    cases: [
+      { volume: 'TBC', spec: 'TBC', destination: 'TBC', terms: 'DAP', days: 'TBC' },
+      { volume: 'TBC', spec: 'TBC', destination: 'TBC', terms: 'FCA', days: 'TBC' },
+      { volume: 'TBC', spec: 'TBC', destination: 'TBC', terms: 'CPT', days: 'TBC' },
+    ],
+    caseLabels: {
+      volume: 'Volume',
+      spec: 'Specification',
+      destination: 'Destination',
+      terms: 'Terms',
+      days: 'Transit',
+    },
+  },
+
+  faq: {
+    eyebrow: 'Questions buyers ask',
+    title: 'Grades, volumes, documents and delivery',
+    lead: 'The answers we give on the phone, written down. If something you need is missing, ask and we will add it.',
+    items: [
+      {
+        question: 'What is the difference between grades I–IV?',
+        answer:
+          'Grade is set by what the board is allowed to show, and the limits are in writing. Grade I permits live knots up to 3–5 mm and nothing else; Grade II adds live knots to 25–35 mm, black knots to 15–25 mm and up to 20–25 mm of sapwood; Grade III widens that to live knots up to 35 mm on narrow sections and 70 mm at 230 mm width, plus ingrown bark; Grade IV, produced at 230 mm, allows live knots to 120 mm. Pith, steam damage, woodworm, micro-cracks, end cracks and double sapwood are accepted in no grade at all.',
+      },
+      {
+        question: 'Which sections and lengths do you produce?',
+        answer:
+          'Oak edged boards are sawn at a fixed 30 mm thickness in five widths — 80, 115, 150, 170 and 230 mm — with fixed lengths per section covering 320 to 2 450 mm. Pine construction timber is cut to your section list instead of a fixed catalogue.',
+      },
+      {
+        question: 'Can you produce non-standard sections or grade mixes?',
+        answer:
+          'Yes. Non-standard sections, lengths and grade mixes are produced to order — send the specification and we confirm feasibility and price before you commit.',
+      },
+      {
+        question: 'What moisture content do you supply?',
+        answer:
+          'Kiln dried or air dried, specified per order. Tell us the target regime and the tolerance you work to and we will confirm it on the offer, because the moisture regime affects both the price and the batch size we can hold to one specification.',
+      },
+      {
+        question: 'Do you provide EUDR geolocation data and a DDS reference?',
+        answer:
+          'Yes. Each consignment ships with the harvesting plot coordinates, species, volume and country of harvest per pack, legality evidence for the harvest, and the Due Diligence Statement reference you need for your EU submission. Confirm your import route with us and we will state the exact document set before you order.',
+      },
+      {
+        question: 'Which Incoterms do you work with?',
+        answer:
+          'EXW, FCA, CPT and DAP. DAP is the usual choice for EU buyers who want the goods at their gate without arranging freight; FCA suits buyers with their own carrier.',
+      },
+      {
+        question: 'How is the timber packed and marked?',
+        answer:
+          'Each grade is packed separately into uniform strapped packs with edge protection, marked with section, grade and volume, and listed the same way on the packing list — so goods-in can check a delivery against the invoice in minutes rather than restacking it.',
+      },
+      {
+        question: 'How are prices quoted and how long do they hold?',
+        answer:
+          'Per cubic metre, by section and grade — our published oak price list runs from €700/m³ for mixed-grade 80 × 30 mm to €2 650/m³ for Grade I at 230 mm. The final figure depends on volume, moisture regime and delivery terms, and is confirmed per batch on the offer.',
+      },
+      {
+        question: 'Do you send samples before an order?',
+        answer:
+          'Yes. For parquet we send finish samples before order confirmation, and for sawn timber we can send graded sample boards so you can check our grading against your own standard before committing to a load.',
+      },
+      {
+        question: 'What languages do you work in?',
+        answer:
+          'English, German, Polish and Ukrainian, for both correspondence and documentation.',
+      },
+      {
+        question: 'What is your minimum order quantity?',
+        // TO CONFIRM — commercial decision. Hidden until answered.
+        answer: 'TBC',
+      },
+      {
+        question: 'What is the lead time to Germany or Poland?',
+        // TO CONFIRM — see exportSection.leadTimes. Hidden until answered.
+        answer: 'TBC',
+      },
     ],
   },
 
@@ -296,10 +523,25 @@ export const en: Dictionary = {
     product: 'Product',
     productPlaceholder: 'Select a product…',
     productMixed: 'Mixed / several products',
-    volume: 'Required volume',
-    volumePlaceholder: 'e.g. 40 m³ per month, grade II, 230 × 30 mm',
+    grade: 'Grade',
+    gradeAny: 'Any / advise me',
+    dimensions: 'Dimensions (th × w × l)',
+    dimensionsPlaceholder: '30 × 230 × 2 050 mm',
+    volume: 'Volume per month',
+    volumePlaceholder: 'e.g. 40 m³',
+    moisture: 'Moisture',
+    moistureOptions: {
+      any: 'Any / advise me',
+      kd: 'Kiln dried (KD)',
+      ad: 'Air dried (AD)',
+      fresh: 'Fresh sawn',
+    },
+    destination: 'Destination',
+    destinationPlaceholder: 'City or port, e.g. Hamburg',
+    incoterms: 'Delivery terms',
+    incotermsAny: 'Not decided yet',
     message: 'Message *',
-    messagePlaceholder: 'Sections, grades, moisture, delivery terms and destination…',
+    messagePlaceholder: 'Anything else that affects the quote — tolerances, packing, schedule…',
     submit: 'Send request',
     sending: 'Sending…',
     required: 'Fields marked * are required.',
@@ -326,7 +568,12 @@ export const en: Dictionary = {
       email: 'Email',
       phone: 'Phone',
       product: 'Product',
-      volume: 'Volume',
+      grade: 'Grade',
+      dimensions: 'Dimensions',
+      volume: 'Volume / month',
+      moisture: 'Moisture',
+      destination: 'Destination',
+      incoterms: 'Delivery terms',
       notSpecified: 'Not specified',
     },
   },
@@ -360,13 +607,12 @@ export const en: Dictionary = {
     permitted: 'Permitted',
     notPermitted: 'Not permitted in any grade',
     availableLengths: 'Available lengths',
-    listPrice: 'List price',
-    currentPrice: 'Current price',
+    priceColumn: 'Price',
     gradeColumn: 'Grade',
     gradeLabel: 'Grade {code}',
     mixedGrade: 'Mixed grade',
     priceFootnote:
-      'Prices are per cubic metre, indicative and quoted per batch — “list price” is the printed price list, “current price” the latest revision where one has been issued. Final price depends on volume, moisture regime and delivery terms; confirm on enquiry.',
+      'Prices are per cubic metre and indicative: the final figure depends on volume, moisture regime and delivery terms, and is confirmed per batch on the offer.',
   },
 
   footer: {
@@ -405,7 +651,7 @@ export const en: Dictionary = {
         { label: 'Lengths', value: '320 – 2 450 mm' },
         { label: 'Grades', value: 'I, II, III, IV' },
       ],
-      priceNote: 'From €400 / m³ (80 × 30 mm, mixed grade). Grade I in 230 mm from €1 800 / m³.',
+      priceNote: 'From €700 / m³ (80 × 30 mm, mixed grade). Grade I in 230 mm from €2 650 / m³.',
       sizesSummary: '30 × 80–230 mm, lengths 320–2 450 mm',
       gradesSummary: 'Grades I–IV and mixed-grade packs',
       advantages: [

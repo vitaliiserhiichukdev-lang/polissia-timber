@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
+import Link from '../components/ui/LocaleLink'
 import { motion } from 'framer-motion'
 import ProductGallery from '../components/product/ProductGallery'
 import SpecTable from '../components/product/SpecTable'
@@ -8,9 +8,9 @@ import GradeGuide from '../components/product/GradeGuide'
 import QuoteForm from '../components/product/QuoteForm'
 import SectionHeader from '../components/ui/SectionHeader'
 import Reveal from '../components/ui/Reveal'
+import SectionReveal from '../components/ui/SectionReveal'
 import Icon from '../components/ui/Icon'
 import useSeo from '../hooks/useSeo'
-import useJsonLd from '../hooks/useJsonLd'
 import { brand, productSlugs, type ProductSlug } from '../data/contact'
 import { formatNumber } from '../data/pricing'
 import { fill } from '../i18n/content'
@@ -24,45 +24,9 @@ export default function ProductPage() {
   const { t, products, productBySlug } = useI18n()
   const product = isProductSlug(slug) ? productBySlug[slug] : undefined
 
-  useSeo({
-    title: product
-      ? `${product.name} — ${product.species} | ${brand.name}`
-      : t.meta.notFoundTitle,
-    description: product?.shortDescription ?? t.meta.notFoundDescription,
-    path: `/products/${slug}`,
-    image: product?.cardPhoto.src,
-  })
-
-  const jsonLd = useMemo(
-    () =>
-      product
-        ? {
-            '@context': 'https://schema.org',
-            '@type': 'Product',
-            name: product.name,
-            description: product.shortDescription,
-            category: product.category,
-            material: product.species,
-            countryOfOrigin: 'UA',
-            image: `${brand.site}${product.cardPhoto.src}`,
-            brand: { '@type': 'Brand', name: brand.name },
-            ...(product.priceFrom
-              ? {
-                  offers: {
-                    '@type': 'AggregateOffer',
-                    priceCurrency: 'EUR',
-                    lowPrice: product.priceFrom,
-                    availability: 'https://schema.org/InStock',
-                    seller: { '@type': 'Organization', name: brand.legalName },
-                  },
-                }
-              : {}),
-          }
-        : null,
-    [product],
-  )
-
-  useJsonLd(jsonLd, 'product-jsonld')
+  // Title, description, canonical, hreflang and the Product + BreadcrumbList
+  // schemas all come from `pageHead`, keyed off this path.
+  useSeo(`/products/${slug}`)
 
   if (!product) return <Navigate to="/404" replace />
 
@@ -181,7 +145,7 @@ export default function ProductPage() {
 
       {/* ------------------------------------------------------ description */}
       <section className="py-section">
-        <div className="container-page grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+        <SectionReveal className="container-page grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <Reveal>
             <h2 className="text-h3 text-ink-900">{t.productPage.aboutTitle}</h2>
           </Reveal>
@@ -192,53 +156,53 @@ export default function ProductPage() {
               </Reveal>
             ))}
           </div>
-        </div>
+        </SectionReveal>
       </section>
 
       {/* -------------------------------------------------- specifications */}
       <section id="specs" className="bg-sand-50 py-section">
-        <div className="container-page">
+        <SectionReveal className="container-page">
           <SectionHeader
             eyebrow={t.productPage.specsEyebrow}
             title={t.productPage.specsTitle}
             lead={t.productPage.specsLead}
           />
           <SpecTable groups={product.specs} />
-        </div>
+        </SectionReveal>
       </section>
 
       {/* --------------------------------------------------------- pricing */}
       {product.priceGroups.length > 0 && (
         <section id="prices" className="py-section">
-          <div className="container-page">
+          <SectionReveal className="container-page">
             <SectionHeader
               eyebrow={t.productPage.pricesEyebrow}
               title={t.productPage.pricesTitle}
               lead={t.productPage.pricesLead}
             />
             <PriceTable groups={product.priceGroups} />
-          </div>
+          </SectionReveal>
         </section>
       )}
 
       {/* ---------------------------------------------------------- grades */}
       {product.gradeBands.length > 0 && (
         <section id="grades" className="bg-sand-50 py-section">
-          <div className="container-page">
+          <SectionReveal className="container-page">
             <SectionHeader
               eyebrow={t.productPage.gradesEyebrow}
               title={t.productPage.gradesTitle}
               lead={t.productPage.gradesLead}
             />
             <GradeGuide bands={product.gradeBands} notPermitted={product.notPermitted} />
-          </div>
+          </SectionReveal>
         </section>
       )}
 
       {/* -------------------------------------------------------- finishes */}
       {product.finishes.length > 0 && (
         <section id="finishes" className="py-section">
-          <div className="container-page">
+          <SectionReveal className="container-page">
             <SectionHeader
               eyebrow={t.productPage.finishesEyebrow}
               title={t.productPage.finishesTitle}
@@ -265,7 +229,7 @@ export default function ProductPage() {
                 </Reveal>
               ))}
             </ul>
-          </div>
+          </SectionReveal>
         </section>
       )}
 
@@ -275,7 +239,7 @@ export default function ProductPage() {
         className="grain relative bg-ink-900 py-section text-inverse"
       >
         <span aria-hidden="true" className="grain-layer-dark" />
-        <div className="container-page relative grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
+        <SectionReveal className="container-page relative grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
           <div>
             <p className="eyebrow eyebrow-inverse">{t.productPage.inquiryEyebrow}</p>
             <h2 className="mt-5 text-h3 text-inverse">
@@ -303,12 +267,12 @@ export default function ProductPage() {
           </div>
 
           <QuoteForm defaultProduct={product.slug} compact />
-        </div>
+        </SectionReveal>
       </section>
 
       {/* --------------------------------------------------------- related */}
       <section className="py-section">
-        <div className="container-page">
+        <SectionReveal className="container-page">
           <SectionHeader
             eyebrow={t.productPage.relatedEyebrow}
             title={t.productPage.relatedTitle}
@@ -343,7 +307,7 @@ export default function ProductPage() {
               </Reveal>
             ))}
           </ul>
-        </div>
+        </SectionReveal>
       </section>
     </article>
   )

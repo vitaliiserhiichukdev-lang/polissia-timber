@@ -10,7 +10,16 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+# Intermediate SSR bundle used by scripts/prerender.mjs
+.ssr-build
 *.local
+
+# Local environment files — real keys live here and must never be committed.
+# `.env.example` is the tracked template and holds placeholders only, so the
+# negation below keeps it committable.
+.env
+.env.*
+!.env.example
 
 # Editor directories and files
 .vscode/*

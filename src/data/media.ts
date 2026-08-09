@@ -73,29 +73,30 @@ export const photos: Record<PhotoId, Photo> = {
   parquet12: photo('parquet12', '/parquet/parquet_type_12.jpg', 1280, 1111, 'parquet'),
 }
 
-/** Gallery order on the home page. */
-export const galleryOrder: PhotoId[] = [
-  'oakGradeA',
-  'oakGradeB',
-  'oakGradeC',
+/**
+ * The seven photographs the home-page gallery shows, in order.
+ *
+ * Deliberately a selection, not the whole library. Showing all 21 turned the
+ * section into a contact sheet, and twelve near-identical parquet tones drowned
+ * the photos a buyer actually needs.
+ *
+ * The parquet shots are excluded on purpose: they are studio product shots on a
+ * white background, so any crop is mostly empty backdrop, and they sit oddly in
+ * a section whose whole claim is "photographed as it ships". They have a
+ * purpose-built grid on the parquet product page, which the gallery links to.
+ *
+ * Order matters — it is what the mosaic bands read from, so this is composition
+ * as much as content. The two widest cells (first and last) need the landscape
+ * frames; `oakEdge` and `pineBundles` are there for that reason.
+ */
+export const galleryTileIds: PhotoId[] = [
   'oakEdge',
-  'machined',
-  'pinePacks',
-  'pineBundles',
-  'pineBeams',
+  'oakGradeA',
   'pineYard',
-  'parquet1',
-  'parquet2',
-  'parquet3',
-  'parquet4',
-  'parquet5',
-  'parquet6',
-  'parquet7',
-  'parquet8',
-  'parquet9',
-  'parquet10',
-  'parquet11',
-  'parquet12',
+  'pinePacks',
+  'machined',
+  'oakGradeC',
+  'pineBundles',
 ]
 
 export const heroPhoto = photos.pinePacks

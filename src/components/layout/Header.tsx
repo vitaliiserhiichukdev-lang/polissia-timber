@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import Link from '../ui/LocaleLink'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import Logo from './Logo'
 import LanguageSwitcher from './LanguageSwitcher'
 import Icon from '../ui/Icon'
 import useBodyLock from '../../hooks/useBodyLock'
 import { brand } from '../../data/contact'
+import { stripLocale } from '../../i18n/routing'
 import { useI18n } from '../../i18n/useI18n'
 import { cn } from '../../lib/cn'
 
@@ -25,8 +27,8 @@ export default function Header() {
   // nothing.
   useEffect(() => setMenuOpen(false), [pathname, hash, key])
 
-  // Only the top of the home page sits over the dark hero.
-  const transparent = pathname === '/' && !scrolled && !menuOpen
+  // Only the top of the home page sits over the dark hero — in any language.
+  const transparent = stripLocale(pathname) === '/' && !scrolled && !menuOpen
 
   return (
     <header
@@ -38,18 +40,29 @@ export default function Header() {
         scrolled && !transparent && 'shadow-[0_1px_20px_rgba(20,18,15,0.07)]',
       )}
     >
-      <div className="container-page flex min-h-header items-center gap-4 py-3 lg:gap-8">
+      {/*
+        Three zones: fixed logo, flexible nav, fixed actions. The nav is the only
+        element allowed to flex, and it may scroll rather than push the actions
+        off-screen — with eight items across four languages (German and Ukrainian
+        labels run ~30% longer than English) a rigid row overflows the container
+        and drags the whole bar sideways.
+      */}
+      <div className="container-page flex min-h-header items-center gap-3 py-3 lg:gap-5">
         <Link to="/" aria-label={`${brand.name} — ${t.common.home}`} className="shrink-0">
-          <Logo inverse={transparent} />
+          {/* No strapline here: it costs ~85px that the nav needs. Footer keeps it. */}
+          <Logo inverse={transparent} compact />
         </Link>
 
-        <nav className="mx-auto hidden items-center gap-6 xl:flex xl:gap-7" aria-label="Main">
+        <nav
+          className="no-scrollbar hidden min-w-0 flex-1 items-center justify-center gap-x-4 overflow-x-auto xl:flex 2xl:gap-x-6"
+          aria-label="Main"
+        >
           {t.nav.map((link) => (
             <Link
               key={link.key}
               to={link.href}
               className={cn(
-                'group relative py-1 text-sm font-medium whitespace-nowrap transition-colors duration-300',
+                'group relative shrink-0 py-1 text-[0.8125rem] font-medium whitespace-nowrap transition-colors duration-300 2xl:text-sm',
                 transparent ? 'text-inverse/80 hover:text-white' : 'text-muted hover:text-oak-600',
               )}
             >
@@ -59,22 +72,11 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="ml-auto flex shrink-0 items-center gap-3">
-          <a
-            href={`tel:${brand.phoneHref}`}
-            className={cn(
-              'hidden items-center gap-2 text-sm font-medium transition-colors duration-300 2xl:inline-flex',
-              transparent ? 'text-inverse/80 hover:text-white' : 'text-muted hover:text-oak-600',
-            )}
-          >
-            <Icon name="phone" size={16} />
-            {brand.phone}
-          </a>
-
+        <div className="ml-auto flex shrink-0 items-center gap-2.5 xl:ml-0">
           <LanguageSwitcher inverse={transparent} />
 
-          <Link to="/#contact" className="btn btn-sm hidden sm:inline-flex">
-            {t.common.requestQuote}
+          <Link to="/#contact" className="btn btn-sm hidden whitespace-nowrap sm:inline-flex">
+            {t.common.quoteShort}
             <span className="btn-icon">
               <Icon name="arrowRight" size={16} />
             </span>
