@@ -1,18 +1,26 @@
 /**
  * Language-neutral company facts: brand name, contact channels, delivery terms.
  *
- * The contact block is still a PLACEHOLDER — replace the e-mail, phone and
- * domain with the real ones before going live. Translated text (address
- * wording, office hours, spoken languages) lives in the locale dictionaries.
+ * Translated text — address wording, office hours, spoken languages — lives in
+ * the locale dictionaries, not here.
  */
 
 export const brand = {
   name: 'Polissia Timber',
-  legalName: 'Polissia Timber LLC',
-  // TO CONFIRM — placeholder contact block
+  /**
+   * TO CONFIRM — the registered entity name, exactly as in the register.
+   *
+   * Held equal to the trading name on purpose: this goes into the footer
+   * copyright and into `Organization` / `AggregateOffer` structured data, where
+   * Google reads it as the company's official name. Asserting a legal form the
+   * business may not have — "LLC" when it is a sole trader — is a claim about
+   * registration, so the neutral value stands until the real one is supplied.
+   */
+  legalName: 'Polissia Timber',
   email: 'export@polissiatimber.com',
-  phone: '+380 44 000 00 00',
-  phoneHref: '+380440000000',
+  /** Grouped for reading; `phoneHref` is the dialable form for `tel:`. */
+  phone: '+380 99 130 74 07',
+  phoneHref: '+380991307407',
   site: 'https://polissiatimber.com',
   incoterms: ['EXW', 'FCA', 'CPT', 'DAP'],
 } as const
