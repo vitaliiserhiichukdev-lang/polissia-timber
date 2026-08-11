@@ -93,6 +93,13 @@
 
 @layer base {
   html {
+    /*
+      The site has exactly one light theme. Saying so stops the browser drawing
+      native controls in the OS palette — on a machine in dark mode the
+      `<select>` popup rendered near-black under a white form, which read as a
+      broken dropdown rather than a deliberate choice.
+    */
+    color-scheme: light;
     scroll-behavior: smooth;
     /* Anchor targets land flush with the bottom of the sticky header. The 2px
        tuck-under stops a sliver of the previous section showing through the
@@ -382,6 +389,23 @@
 
   .field::placeholder {
     color: color-mix(in srgb, var(--color-muted) 65%, transparent);
+  }
+
+  /*
+    A select still showing its placeholder should look like one. Inputs get that
+    from `::placeholder`; a select has no equivalent, so "Select a product…"
+    rendered in full body colour and was indistinguishable from a real choice —
+    the form looked pre-filled. `:has()` reads the state straight from the DOM,
+    so no call site has to track it.
+  */
+  select.field:has(option[value='']:checked) {
+    color: color-mix(in srgb, var(--color-muted) 65%, transparent);
+  }
+
+  /* Options themselves always render on the light card, never inherited. */
+  .field option {
+    color: var(--color-body);
+    background-color: #fff;
   }
 
   .field:focus {

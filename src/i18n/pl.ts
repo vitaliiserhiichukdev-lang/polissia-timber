@@ -518,7 +518,7 @@ export const pl: Dictionary = {
   form: {
     name: 'Imię i nazwisko *',
     namePlaceholder: 'Jan Kowalski',
-    company: 'Firma *',
+    company: 'Firma',
     companyPlaceholder: 'Drewno Sp. z o.o.',
     country: 'Kraj',
     countryPlaceholder: 'Polska',
@@ -554,7 +554,6 @@ export const pl: Dictionary = {
     privacy: 'Twoich danych używamy wyłącznie do odpowiedzi na to zapytanie.',
     errors: {
       name: 'Podaj proszę swoje imię i nazwisko.',
-      company: 'Nazwa firmy pomoże nam dokładniej wycenić.',
       email: 'Wpisz poprawny adres e-mail.',
       message: 'Napisz proszę kilka słów o swojej potrzebie.',
     },

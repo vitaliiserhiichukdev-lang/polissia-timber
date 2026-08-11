@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://polissia-timber.com/sitemap.xml
+Sitemap: https://polissiatimber.com/sitemap.xml

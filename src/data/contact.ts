@@ -10,10 +10,10 @@ export const brand = {
   name: 'Polissia Timber',
   legalName: 'Polissia Timber LLC',
   // TO CONFIRM — placeholder contact block
-  email: 'export@polissia-timber.com',
+  email: 'export@polissiatimber.com',
   phone: '+380 44 000 00 00',
   phoneHref: '+380440000000',
-  site: 'https://polissia-timber.com',
+  site: 'https://polissiatimber.com',
   incoterms: ['EXW', 'FCA', 'CPT', 'DAP'],
 } as const
 

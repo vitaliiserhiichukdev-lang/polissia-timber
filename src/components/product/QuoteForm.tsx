@@ -84,7 +84,9 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
   const validate = () => {
     const next: Partial<Record<keyof FormState, string>> = {}
     if (!form.name.trim()) next.name = t.form.errors.name
-    if (!form.company.trim()) next.company = t.form.errors.company
+    // Company is deliberately optional: a joiner or architect without a
+    // registered company is still a real enquiry, and the name is easy enough
+    // to ask for in the reply. A required field only costs submissions.
     if (!EMAIL_PATTERN.test(form.email)) next.email = t.form.errors.email
     if (form.message.trim().length < 10) next.message = t.form.errors.message
     setErrors(next)
@@ -110,7 +112,7 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
     const dash = '—'
     const body = [
       `${f.name}: ${form.name}`,
-      `${f.company}: ${form.company}`,
+      `${f.company}: ${form.company || dash}`,
       `${f.country}: ${form.country || dash}`,
       `${f.email}: ${form.email}`,
       `${f.phone}: ${form.phone || dash}`,
@@ -153,6 +155,17 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
         }),
       })
       if (!response.ok) throw new Error(`Request failed: ${response.status}`)
+
+      /**
+       * A 200 is not enough. If the endpoint is ever misrouted the visitor gets
+       * the SPA's own HTML with a 200, and reporting that as "enquiry received"
+       * loses a real enquiry silently. Only the handler's `{ ok: true }` counts.
+       */
+      const result: unknown = await response.json()
+      if ((result as { ok?: boolean } | null)?.ok !== true) {
+        throw new Error('Endpoint did not confirm delivery')
+      }
+
       setStatus('sent')
       setForm(emptyForm(defaultProduct))
     } catch {

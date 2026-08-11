@@ -145,7 +145,9 @@ Currently hidden, and what it takes to reveal each:
   `contact.values` block of each dictionary.
 - Pine dimensions and parquet construction/thickness (no written spec supplied).
 - Moisture regime for oak; the indicative list of export destinations.
-- `https://polissia-timber.com` in `brand.site` and `public/robots.txt`.
+- The domain is `polissiatimber.com`, set in `brand.site` and `public/robots.txt`.
+  Transactional mail is sent from the `send.` subdomain so its SPF/DKIM cannot
+  collide with the Zoho records on the apex — see `server/quote.ts`.
 
 **The compliance section states regulatory facts** (EUDR data provided per
 consignment, phytosanitary, ISPM-15, EUR.1). It carries a review notice in both

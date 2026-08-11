@@ -316,9 +316,9 @@ export interface Dictionary {
     sending: string
     required: string
     privacy: string
+    /** Company is optional, so it has no error message. */
     errors: {
       name: string
-      company: string
       email: string
       message: string
     }
