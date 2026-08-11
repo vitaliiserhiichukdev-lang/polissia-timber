@@ -1,0 +1,16 @@
+# Netlify deployment. Delete this file if you host elsewhere.
+[build]
+  command = "yarn build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# SPA fallback. Function routes (netlify/functions/quote.mts declares
+# `path = "/api/quote"`) are matched before redirects, so /api/quote still
+# reaches the function.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

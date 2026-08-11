@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import Icon from '../ui/Icon'
 import { brand } from '../../data/contact'
@@ -7,9 +7,9 @@ import { useI18n } from '../../i18n/useI18n'
 import { cn } from '../../lib/cn'
 
 /**
- * Optional JSON endpoint (form service or own API). Without it the form opens a
- * pre-filled email in the visitor's mail client, so the site is useful with no
- * backend deployed.
+ * JSON endpoint that receives enquiries — normally `/api/quote`, served by the
+ * function in `server/quote.ts`. Without it the form falls back to composing an
+ * email in the visitor's mail client, so the site still works undeployed.
  */
 const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT
 
@@ -69,6 +69,13 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [status, setStatus] = useState<Status>('idle')
 
+  /**
+   * Captcha-free bot filtering, checked again on the server:
+   * a hidden field no human can see, and how long the form took to fill.
+   */
+  const honeypot = useRef<HTMLInputElement>(null)
+  const mountedAt = useRef(Date.now())
+
   const update = (field: keyof FormState) => (event: { target: { value: string } }) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }))
     setErrors((prev) => ({ ...prev, [field]: undefined }))
@@ -77,7 +84,9 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
   const validate = () => {
     const next: Partial<Record<keyof FormState, string>> = {}
     if (!form.name.trim()) next.name = t.form.errors.name
-    if (!form.company.trim()) next.company = t.form.errors.company
+    // Company is deliberately optional: a joiner or architect without a
+    // registered company is still a real enquiry, and the name is easy enough
+    // to ask for in the reply. A required field only costs submissions.
     if (!EMAIL_PATTERN.test(form.email)) next.email = t.form.errors.email
     if (form.message.trim().length < 10) next.message = t.form.errors.message
     setErrors(next)
@@ -103,7 +112,7 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
     const dash = '—'
     const body = [
       `${f.name}: ${form.name}`,
-      `${f.company}: ${form.company}`,
+      `${f.company}: ${form.company || dash}`,
       `${f.country}: ${form.country || dash}`,
       `${f.email}: ${form.email}`,
       `${f.phone}: ${form.phone || dash}`,
@@ -138,9 +147,25 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
       const response = await fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, locale: t.locale }),
+        body: JSON.stringify({
+          ...form,
+          locale: t.locale,
+          honeypot: honeypot.current?.value ?? '',
+          elapsedMs: Date.now() - mountedAt.current,
+        }),
       })
       if (!response.ok) throw new Error(`Request failed: ${response.status}`)
+
+      /**
+       * A 200 is not enough. If the endpoint is ever misrouted the visitor gets
+       * the SPA's own HTML with a 200, and reporting that as "enquiry received"
+       * loses a real enquiry silently. Only the handler's `{ ok: true }` counts.
+       */
+      const result: unknown = await response.json()
+      if ((result as { ok?: boolean } | null)?.ok !== true) {
+        throw new Error('Endpoint did not confirm delivery')
+      }
+
       setStatus('sent')
       setForm(emptyForm(defaultProduct))
     } catch {
@@ -185,6 +210,20 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
       noValidate
       className={cn('card-surface p-6 md:p-8', compact && 'md:p-7')}
     >
+      {/* Honeypot: invisible and skipped by keyboard, so only bots fill it. */}
+      <div className="sr-only" aria-hidden="true">
+        <label htmlFor="qf-website">Website</label>
+        <input
+          ref={honeypot}
+          id="qf-website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          defaultValue=""
+        />
+      </div>
+
       <div className="grid gap-5 sm:grid-cols-2">
         <div className={fieldWrap}>
           <label className={labelClass} htmlFor="qf-name">

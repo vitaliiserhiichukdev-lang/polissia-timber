@@ -521,7 +521,7 @@ export const de: Dictionary = {
   form: {
     name: 'Name *',
     namePlaceholder: 'Thomas Müller',
-    company: 'Firma *',
+    company: 'Firma',
     companyPlaceholder: 'Holzhandel GmbH',
     country: 'Land',
     countryPlaceholder: 'Deutschland',
@@ -557,7 +557,6 @@ export const de: Dictionary = {
     privacy: 'Wir verwenden Ihre Daten nur zur Beantwortung dieser Anfrage.',
     errors: {
       name: 'Bitte nennen Sie uns Ihren Namen.',
-      company: 'Der Firmenname hilft uns, korrekt zu kalkulieren.',
       email: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
       message: 'Bitte ein paar Worte zu Ihrem Bedarf.',
     },

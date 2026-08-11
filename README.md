@@ -145,7 +145,9 @@ Currently hidden, and what it takes to reveal each:
   `contact.values` block of each dictionary.
 - Pine dimensions and parquet construction/thickness (no written spec supplied).
 - Moisture regime for oak; the indicative list of export destinations.
-- `https://polissia-timber.com` in `brand.site` and `public/robots.txt`.
+- The domain is `polissiatimber.com`, set in `brand.site` and `public/robots.txt`.
+  Transactional mail is sent from the `send.` subdomain so its SPF/DKIM cannot
+  collide with the Zoho records on the apex — see `server/quote.ts`.
 
 **The compliance section states regulatory facts** (EUDR data provided per
 consignment, phytosanitary, ISPM-15, EUR.1). It carries a review notice in both
@@ -252,16 +254,56 @@ the page transitions all disable themselves when it is set.
 
 ## Quote form
 
-`QuoteForm` validates client-side and then:
+Enquiries are the point of the site, so delivery does not depend on the
+visitor's mail client:
 
-- `POST`s JSON to `VITE_CONTACT_ENDPOINT` when that variable is set, or
-- opens a pre-filled e-mail in the visitor's mail client when it is not,
-
-so the site is usable with no backend deployed. To wire a real endpoint:
-
-```bash
-echo 'VITE_CONTACT_ENDPOINT=https://your-form-endpoint' > .env.local
 ```
+QuoteForm (client)  →  POST /api/quote  →  server/quote.ts  →  Resend  →  inbox
+```
+
+- **`src/components/product/QuoteForm.tsx`** validates input, then posts JSON to
+  `VITE_CONTACT_ENDPOINT`. With that variable unset it falls back to composing a
+  pre-filled e-mail — handy locally, not something to ship.
+- **`server/quote.ts`** holds the whole server side: validation, bot filtering
+  and the Resend call. It is written against the Web `Request`/`Response` API,
+  so the platform adapters are three lines each —
+  `netlify/functions/quote.mts` and `api/quote.ts` (Vercel). Cloudflare Pages
+  works the same way via `functions/api/quote.ts` re-exporting `onRequestPost`.
+- The customer's address becomes `reply_to`, so replying from the inbox answers
+  them directly, and the mail is sent **from your own domain** — no third party
+  in the delivery path and nothing stored outside your mailbox.
+
+### Setup
+
+1. Create a Resend account, verify the sending domain and issue an API key.
+2. Set the variables on the hosting platform (see `.env.example`):
+
+   | Variable | Scope | Purpose |
+   | --- | --- | --- |
+   | `VITE_CONTACT_ENDPOINT` | build | `/api/quote` |
+   | `RESEND_API_KEY` | function | Resend key — never prefix with `VITE_` |
+   | `QUOTE_TO` | function | inbox that receives enquiries |
+   | `QUOTE_FROM` | function | verified sender, e.g. `Polissia Timber <website@…>` |
+   | `ALLOWED_ORIGIN` | function | rejects posts from other sites |
+
+3. Deploy. `netlify.toml` / `vercel.json` are included — keep the one matching
+   your host and delete the other.
+
+Locally: `netlify dev` or `vercel dev` serves the function alongside Vite. Plain
+`yarn dev` has no function, so the form uses the e-mail fallback.
+
+### Spam handling
+
+No captcha. Two checks, both enforced **server-side** because the client can be
+bypassed:
+
+- a honeypot field, clipped from view and out of the tab order, that only bots
+  fill in;
+- the time between the form mounting and being submitted; under 2.5 s is a bot.
+
+Either one makes the endpoint answer `200` and quietly drop the message — an
+error response would just tell a bot what to fix. Payload fields are length
+capped and HTML-escaped before they reach the e-mail.
 
 ## SEO
 

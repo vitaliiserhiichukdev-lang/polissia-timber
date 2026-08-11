@@ -512,7 +512,7 @@ export const en: Dictionary = {
   form: {
     name: 'Name *',
     namePlaceholder: 'Jan Kowalski',
-    company: 'Company *',
+    company: 'Company',
     companyPlaceholder: 'Drewno Sp. z o.o.',
     country: 'Country',
     countryPlaceholder: 'Poland',
@@ -548,7 +548,6 @@ export const en: Dictionary = {
     privacy: 'We use your details only to answer this enquiry.',
     errors: {
       name: 'Please tell us your name.',
-      company: 'Company name helps us quote correctly.',
       email: 'Enter a valid email address.',
       message: 'A few words about your requirement, please.',
     },

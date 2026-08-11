@@ -515,7 +515,7 @@ export const uk: Dictionary = {
   form: {
     name: "Ім'я *",
     namePlaceholder: 'Іван Ковальчук',
-    company: 'Компанія *',
+    company: 'Компанія',
     companyPlaceholder: 'ТОВ «Деревообробка»',
     country: 'Країна',
     countryPlaceholder: 'Польща',
@@ -551,7 +551,6 @@ export const uk: Dictionary = {
     privacy: 'Ваші дані використовуємо лише для відповіді на цей запит.',
     errors: {
       name: 'Вкажіть, будь ласка, ваше ім’я.',
-      company: 'Назва компанії допоможе точніше розрахувати ціну.',
       email: 'Введіть коректну електронну адресу.',
       message: 'Кілька слів про вашу потребу, будь ласка.',
     },
