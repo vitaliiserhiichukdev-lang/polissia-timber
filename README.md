@@ -141,8 +141,11 @@ Currently hidden, and what it takes to reveal each:
 
 **`TO CONFIRM` — published values that need checking:**
 
-- Brand name, e-mail, phone and address in `src/data/contact.ts` and the
-  `contact.values` block of each dictionary.
+- `legalName` in `src/data/contact.ts` — the registered entity name and form.
+  It appears in the footer copyright and in the `Organization` / `AggregateOffer`
+  JSON-LD, so it should match the register.
+- The address wording in the `contact.values` block of each dictionary — it is
+  currently only "Kyiv region, Ukraine".
 - Pine dimensions and parquet construction/thickness (no written spec supplied).
 - Moisture regime for oak; the indicative list of export destinations.
 - The domain is `polissiatimber.com`, set in `brand.site` and `public/robots.txt`.
