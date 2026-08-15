@@ -61,7 +61,9 @@ function organization(t: Dictionary): Record<string, unknown> {
     address: {
       '@type': 'PostalAddress',
       addressCountry: 'UA',
-      addressLocality: t.contact.values.address,
+      // The dictionary holds one localised line, so it belongs in the free-form
+      // street field rather than `addressLocality`, which means the town alone.
+      streetAddress: t.contact.values.address,
     },
     email: brand.email,
     telephone: brand.phoneHref,
