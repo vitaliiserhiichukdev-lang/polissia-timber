@@ -507,7 +507,7 @@ export const pl: Dictionary = {
       languages: 'Mówimy',
     },
     values: {
-      address: 'Obwód kijowski, Ukraina',
+      address: 'Bronniki, ul. Bohdana Chmielnickiego, rejon rówieński, obwód rówieński, Ukraina',
       hours: 'Pn–Pt, 08:00–18:00 (EET)',
       languages: 'polski, angielski, niemiecki, ukraiński',
     },

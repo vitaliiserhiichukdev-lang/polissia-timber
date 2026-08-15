@@ -47,8 +47,14 @@ export interface Destination {
   dy?: number
 }
 
-/** The yard shipments leave from — Kyiv region. */
-export const origin = { lat: 50.45, lon: 30.52 }
+/**
+ * The yard shipments leave from: Bronnyky, Rivne district, Rivne region.
+ *
+ * Not a cosmetic detail — every route on the map is drawn from here and the
+ * reference rings measure distance from it. The previous value pointed at Kyiv,
+ * some 300 km east, which overstated the haul to every western destination.
+ */
+export const origin = { lat: 50.7063, lon: 26.0983 }
 
 export const destinations: Destination[] = [
   { code: 'PL', city: 'Warsaw', lat: 52.23, lon: 21.01, labelled: true, anchor: 'start', dy: -16 },

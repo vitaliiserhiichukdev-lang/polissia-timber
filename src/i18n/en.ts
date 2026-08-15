@@ -501,7 +501,7 @@ export const en: Dictionary = {
       languages: 'We speak',
     },
     values: {
-      address: 'Kyiv region, Ukraine',
+      address: 'Bronnyky, Bohdana Khmelnytskoho St., Rivne district, Rivne region, Ukraine',
       hours: 'Mon–Fri, 08:00–18:00 EET',
       languages: 'English, German, Polish, Ukrainian',
     },

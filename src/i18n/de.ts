@@ -509,7 +509,7 @@ export const de: Dictionary = {
       languages: 'Wir sprechen',
     },
     values: {
-      address: 'Region Kyjiw, Ukraine',
+      address: 'Bronnyky, Bohdan-Chmelnyzkyj-Str., Rajon Riwne, Oblast Riwne, Ukraine',
       hours: 'Mo–Fr, 08:00–18:00 (EET)',
       languages: 'Deutsch, Englisch, Polnisch, Ukrainisch',
     },
