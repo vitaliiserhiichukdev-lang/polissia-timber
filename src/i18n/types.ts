@@ -1,6 +1,6 @@
 import type { IconName } from '../components/ui/Icon'
 import type { DestinationCode } from '../data/destinations'
-import type { PhotoId } from '../data/media'
+import type { PhotoId, VideoId } from '../data/media'
 import type { GradeCode } from '../data/pricing'
 import type { ProductSlug } from '../data/contact'
 
@@ -58,42 +58,41 @@ export interface FaqItem {
   answer: string
 }
 
+/** How a grade is presented: the code comes from the price list, the rest is copy. */
 export interface GradeText {
-  code: GradeCode
+  /** Trade name printed beside the code, e.g. "Select". */
   name: string
-  allowances: string[]
+  /** One line for the picker. */
+  summary: string
+  /** What the face of the board looks like in this grade. */
+  traits: string[]
 }
 
-export interface GradeBandText {
-  widths: string
-  grades: GradeText[]
-}
-
+/**
+ * Copy for one parquet format. Sizes, prices and construction figures are not
+ * here — they come from `src/data/pricing.ts`, so they cannot drift between
+ * languages.
+ */
 export interface ProductText {
   name: string
+  /** Short form for the format picker and chips, e.g. "Chevron". */
+  shortName: string
   kicker: string
   category: string
-  species: string
   tagline: string
   shortDescription: string
   description: string[]
-  keyFacts: KeyFact[]
-  priceNote: string
-  sizesSummary: string
-  gradesSummary: string
   advantages: string[]
   specs: SpecGroupText[]
-  gradeBands: GradeBandText[]
-  notPermitted: string[]
 }
 
-export interface PhotoText {
+export interface MediaText {
   alt: string
   caption: string
 }
 
 /**
- * Every translatable string on the site. `en.ts` and `uk.ts` both satisfy this
+ * Every translatable string on the site. Each locale file satisfies this
  * interface, so a missing translation is a type error rather than a blank page.
  */
 export interface Dictionary {
@@ -103,6 +102,8 @@ export interface Dictionary {
   label: string
   /** Two-letter code shown in the header toggle. */
   short: string
+  /** Prices and measurements use a decimal comma (52,50 € · 3,2 mm). */
+  decimalComma: boolean
 
   meta: {
     homeTitle: string
@@ -118,28 +119,35 @@ export interface Dictionary {
     /** Header CTA. Must stay short — the top bar has eight nav items beside it. */
     quoteShort: string
     viewProducts: string
-    viewDetails: string
     viewProduct: string
-    onRequest: string
     priceFrom: string
-    pricing: string
-    quotedPerSpecification: string
-    gradeBased: string
     skipToContent: string
     openMenu: string
     closeMenu: string
     language: string
     home: string
     products: string
-    perCubicMetre: string
+    perSquareMetre: string
     priceUnit: string
     openImage: string
     closeViewer: string
     previousImage: string
     nextImage: string
     viewFullSize: string
+    playVideo: string
+    pauseVideo: string
+    video: string
     mm: string
     logoSub: string
+    whatsapp: string
+    whatsappCta: string
+  }
+
+  /** Messages the WhatsApp chat opens with. */
+  whatsapp: {
+    general: string
+    /** "…{product}, grade {grade}, {size} — {price} per m²…" */
+    selection: string
   }
 
   hero: {
@@ -148,7 +156,8 @@ export interface Dictionary {
     titleAccent: string
     lead: string
     insetCaption: string
-    scrollLabel: string
+    /** Label over the lowest price on the sheet. */
+    priceBadge: string
     imageAlt: string
   }
 
@@ -164,18 +173,32 @@ export interface Dictionary {
     tags: string[]
   }
 
+  /** The format / grade / size picker that opens the home page. */
   catalog: {
     eyebrow: string
     title: string
     lead: string
-    action: string
     footnote: string
-    cardLabels: {
-      woodType: string
-      sizes: string
-      grade: string
-    }
+    formatStep: string
+    gradeStep: string
+    sizeStep: string
+    priceLabel: string
+    priceNote: string
+    specs: { thickness: string; wearLayer: string; width: string; length: string }
+    randomLengths: string
+    fixedLengths: string
+    details: string
   }
+
+  priceList: {
+    eyebrow: string
+    title: string
+    lead: string
+    size: string
+    footnote: string
+  }
+
+  grades: Record<GradeCode, GradeText>
 
   process: {
     eyebrow: string
@@ -191,7 +214,7 @@ export interface Dictionary {
 
   /**
    * EUDR and the export document set. This is the first filter an EU importer
-   * applies, so it sits directly under the hero.
+   * applies, so it sits directly under the catalogue.
    */
   compliance: {
     eyebrow: string
@@ -227,7 +250,7 @@ export interface Dictionary {
     eyebrow: string
     title: string
     lead: string
-    /** Points at the parquet page, which holds the full range of finishes. */
+    /** Points at the chevron page, which holds the range of finishes. */
     action: string
   }
 
@@ -243,7 +266,7 @@ export interface Dictionary {
     cta: string
     /** Destination country names, keyed to `src/data/destinations.ts`. */
     countries: Record<DestinationCode, string>
-    /** Marker for the yard the routes start from. */
+    /** Marker for the site the routes start from. */
     originLabel: string
     /** Reference ring label, e.g. "{km} km". */
     ringLabel: string
@@ -270,6 +293,7 @@ export interface Dictionary {
     labels: {
       email: string
       phone: string
+      whatsapp: string
       production: string
       hours: string
       languages: string
@@ -279,6 +303,8 @@ export interface Dictionary {
       hours: string
       languages: string
     }
+    whatsappTitle: string
+    whatsappBody: string
     /** "Prefer email? Write directly to {email} …" — split around the address. */
     noteBefore: string
     noteAfter: string
@@ -304,8 +330,8 @@ export interface Dictionary {
     dimensionsPlaceholder: string
     volume: string
     volumePlaceholder: string
-    moisture: string
-    moistureOptions: { any: string; kd: string; ad: string; fresh: string }
+    finish: string
+    finishOptions: { any: string; unfinished: string; oiled: string; lacquered: string }
     destination: string
     destinationPlaceholder: string
     incoterms: string
@@ -340,7 +366,7 @@ export interface Dictionary {
       grade: string
       dimensions: string
       volume: string
-      moisture: string
+      finish: string
       destination: string
       incoterms: string
       notSpecified: string
@@ -349,6 +375,7 @@ export interface Dictionary {
 
   productPage: {
     aboutTitle: string
+    configureTitle: string
     specsEyebrow: string
     specsTitle: string
     specsLead: string
@@ -366,16 +393,7 @@ export interface Dictionary {
     inquiryLead: string
     relatedEyebrow: string
     relatedTitle: string
-    priceInformation: string
     seePriceList: string
-    permitted: string
-    notPermitted: string
-    availableLengths: string
-    priceColumn: string
-    gradeColumn: string
-    gradeLabel: string
-    mixedGrade: string
-    priceFootnote: string
   }
 
   footer: {
@@ -395,6 +413,7 @@ export interface Dictionary {
   }
 
   products: Record<ProductSlug, ProductText>
-  photos: Record<PhotoId, PhotoText>
+  photos: Record<PhotoId, MediaText>
+  videos: Record<VideoId, MediaText>
   finishes: { id: PhotoId; name: string; tone: string }[]
 }

@@ -5,8 +5,9 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-
 import Logo from './Logo'
 import LanguageSwitcher from './LanguageSwitcher'
 import Icon from '../ui/Icon'
+import WhatsAppIcon from '../ui/WhatsAppIcon'
 import useBodyLock from '../../hooks/useBodyLock'
-import { brand } from '../../data/contact'
+import { brand, whatsappHref } from '../../data/contact'
 import { stripLocale } from '../../i18n/routing'
 import { useI18n } from '../../i18n/useI18n'
 import { cn } from '../../lib/cn'
@@ -144,7 +145,16 @@ export default function Header() {
                 <Icon name="phone" size={16} />
                 {brand.phone}
               </a>
-              <Link to="/#contact" className="btn btn-oak mt-2 w-full">
+              <a
+                href={whatsappHref(t.whatsapp.general)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-whatsapp mt-2 w-full"
+              >
+                <WhatsAppIcon size={18} />
+                {t.common.whatsappCta}
+              </a>
+              <Link to="/#contact" className="btn btn-oak w-full">
                 {t.common.requestQuote}
               </Link>
             </div>

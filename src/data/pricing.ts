@@ -1,84 +1,86 @@
+import type { ProductSlug } from './contact'
+
 /**
- * Oak price list, transcribed from the company's own sheet
- * (public/specifications/document_2.jpg).
+ * Parquet price list, transcribed from the company sheet
+ * (docs/price-list-2026-09.jpg).
  *
- * `price` is the current quote — the revised handwritten figure where the sheet
- * gives one, otherwise the printed one. `supersededPrice` keeps the original
- * printed figure for reference; it is not shown on the site.
+ * Every line on the sheet is the same build — 14 mm overall with a 3.2 mm oak
+ * wear layer — so construction is stated once and each format only varies by
+ * width, length and grade. Prices are EUR per square metre, the unit parquet is
+ * sold in; the sheet itself prints only "€" (TO CONFIRM).
  *
- * Sections, lengths and grade numerals are language-neutral, so this file is
- * shared by both locales; only the "mixed grade" label and the units are
- * translated.
+ * Sizes, grade codes and prices are language-neutral, so this file is shared by
+ * every locale; grade names and units are translated in the dictionaries.
  */
 
-export type GradeCode = 'I' | 'II' | 'III' | 'IV' | 'mixed'
+export type GradeCode = 'AB' | 'C'
 
-export interface GradePrice {
-  grade: GradeCode
-  /** Current price per m³, or null when the sheet no longer quotes the grade. */
-  price: number | null
-  /** Printed figure the current price replaced — kept as provenance only. */
-  supersededPrice?: number
-}
+export const gradeCodes: GradeCode[] = ['AB', 'C']
 
-export interface PriceGroup {
-  /** Section label, e.g. "230 × 30 mm" — rendered with a translated unit. */
+/** How the code is printed: the sheet writes the upper grade as "A-B". */
+export const gradeDisplay: Record<GradeCode, string> = { AB: 'A-B', C: 'C' }
+
+export const construction = {
+  /** Overall board thickness, mm. */
+  thickness: 14,
+  /** Oak top layer, mm. */
+  wearLayer: 3.2,
+} as const
+
+export interface SizeOption {
   width: number
-  thickness: number
+  /**
+   * `range`: random lengths between the two figures (planks).
+   * `fixed`: the block lengths produced (chevron and herringbone).
+   */
   lengths: number[]
-  prices: GradePrice[]
+  lengthKind: 'range' | 'fixed'
+  /** EUR per m². */
+  prices: Record<GradeCode, number>
 }
 
-export const oakPriceGroups: PriceGroup[] = [
-  {
-    width: 230,
-    thickness: 30,
-    lengths: [2050, 2250, 2350, 2450],
-    prices: [
-      { grade: 'I', price: 2650, supersededPrice: 1800 },
-      { grade: 'II', price: 2300, supersededPrice: 1550 },
-      { grade: 'III', price: 1800, supersededPrice: 850 },
-      // Grade IV is struck through on the source sheet — quoted on request.
-      { grade: 'IV', price: null, supersededPrice: 650 },
-    ],
-  },
-  {
-    width: 170,
-    thickness: 30,
-    lengths: [1040, 1240, 1440, 1640],
-    prices: [
-      { grade: 'I', price: 1350, supersededPrice: 1000 },
-      { grade: 'II', price: 1200, supersededPrice: 850 },
-      { grade: 'III', price: 1050, supersededPrice: 700 },
-    ],
-  },
-  {
-    width: 150,
-    thickness: 30,
-    lengths: [740, 840, 1040, 1240, 1440],
-    prices: [
-      { grade: 'I', price: 1300, supersededPrice: 950 },
-      { grade: 'II', price: 1130, supersededPrice: 780 },
-      { grade: 'III', price: 1000, supersededPrice: 650 },
-    ],
-  },
-  {
-    width: 115,
-    thickness: 30,
-    lengths: [630, 830, 1030, 1230],
-    prices: [{ grade: 'mixed', price: 800, supersededPrice: 500 }],
-  },
-  {
-    width: 80,
-    thickness: 30,
-    lengths: [320, 420, 520, 620],
-    prices: [{ grade: 'mixed', price: 700, supersededPrice: 400 }],
-  },
-]
+export const priceList: Record<ProductSlug, SizeOption[]> = {
+  'oak-chevron-parquet': [
+    { width: 125, lengths: [500, 600, 700], lengthKind: 'fixed', prices: { AB: 53, C: 50 } },
+  ],
+  'oak-plank-flooring': [
+    { width: 125, lengths: [600, 1400], lengthKind: 'range', prices: { AB: 42.5, C: 38 } },
+    { width: 145, lengths: [800, 1600], lengthKind: 'range', prices: { AB: 44.5, C: 39 } },
+    { width: 195, lengths: [1700, 2500], lengthKind: 'range', prices: { AB: 52.5, C: 40 } },
+  ],
+  'oak-herringbone-parquet': [
+    { width: 125, lengths: [500, 600, 700], lengthKind: 'fixed', prices: { AB: 43.5, C: 39 } },
+  ],
+}
 
-/** Lowest published oak price, used for the "from €…" figures. */
-export const oakPriceFrom = 700
+const pricesOf = (sizes: SizeOption[]): number[] =>
+  sizes.flatMap((size) => gradeCodes.map((grade) => size.prices[grade]))
+
+/** Cheapest line of one format — the "from" figure on its card. */
+export const lowestPrice = (slug: ProductSlug): number => Math.min(...pricesOf(priceList[slug]))
+
+/** Most expensive line of one format — the `highPrice` of its structured data. */
+export const highestPrice = (slug: ProductSlug): number => Math.max(...pricesOf(priceList[slug]))
+
+/** Cheapest line on the whole sheet. */
+export const priceFrom = Math.min(...Object.values(priceList).flatMap(pricesOf))
 
 /** 1800 → "1 800" (thin space, the convention on European price lists). */
 export const formatNumber = (value: number): string =>
-  value.toLocaleString('en-GB').replace(/,/g, ' ')
+  value.toLocaleString('en-GB').replace(/,/g, ' ')
+
+/**
+ * 3.2 → "3.2" or "3,2". Hand-rolled rather than `Intl`, because the prerender
+ * (Node's ICU) and the visitor's browser can disagree on separators, and any
+ * difference is a hydration mismatch.
+ */
+export const formatDecimal = (value: number, decimalComma: boolean): string => {
+  const text = String(value)
+  return decimalComma ? text.replace('.', ',') : text
+}
+
+/** 52.5 → "€52.50" in English, "52,50 €" elsewhere (no-break space). */
+export const formatEuro = (value: number, decimalComma: boolean): string => {
+  const amount = value.toFixed(2)
+  return decimalComma ? `${amount.replace('.', ',')} €` : `€${amount}`
+}

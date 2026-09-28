@@ -1,4 +1,6 @@
 import { brand, productSlugs, type ProductSlug } from '../data/contact'
+import { gradeCodes, highestPrice } from '../data/pricing'
+import { photos, heroPhoto } from '../data/media'
 import { buildContent } from '../i18n/content'
 import { defaultLocale, localizePath, locales } from '../i18n/routing'
 import { dictionaries } from '../i18n/useI18n'
@@ -103,7 +105,7 @@ function facts(locale: Locale, path: string): PageFacts {
     return {
       title: t.meta.homeTitle,
       description: t.meta.homeDescription,
-      image: '/additional_image/oak_edged_board.jpg',
+      image: photos[heroPhoto].src,
       jsonLd: [organization(t), faqPage(t)].filter(
         (entry): entry is Record<string, unknown> => entry !== null,
       ),
@@ -115,7 +117,7 @@ function facts(locale: Locale, path: string): PageFacts {
     const productPath = localizePath(locale, `/products/${route.slug}`)
 
     return {
-      title: `${product.name} — ${product.species} | ${brand.name}`,
+      title: `${product.name} — ${product.category} | ${brand.name}`,
       description: product.shortDescription,
       image: product.cardPhoto.src,
       jsonLd: [
@@ -125,21 +127,20 @@ function facts(locale: Locale, path: string): PageFacts {
           name: product.name,
           description: product.shortDescription,
           category: product.category,
-          material: product.species,
+          material: 'Oak',
           countryOfOrigin: 'UA',
           image: absolute(product.cardPhoto.src),
           brand: { '@type': 'Brand', name: brand.name },
-          ...(product.priceFrom
-            ? {
-                offers: {
-                  '@type': 'AggregateOffer',
-                  priceCurrency: 'EUR',
-                  lowPrice: product.priceFrom,
-                  availability: 'https://schema.org/InStock',
-                  seller: { '@type': 'Organization', name: brand.legalName },
-                },
-              }
-            : {}),
+          offers: {
+            '@type': 'AggregateOffer',
+            priceCurrency: 'EUR',
+            lowPrice: product.priceFrom,
+            highPrice: highestPrice(product.slug),
+            // One offer per size and grade, as on the price sheet.
+            offerCount: product.sizes.length * gradeCodes.length,
+            availability: 'https://schema.org/InStock',
+            seller: { '@type': 'Organization', name: brand.legalName },
+          },
         },
         {
           '@context': 'https://schema.org',
@@ -173,7 +174,7 @@ function facts(locale: Locale, path: string): PageFacts {
 }
 
 /**
- * The head for a locale-independent path, e.g. `('uk', '/products/oak-parquet-boards')`.
+ * The head for a locale-independent path, e.g. `('uk', '/products/oak-chevron-parquet')`.
  */
 export function pageHead(locale: Locale, path: string): PageHead {
   const t = dictionaries[locale]

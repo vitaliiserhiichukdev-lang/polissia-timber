@@ -2,6 +2,8 @@ import { Navigate, useParams } from 'react-router-dom'
 import Link from '../components/ui/LocaleLink'
 import { motion } from 'framer-motion'
 import ProductGallery from '../components/product/ProductGallery'
+import ParquetConfigurator from '../components/product/ParquetConfigurator'
+import FormatPattern from '../components/product/FormatPattern'
 import SpecTable from '../components/product/SpecTable'
 import PriceTable from '../components/product/PriceTable'
 import GradeGuide from '../components/product/GradeGuide'
@@ -10,18 +12,20 @@ import SectionHeader from '../components/ui/SectionHeader'
 import Reveal from '../components/ui/Reveal'
 import SectionReveal from '../components/ui/SectionReveal'
 import Icon from '../components/ui/Icon'
+import WhatsAppIcon from '../components/ui/WhatsAppIcon'
 import useSeo from '../hooks/useSeo'
-import { brand, productSlugs, type ProductSlug } from '../data/contact'
-import { formatNumber } from '../data/pricing'
+import { brand, productSlugs, whatsappHref, type ProductSlug } from '../data/contact'
 import { fill } from '../i18n/content'
 import { useI18n } from '../i18n/useI18n'
 
 const isProductSlug = (value: string | undefined): value is ProductSlug =>
   productSlugs.includes(value as ProductSlug)
 
+const easeExpo = [0.16, 1, 0.3, 1] as const
+
 export default function ProductPage() {
   const { slug } = useParams()
-  const { t, products, productBySlug } = useI18n()
+  const { t, products, productBySlug, formatPrice } = useI18n()
   const product = isProductSlug(slug) ? productBySlug[slug] : undefined
 
   // Title, description, canonical, hreflang and the Product + BreadcrumbList
@@ -37,13 +41,6 @@ export default function ProductPage() {
       {/* ------------------------------------------------------------ intro */}
       <section className="relative overflow-hidden bg-ink-900 pt-12 pb-section text-inverse">
         <span aria-hidden="true" className="grain-layer-dark" />
-        {/* Decorative echo of the product photo, masked so it has no hard edge */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-24 right-0 hidden h-[520px] w-1/2 opacity-15 [mask-image:linear-gradient(to_left,black,transparent_75%)] lg:block"
-        >
-          <img src={product.heroPhoto.src} alt="" className="size-full object-cover blur-[2px]" />
-        </div>
 
         <div className="container-page relative">
           <nav aria-label="Breadcrumb" className="mb-10 text-sm text-inverse-muted">
@@ -66,19 +63,20 @@ export default function ProductPage() {
             </ol>
           </nav>
 
-          <div className="grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:items-start lg:gap-14">
+          <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-start lg:gap-14">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, ease: easeExpo }}
+              className="lg:sticky lg:top-[calc(var(--spacing-header)+1.5rem)]"
             >
-              <ProductGallery images={product.gallery} name={product.name} />
+              <ProductGallery key={product.slug} media={product.media} name={product.name} />
             </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, delay: 0.12, ease: easeExpo }}
               className="flex flex-col gap-6"
             >
               <div className="flex flex-wrap items-center gap-2">
@@ -86,58 +84,40 @@ export default function ProductPage() {
                 <span className="chip chip-dark">{product.category}</span>
               </div>
 
-              <div>
-                <h1 className="text-h2 text-inverse">{product.name}</h1>
-                <p className="mt-4 text-lead text-inverse-muted">{product.tagline}</p>
+              <div className="flex items-start gap-4">
+                <FormatPattern slug={product.slug} size={52} className="mt-1 shrink-0 text-oak-400" />
+                <div>
+                  <h1 className="text-h2 text-inverse">{product.name}</h1>
+                  <p className="mt-4 text-lead text-inverse-muted">{product.tagline}</p>
+                </div>
               </div>
 
-              <dl className="grid grid-cols-2 gap-x-6 gap-y-5 border-y border-line-inverse py-6">
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-5 border-y border-line-inverse py-6 sm:grid-cols-4">
                 {product.keyFacts.map((fact) => (
                   <div key={fact.label}>
                     <dt className="text-xs font-semibold tracking-[0.1em] text-inverse-muted uppercase">
                       {fact.label}
                     </dt>
-                    <dd className="mt-1 font-display text-lg text-inverse">{fact.value}</dd>
+                    <dd className="mt-1 font-display text-lg text-inverse tabular-nums">{fact.value}</dd>
                   </div>
                 ))}
               </dl>
 
-              <div className="rounded-3xl border border-white/12 bg-white/5 p-5">
-                <p className="text-xs font-semibold tracking-[0.12em] text-oak-400 uppercase">
-                  {t.productPage.priceInformation}
-                </p>
-                <p className="mt-2 font-display text-2xl text-inverse">
-                  {product.priceFrom
-                    ? `${t.common.priceFrom} € ${formatNumber(product.priceFrom)} ${t.common.perCubicMetre}`
-                    : t.common.onRequest}
-                </p>
-                <p className="mt-2 text-sm text-inverse-muted">{product.priceNote}</p>
+              <div>
+                <h2 className="mb-4 text-xs font-semibold tracking-[0.14em] text-oak-400 uppercase">
+                  {t.productPage.configureTitle}
+                </h2>
+                <ParquetConfigurator
+                  key={product.slug}
+                  product={product}
+                  quoteTo={`/products/${product.slug}#inquiry`}
+                />
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                <a href="#inquiry" className="btn btn-oak">
-                  {t.common.requestQuote}
-                  <span className="btn-icon">
-                    <Icon name="arrowRight" size={18} />
-                  </span>
-                </a>
-                {product.priceGroups.length > 0 && (
-                  <a href="#prices" className="btn btn-glass">
-                    {t.productPage.seePriceList}
-                  </a>
-                )}
-              </div>
-
-              <ul className="flex flex-col gap-2.5">
-                {product.advantages.map((advantage) => (
-                  <li key={advantage} className="flex gap-3 text-sm text-inverse-muted">
-                    <span className="mt-1 shrink-0 text-oak-400">
-                      <Icon name="check" size={14} />
-                    </span>
-                    {advantage}
-                  </li>
-                ))}
-              </ul>
+              <a href="#prices" className="link-arrow self-start text-oak-400">
+                {t.productPage.seePriceList}
+                <Icon name="arrowRight" size={16} />
+              </a>
             </motion.div>
           </div>
         </div>
@@ -148,6 +128,16 @@ export default function ProductPage() {
         <SectionReveal className="container-page grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <Reveal>
             <h2 className="text-h3 text-ink-900">{t.productPage.aboutTitle}</h2>
+            <ul className="mt-8 flex flex-col gap-3">
+              {product.advantages.map((advantage) => (
+                <li key={advantage} className="flex gap-3 text-sm text-ink-800">
+                  <span className="mt-1 shrink-0 text-oak-500">
+                    <Icon name="check" size={14} />
+                  </span>
+                  {advantage}
+                </li>
+              ))}
+            </ul>
           </Reveal>
           <div className="flex flex-col gap-5">
             {product.description.map((paragraph, i) => (
@@ -156,6 +146,30 @@ export default function ProductPage() {
               </Reveal>
             ))}
           </div>
+        </SectionReveal>
+      </section>
+
+      {/* ---------------------------------------------------------- grades */}
+      <section id="grades" className="bg-sand-50 py-section">
+        <SectionReveal className="container-page">
+          <SectionHeader
+            eyebrow={t.productPage.gradesEyebrow}
+            title={t.productPage.gradesTitle}
+            lead={t.productPage.gradesLead}
+          />
+          <GradeGuide product={product} />
+        </SectionReveal>
+      </section>
+
+      {/* --------------------------------------------------------- pricing */}
+      <section id="prices" className="py-section">
+        <SectionReveal className="container-page">
+          <SectionHeader
+            eyebrow={t.productPage.pricesEyebrow}
+            title={t.productPage.pricesTitle}
+            lead={t.productPage.pricesLead}
+          />
+          <PriceTable products={[product]} />
         </SectionReveal>
       </section>
 
@@ -170,34 +184,6 @@ export default function ProductPage() {
           <SpecTable groups={product.specs} />
         </SectionReveal>
       </section>
-
-      {/* --------------------------------------------------------- pricing */}
-      {product.priceGroups.length > 0 && (
-        <section id="prices" className="py-section">
-          <SectionReveal className="container-page">
-            <SectionHeader
-              eyebrow={t.productPage.pricesEyebrow}
-              title={t.productPage.pricesTitle}
-              lead={t.productPage.pricesLead}
-            />
-            <PriceTable groups={product.priceGroups} />
-          </SectionReveal>
-        </section>
-      )}
-
-      {/* ---------------------------------------------------------- grades */}
-      {product.gradeBands.length > 0 && (
-        <section id="grades" className="bg-sand-50 py-section">
-          <SectionReveal className="container-page">
-            <SectionHeader
-              eyebrow={t.productPage.gradesEyebrow}
-              title={t.productPage.gradesTitle}
-              lead={t.productPage.gradesLead}
-            />
-            <GradeGuide bands={product.gradeBands} notPermitted={product.notPermitted} />
-          </SectionReveal>
-        </section>
-      )}
 
       {/* -------------------------------------------------------- finishes */}
       {product.finishes.length > 0 && (
@@ -234,10 +220,7 @@ export default function ProductPage() {
       )}
 
       {/* --------------------------------------------------------- inquiry */}
-      <section
-        id="inquiry"
-        className="grain relative bg-ink-900 py-section text-inverse"
-      >
+      <section id="inquiry" className="grain relative bg-ink-900 py-section text-inverse">
         <span aria-hidden="true" className="grain-layer-dark" />
         <SectionReveal className="container-page relative grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
           <div>
@@ -264,6 +247,15 @@ export default function ProductPage() {
                 {t.contact.values.hours}
               </li>
             </ul>
+            <a
+              href={whatsappHref(t.whatsapp.general)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-whatsapp mt-8"
+            >
+              <WhatsAppIcon size={18} />
+              {t.common.whatsappCta}
+            </a>
           </div>
 
           <QuoteForm defaultProduct={product.slug} compact />
@@ -273,10 +265,7 @@ export default function ProductPage() {
       {/* --------------------------------------------------------- related */}
       <section className="py-section">
         <SectionReveal className="container-page">
-          <SectionHeader
-            eyebrow={t.productPage.relatedEyebrow}
-            title={t.productPage.relatedTitle}
-          />
+          <SectionHeader eyebrow={t.productPage.relatedEyebrow} title={t.productPage.relatedTitle} />
           <ul className="grid gap-6 md:grid-cols-2">
             {others.map((other, i) => (
               <Reveal as="li" key={other.slug} delay={i * 0.08}>
@@ -292,12 +281,16 @@ export default function ProductPage() {
                     loading="lazy"
                     decoding="async"
                     className="size-28 shrink-0 rounded-xl object-cover"
+                    style={{ objectPosition: other.cardPhoto.position }}
                   />
                   <span className="min-w-0">
                     <span className="block font-display text-xl text-ink-900 transition-colors group-hover:text-oak-600">
                       {other.name}
                     </span>
                     <span className="mt-1 block text-sm text-muted">{other.tagline}</span>
+                    <span className="mt-2 block text-sm font-semibold text-ink-900 tabular-nums">
+                      {t.common.priceFrom} {formatPrice(other.priceFrom)} {t.common.perSquareMetre}
+                    </span>
                     <span className="link-arrow mt-3 inline-flex">
                       {t.common.viewProduct}
                       <Icon name="arrowRight" size={16} />

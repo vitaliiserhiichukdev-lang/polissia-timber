@@ -1,5 +1,6 @@
 import { useCallback, useRef, type ReactNode } from 'react'
-import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
+import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion'
 
 type Variant = 'up' | 'down' | 'left' | 'right' | 'fade' | 'scale'
 
@@ -32,6 +33,10 @@ interface RevealProps {
  * back from a product page left revealed content stuck at its hidden start
  * state, and no amount of scrolling brought it back. `useInView` owns its own
  * observer and is unaffected.
+ *
+ * Reduced motion keeps the same element and simply shows it at once, rather
+ * than swapping in a plain tag: the prerendered markup is the motion element's,
+ * and a different element on the client is a hydration mismatch.
  */
 export default function Reveal({
   children,
@@ -42,7 +47,7 @@ export default function Reveal({
   className,
   as = 'div',
 }: RevealProps) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = usePrefersReducedMotion()
   const ref = useRef<HTMLElement | null>(null)
   const inView = useInView(ref, { once: true, amount })
   const MotionTag = motion[as]
@@ -55,11 +60,6 @@ export default function Reveal({
     ref.current = node
   }, [])
 
-  if (reduceMotion) {
-    const Tag = as
-    return <Tag className={className}>{children}</Tag>
-  }
-
   const hidden = { opacity: 0, ...offsets[variant] }
 
   return (
@@ -67,8 +67,8 @@ export default function Reveal({
       ref={attach}
       className={className}
       initial={hidden}
-      animate={inView ? { opacity: 1, x: 0, y: 0, scale: 1 } : hidden}
-      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
+      animate={inView || reduceMotion ? { opacity: 1, x: 0, y: 0, scale: 1 } : hidden}
+      transition={reduceMotion ? { duration: 0 } : { duration, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </MotionTag>

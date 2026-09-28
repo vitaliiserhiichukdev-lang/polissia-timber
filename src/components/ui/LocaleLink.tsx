@@ -3,7 +3,7 @@ import { localizePath } from '../../i18n/routing'
 import { useI18n } from '../../i18n/useI18n'
 
 interface LocaleLinkProps extends Omit<LinkProps, 'to'> {
-  /** Locale-independent path, e.g. `/products/oak-edged-boards` or `/#contact`. */
+  /** Locale-independent path, e.g. `/products/oak-chevron-parquet` or `/#contact`. */
   to: string
 }
 

@@ -7,6 +7,39 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# Retired product URLs. The parquet page became the chevron page; edged boards
+# and pine timber are no longer sold, so they go to the home page. Listed
+# before the fallback because Netlify applies the first matching rule.
+[[redirects]]
+  from = "/products/oak-parquet-boards"
+  to = "/products/oak-chevron-parquet"
+  status = 301
+
+[[redirects]]
+  from = "/:lang/products/oak-parquet-boards"
+  to = "/:lang/products/oak-chevron-parquet"
+  status = 301
+
+[[redirects]]
+  from = "/products/oak-edged-boards"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/products/pine-construction-timber"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/:lang/products/oak-edged-boards"
+  to = "/:lang"
+  status = 301
+
+[[redirects]]
+  from = "/:lang/products/pine-construction-timber"
+  to = "/:lang"
+  status = 301
+
 # SPA fallback. Function routes (netlify/functions/quote.mts declares
 # `path = "/api/quote"`) are matched before redirects, so /api/quote still
 # reaches the function.

@@ -1,5 +1,6 @@
 import { useRef, type ReactNode } from 'react'
-import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
+import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion'
 
 interface SectionRevealProps {
   children: ReactNode
@@ -29,20 +30,19 @@ export default function SectionReveal({
   className,
   distance = 40,
 }: SectionRevealProps) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = usePrefersReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   // Fires early: a tall section would otherwise be half-read before it moves.
   const inView = useInView(ref, { once: true, amount: 0.05 })
 
-  if (reduceMotion) return <div className={className}>{children}</div>
-
+  // Same element either way — see the note in `Reveal` on hydration.
   return (
     <motion.div
       ref={ref}
       className={className}
       initial={{ y: distance }}
-      animate={{ y: inView ? 0 : distance }}
-      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      animate={{ y: inView || reduceMotion ? 0 : distance }}
+      transition={reduceMotion ? { duration: 0 } : { duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>

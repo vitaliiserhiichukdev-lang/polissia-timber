@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
-import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import Link from '../ui/LocaleLink'
 import Icon from '../ui/Icon'
+import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion'
 import { brand } from '../../data/contact'
 import { destinations, origin, ringsKm, type DestinationCode } from '../../data/destinations'
 import { fill } from '../../i18n/content'
@@ -84,7 +85,7 @@ export default function ShippingMap() {
   const { t } = useI18n()
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.2 })
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = usePrefersReducedMotion()
   const [active, setActive] = useState<DestinationCode | null>(null)
 
   const countryName = (code: DestinationCode) => t.exportSection.countries[code]

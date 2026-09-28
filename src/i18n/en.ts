@@ -1,22 +1,26 @@
 import type { Dictionary } from './types'
 import { brand } from '../data/contact'
+import { formatEuro, highestPrice, priceFrom } from '../data/pricing'
+
+const from = formatEuro(priceFrom, false)
+const top = formatEuro(highestPrice('oak-chevron-parquet'), false)
 
 export const en: Dictionary = {
   locale: 'en',
   htmlLang: 'en',
   label: 'English',
   short: 'EN',
+  decimalComma: false,
 
   meta: {
-    homeTitle: `${brand.name} — Premium Ukrainian Timber for European Markets`,
-    homeDescription:
-      'Ukrainian producer and exporter of premium timber: oak edged boards in grades I–IV, pine construction materials and natural oak parquet. Stable large-volume supply and delivery throughout Europe.',
+    homeTitle: `${brand.name} — Engineered Oak Parquet from Ukraine`,
+    homeDescription: `Ukrainian producer and exporter of engineered oak parquet: plank, chevron and herringbone in grades A-B and C, 14 mm with a 3.2 mm oak wear layer. Price list from ${from} per m², delivery across Europe.`,
     notFoundTitle: `Page not found | ${brand.name}`,
     notFoundDescription: 'The page you were looking for does not exist.',
   },
 
   nav: [
-    { key: 'products', label: 'Products', href: '/#products' },
+    { key: 'products', label: 'Parquet', href: '/#products' },
     { key: 'compliance', label: 'Compliance', href: '/#compliance' },
     { key: 'about', label: 'About', href: '/#about' },
     { key: 'production', label: 'Production', href: '/#production' },
@@ -29,99 +33,127 @@ export const en: Dictionary = {
   common: {
     requestQuote: 'Request a quote',
     quoteShort: 'Get a quote',
-    viewProducts: 'View products',
-    viewDetails: 'View details',
-    viewProduct: 'View product',
-    onRequest: 'On request',
-    priceFrom: 'Price from',
-    pricing: 'Pricing',
-    quotedPerSpecification: 'Quoted per specification',
-    gradeBased: 'Grade-based, EUR / m³',
+    viewProducts: 'Choose parquet',
+    viewProduct: 'View format',
+    priceFrom: 'from',
     skipToContent: 'Skip to content',
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
     language: 'Language',
     home: 'Home',
-    products: 'Products',
-    perCubicMetre: '/ m³',
-    priceUnit: 'EUR / m³',
+    products: 'Parquet',
+    perSquareMetre: '/ m²',
+    priceUnit: 'EUR / m²',
     openImage: 'Open image',
     closeViewer: 'Close image viewer',
     previousImage: 'Previous image',
     nextImage: 'Next image',
     viewFullSize: 'View full size',
+    playVideo: 'Play video',
+    pauseVideo: 'Pause video',
+    video: 'Video',
     mm: 'mm',
-    logoSub: 'Ukrainian timber · Export',
+    logoSub: 'Oak parquet · Export',
+    whatsapp: 'WhatsApp',
+    whatsappCta: 'Message us on WhatsApp',
+  },
+
+  whatsapp: {
+    general:
+      'Hello! I am interested in your oak parquet. Could you send me the current price list and availability?',
+    selection:
+      'Hello! I am interested in {product}, grade {grade}, {size} — {price} per m² on your price list. Please confirm availability and delivery to: ',
   },
 
   hero: {
-    eyebrow: 'Ukraine · Producer & exporter',
-    titleLead: 'Premium Ukrainian Timber',
-    titleAccent: 'for European Markets',
-    lead: 'We produce and export high-quality timber to European countries: oak edged boards graded to a written specification, pine construction materials and natural oak parquet. Quality controlled at every stage, packed and documented ready for export.',
-    insetCaption: 'Oak edged board · Grade I · 30 mm',
-    scrollLabel: 'Scroll to the products section',
-    imageAlt: 'Packs of Ukrainian sawn timber stacked in the export yard',
+    eyebrow: 'Ukraine · Parquet producer & exporter',
+    titleLead: 'Engineered oak parquet',
+    titleAccent: 'plank, chevron, herringbone',
+    lead: 'European oak on a 14 mm board with a 3.2 mm wear layer, graded A-B or C and priced openly per square metre. Produced, finished and packed by us, delivered across Europe.',
+    insetCaption: 'Chevron, fitted',
+    priceBadge: 'Price list from',
+    imageAlt: 'Showroom wall of oak chevron and herringbone parquet panels',
   },
 
   stats: [
-    {
-      value: '4',
-      label: 'Graded quality classes',
-      detail: 'Grades I–IV assessed against our written oak specification.',
-    },
-    {
-      value: '5',
-      label: 'Standard oak sections',
-      detail: 'Widths from 80 to 230 mm, all in 30 mm thickness.',
-    },
-    {
-      value: '12',
-      label: 'Parquet finishes',
-      detail: 'Chevron oak parquet, from whitewashed to dark espresso.',
-    },
-    {
-      value: 'EU',
-      label: 'Delivery coverage',
-      detail: 'Regular full-truck and container shipments across Europe.',
-    },
+    { value: '3', label: 'Formats', detail: 'Plank, chevron and herringbone.' },
+    { value: '2', label: 'Grades', detail: 'A-B Select and C Rustic, priced separately.' },
+    { value: '3.2 mm', label: 'Oak wear layer', detail: 'On a 14 mm board, thick enough to sand and refinish.' },
+    { value: '12', label: 'Finishes', detail: 'Chevron tones from whitewashed to espresso.' },
   ],
 
   about: {
     eyebrow: 'About the company',
-    title: 'A Ukrainian producer built for European buyers',
-    lead: 'We offer a wide range of natural wood products manufactured according to modern quality standards and international market requirements — and we control the whole route from log to loaded truck.',
+    title: 'A Ukrainian parquet producer built for European buyers',
+    lead: 'We make engineered oak flooring in three formats and two grades — and control the whole route from the oak lamella to the loaded truck.',
     action: 'See how we produce',
     quote:
       '“We value long-term partnerships and guarantee high product quality on every order.”',
     highlights: [
       {
         title: 'Production and export under one roof',
-        body: 'We specialise in the production and export of high-quality timber to European countries, covering the full path from log intake to a loaded truck. That means one point of responsibility for your order — not a chain of intermediaries.',
+        body: 'We produce the boards, finish them and ship them ourselves. That means one point of responsibility for your order — not a chain of intermediaries between the factory and your warehouse.',
       },
       {
-        title: 'Controlled at every stage',
-        body: 'Every stage of production is carefully controlled — from raw material selection through sawing, drying and grading to packaging and delivery. Each batch is checked against a written specification before it leaves the yard.',
+        title: 'Graded board by board',
+        body: 'Every board is graded A-B or C before it is packed, so a repeat order in the same grade gives the same floor — batch after batch, site after site.',
       },
       {
         title: 'Export-ready to European requirements',
-        body: 'All products undergo quality control, comply with European requirements and are prepared for export: sorted by grade, strapped, marked and documented so they clear and unload without surprises.',
+        body: 'Packed by format and grade in cartons on pallets, marked and documented, so a consignment clears and unloads without surprises.',
       },
     ],
-    tags: ['Own production', 'Written specifications', 'Export documentation'],
+    tags: ['Own production', 'Open price list', 'Export documentation'],
   },
 
   catalog: {
-    eyebrow: 'Product catalogue',
-    title: 'Three product lines, one standard',
-    lead: 'Oak edged boards are our main direction. Alongside them we supply pine construction materials and natural oak parquet — all produced, graded and packed by us.',
-    action: 'Request the full price list',
+    eyebrow: 'Parquet range',
+    title: 'Choose format, grade and size',
+    lead: 'Three formats in two grades, all on the same 14 mm engineered board. Pick a combination to see its price per square metre, its sizes and footage from our line — then send it to us as a quote or a WhatsApp message.',
     footnote:
-      'Non-standard sections, lengths or grade mixes are produced to order — send us your specification and we will confirm feasibility and price.',
-    cardLabels: {
-      woodType: 'Wood type',
-      sizes: 'Available sizes',
-      grade: 'Grade',
+      'Other widths, lengths, finishes and grade mixes are produced to order — send your specification and we will confirm feasibility and price.',
+    formatStep: 'Format',
+    gradeStep: 'Grade',
+    sizeStep: 'Size',
+    priceLabel: 'Price',
+    priceNote: 'Per m², from the current price list. The final price is confirmed on the offer.',
+    specs: { thickness: 'Thickness', wearLayer: 'Wear layer', width: 'Width', length: 'Length' },
+    randomLengths: 'random lengths',
+    fixedLengths: 'block lengths',
+    details: 'All about {product}',
+  },
+
+  priceList: {
+    eyebrow: 'Price list',
+    title: 'Every format and grade at a glance',
+    lead: 'The full sheet, line for line, in euro per square metre. Every board is 14 mm with a 3.2 mm oak wear layer.',
+    size: 'Size',
+    footnote:
+      'Prices are per square metre and indicative: the final figure depends on volume, finish and delivery terms, and is confirmed on the offer.',
+  },
+
+  // TO CONFIRM — grade descriptions are the usual trade reading of A-B and C;
+  // replace them with the company's own grading rules once written down.
+  grades: {
+    AB: {
+      name: 'Select',
+      summary: 'Calm, even grain for a clean, uniform floor.',
+      traits: [
+        'Uniform colour with little variation between boards',
+        'Small sound knots only, and few of them',
+        'Minimal sapwood',
+        'Suits modern and minimalist interiors',
+      ],
+    },
+    C: {
+      name: 'Rustic',
+      summary: 'Lively grain, knots and colour play — the most natural look.',
+      traits: [
+        'Pronounced grain and natural colour variation',
+        'Larger sound knots and filled cracks',
+        'Sapwood accepted',
+        'A characterful floor at a lower price',
+      ],
     },
   },
 
@@ -135,15 +167,15 @@ export const en: Dictionary = {
   compliance: {
     eyebrow: 'Compliance and documentation',
     title: 'EUDR-ready: geolocation data and DDS reference per consignment',
-    lead: 'Since the EU Deforestation Regulation applies, an importer cannot place timber on the EU market without plot-level origin data and a Due Diligence Statement. We prepare that pack with the shipment, not after you ask for it.',
+    lead: 'Since the EU Deforestation Regulation applies, an importer cannot place wood flooring on the EU market without plot-level origin data and a Due Diligence Statement. We prepare that pack with the shipment, not after you ask for it.',
     eudr: {
       badge: 'EUDR',
       title: 'What you receive with every consignment',
-      body: 'Regulation (EU) 2023/1115 makes the importer responsible for proving the timber is deforestation-free and legally harvested. That proof has to come from the supplier, so we assemble it as part of the order rather than treating it as paperwork at the end.',
+      body: 'Regulation (EU) 2023/1115 makes the importer responsible for proving the oak is deforestation-free and legally harvested. That proof has to come from the supplier, so we assemble it as part of the order rather than treating it as paperwork at the end.',
       points: [
         'Geolocation coordinates of the harvesting plots for the batch',
-        'Species, volume and country of harvest per pack, matching the packing list',
-        'Legality evidence for the harvest, traceable from the log to the pack',
+        'Species, volume and country of harvest for the batch, matching the packing list',
+        'Legality evidence for the harvest, traceable from the log to the pallet',
         'Due Diligence Statement reference for your EU TRACES submission',
       ],
       note: 'Send the specification and destination and we will confirm the exact document set for your import route before you order.',
@@ -151,15 +183,9 @@ export const en: Dictionary = {
     documentsTitle: 'Export document set',
     documents: [
       {
-        icon: 'shield',
-        title: 'Phytosanitary certificate',
-        body: 'Issued by the state phytosanitary service for each consignment of sawn timber leaving Ukraine.',
-        status: 'Issued per shipment',
-      },
-      {
         icon: 'box',
         title: 'ISPM-15 heat treatment',
-        body: 'Marking for wood packaging, dunnage and pallets used to secure the load.',
+        body: 'Marking for the wooden pallets and dunnage the cartons ship on.',
         status: 'Issued per shipment',
       },
       {
@@ -171,7 +197,7 @@ export const en: Dictionary = {
       {
         icon: 'stack',
         title: 'Packing list and specification',
-        body: 'Volume, section and grade per pack, matching the marking on the strapping, so goods-in can check a delivery against the invoice.',
+        body: 'Format, size, grade and square metres per pallet, matching the carton labels, so goods-in can check a delivery against the invoice.',
         status: 'With every load',
       },
       {
@@ -188,130 +214,113 @@ export const en: Dictionary = {
 
   process: {
     eyebrow: 'Quality and production',
-    title: 'Five controlled stages, from log to loading',
-    lead: 'We carefully control every stage of production — from raw material selection to packaging and delivery. Each step below has a defined check before material moves on.',
+    title: 'Four controlled stages, from lamella to pallet',
+    lead: 'Every board passes the same line and the same checks before it is packed. The frames and clips below are from our own production.',
     steps: [
       {
         icon: 'oak',
-        title: 'Raw material selection',
-        body: 'Logs are selected by species, diameter and soundness before they reach the saw line. Material with pith defects, insect damage or steam damage is rejected at intake — the cheapest place to remove a defect.',
+        title: 'Oak top layer',
+        body: 'Oak lamellas are selected by grain and colour and bonded as a 3.2 mm wear layer onto a stable base, making a 14 mm engineered board.',
       },
       {
         icon: 'factory',
-        title: 'Sawing and manufacturing',
-        body: 'Edged boards are cut to fixed sections — 30 mm thickness in widths from 80 to 230 mm — with clean parallel edges and square ends. Pine construction sections are cut to the dimensions each project asks for.',
+        title: 'Cutting and profiling',
+        body: 'Boards are cut to format — random-length planks, square-ended herringbone blocks, chevron blanks with angled ends — and profiled so the joints close tight.',
       },
       {
-        icon: 'shield',
-        title: 'Drying and quality control',
-        body: 'Boards are stacked for controlled drying, then graded piece by piece against our written specification: knot size and type, sapwood, ingrown bark, cracks. Pith, woodworm, steam damage and end cracks are accepted in no grade.',
+        icon: 'layers',
+        title: 'Surface finishing',
+        body: 'Sanding, brushing and a natural or toned finish on the roller line, so every board in an order carries the same surface.',
       },
       {
         icon: 'box',
-        title: 'Packaging',
-        body: 'Each grade is packed separately into uniform bundles, strapped, edge-protected and marked with size, grade and volume, so the receiving warehouse can check a delivery in minutes.',
-      },
-      {
-        icon: 'truck',
-        title: 'Export and delivery',
-        body: 'We load full trucks and containers with complete export documentation, and keep you updated from dispatch to unloading anywhere in Europe.',
+        title: 'Grading and packing',
+        body: 'Each board is graded A-B or C, then packed in cartons by format and grade, palletised and marked for fast goods-in.',
       },
     ],
     callout: {
-      title: 'Written specifications, not verbal promises',
-      body: 'Our oak grading rules define exactly what each grade allows — knot size and type, sapwood, ingrown bark — and what is never accepted: pith, steam damage, woodworm, micro-cracks, end cracks and double sapwood.',
-      action: 'Read the grading rules',
+      title: 'An open price list, not “price on request”',
+      body: 'Every format, size and grade has a published price per square metre. What you see in the picker is the line you will be quoted.',
+      action: 'See the price list',
     },
     capacityTitle: 'Production capacity',
     capacityLead:
-      'The figures worth checking before you commit a season of production to a supplier.',
+      'The figures worth checking before you commit a season of projects to a supplier.',
     // TO CONFIRM — production must supply these before launch. Metrics left at
-    // `TBC` do not render, so the block simply stays hidden until then.
+    // `TBC` do not render.
     capacity: [
       {
         value: 'TBC',
-        unit: 'm³ / month',
-        label: 'Sawn oak output',
-        detail: 'Edged boards at 30 mm across all five standard sections.',
+        unit: 'm² / month',
+        label: 'Parquet output',
+        detail: 'Across all three formats and both grades.',
       },
       {
         value: 'TBC',
-        unit: 'm³ / shift',
-        label: 'Saw line throughput',
-        detail: 'Log intake to edged, trimmed board.',
+        unit: 'm² / shift',
+        label: 'Finishing line',
+        detail: 'Boards sanded and finished per shift.',
       },
       {
-        value: 'TBC',
-        unit: 'chambers',
-        label: 'Drying capacity',
-        detail: 'Kiln chambers in operation, with the volume per charge.',
+        value: '3',
+        unit: 'formats',
+        label: 'Plank, chevron, herringbone',
+        detail: 'All on one 14 mm engineered construction.',
       },
       {
-        value: 'TBC',
-        unit: 'm³ / charge',
-        label: 'Kiln load',
-        detail: 'Volume dried per cycle, which sets the batch size we can hold to one moisture regime.',
-      },
-      {
-        value: '5',
-        unit: 'sections',
-        label: 'Standard oak sections',
-        detail: 'Widths 80, 115, 150, 170 and 230 mm — held in rotation, not cut to order.',
-      },
-      {
-        value: '4',
+        value: '2',
         unit: 'grades',
-        label: 'Graded classes',
-        detail: 'Grades I–IV assessed piece by piece against the written specification.',
+        label: 'A-B and C',
+        detail: 'Graded board by board before packing.',
       },
     ],
     capacityNote:
-      'Every piece is graded against the written specification before packing, so a repeat order at the same grade gives the same yield in your workshop.',
+      'Every board is graded before packing, so a repeat order in the same grade gives the same floor.',
   },
 
   advantages: {
     eyebrow: 'Our advantages',
     title: 'Why European buyers work with us',
-    lead: 'Everything below is a working promise we are measured on: quality, volume, logistics and price.',
+    lead: 'Everything below is a working promise we are measured on: quality, construction, logistics and price.',
     items: [
       {
         icon: 'oak',
-        title: 'Premium Ukrainian wood',
-        body: 'Slow-grown Ukrainian oak and pine with dense, even grain — the raw material behind the strength, durability and natural beauty our customers buy us for.',
+        title: 'European oak, Ukrainian production',
+        body: 'Dense, slow-grown oak with an even grain for the wear layer — the material that gives a floor its looks and its lifespan.',
       },
       {
         icon: 'shield',
-        title: 'European quality standards',
-        body: 'Products are manufactured to modern quality standards and international market requirements, and graded against a documented specification with defined tolerances.',
+        title: 'Engineered for stability',
+        body: 'A 14 mm board with a 3.2 mm oak wear layer: it moves less than solid oak with the seasons, and the top layer is thick enough to sand and refinish.',
       },
       {
-        icon: 'stack',
-        title: 'Large-volume production',
-        body: 'Stable large-volume supplies with repeatable grading, so you can plan a season of production around us instead of chasing spot lots.',
+        icon: 'layers',
+        title: 'Three formats, one construction',
+        body: 'Plank, chevron and herringbone share the same board build, so formats can meet in one project without a step at the threshold.',
       },
       {
         icon: 'truck',
         title: 'Reliable logistics',
-        body: 'Timely delivery throughout Europe by full truck or container, with packaging and export paperwork prepared before dispatch.',
+        body: 'Timely delivery throughout Europe by full truck or container, with packing and export paperwork prepared before dispatch.',
       },
       {
         icon: 'tag',
-        title: 'Competitive pricing',
-        body: 'Direct-from-producer pricing with transparent grade-based price lists — no reseller margin between the sawmill and your warehouse.',
+        title: 'Transparent pricing',
+        body: 'A published price per square metre for every format, size and grade — direct from the producer, with no reseller margin.',
       },
       {
         icon: 'partners',
-        title: 'Individual customer approach',
-        body: 'Sizes, grades and packing adapted to your specification. We value long-term partnerships and treat every order as part of one.',
+        title: 'Individual approach',
+        body: 'Widths, lengths, finishes and packing adapted to your project. We value long-term partnerships and treat every order as part of one.',
       },
     ],
   },
 
   gallery: {
     eyebrow: 'Gallery',
-    title: 'Our timber, photographed as it ships',
-    lead: 'Seven pictures rather than a contact sheet: the edge of a graded board, the packs it leaves the yard in, the stock behind a repeat order. Shot in our own yard and workshop, not bought from a stock library.',
-    action: 'See all twelve parquet finishes',
+    title: 'Our parquet, photographed and filmed',
+    lead: 'The showroom, fitted floors and our own finishing line — photos and short clips from production, not a stock library.',
+    action: 'See all twelve chevron finishes',
   },
 
   exportSection: {
@@ -327,7 +336,7 @@ export const en: Dictionary = {
       {
         icon: 'stack',
         title: 'Stable supply chains',
-        body: 'Stable large-volume supplies backed by our own production, with agreed monthly volumes for contract customers.',
+        body: 'Stable volumes backed by our own production, with agreed monthly quantities for contract customers.',
       },
       {
         icon: 'globe',
@@ -361,30 +370,31 @@ export const en: Dictionary = {
       EE: 'Estonia',
       DK: 'Denmark',
     },
-    originLabel: 'Our yard',
+    originLabel: 'Production',
     ringLabel: '{km} km',
     mapNote:
-      'Rings are straight-line distance from the yard, not road distance — they show reach, not a quote. Ask for a lead time to your exact address and we will confirm it.',
+      'Rings are straight-line distance from production, not road distance — they show reach, not a quote. Ask for a lead time to your exact address and we will confirm it.',
     loadsTitle: 'What fits in a load',
     loadsLead:
-      'Freight is charged by the load, not the cubic metre, so the cheapest order is usually a full one.',
+      'Freight is charged by the load, not the square metre, so the cheapest order is usually a full one.',
+    // TO CONFIRM — square metres per load depend on pallet format. Hidden while `TBC`.
     loads: [
       {
-        value: '22–24',
-        unit: 'm³',
+        value: 'TBC',
+        unit: 'm²',
         label: 'Full truck',
-        detail: 'Standard 13.6 m curtainsider of strapped packs — the usual EU road shipment.',
+        detail: 'Standard 13.6 m curtainsider of palletised cartons — the usual EU road shipment.',
       },
       {
-        value: '25–28',
-        unit: 'm³',
+        value: 'TBC',
+        unit: 'm²',
         label: "40 ft container",
         detail: 'For onward sea freight or destinations beyond road range.',
       },
       {
         // TO CONFIRM — commercial decision, not a measurement.
         value: 'TBC',
-        unit: 'm³',
+        unit: 'm²',
         label: 'Minimum order',
         detail: 'Below a full load we consolidate with another shipment to the same direction.',
       },
@@ -405,7 +415,7 @@ export const en: Dictionary = {
     leadTimeNote:
       'Border crossing and customs clearance are included in the figures above. Delivery terms available: EXW, FCA, CPT and DAP — DAP puts the goods at your gate with duties handled.',
     casesTitle: 'Recent shipments',
-    casesLead: 'Anonymised, but real: the sections, volumes and routes we actually load.',
+    casesLead: 'Anonymised, but real: the formats, volumes and routes we actually load.',
     // TO CONFIRM — populate from dispatch records. Hidden while set to `TBC`.
     cases: [
       { volume: 'TBC', spec: 'TBC', destination: 'TBC', terms: 'DAP', days: 'TBC' },
@@ -423,33 +433,37 @@ export const en: Dictionary = {
 
   faq: {
     eyebrow: 'Questions buyers ask',
-    title: 'Grades, volumes, documents and delivery',
+    title: 'Grades, sizes, prices and delivery',
     lead: 'The answers we give on the phone, written down. If something you need is missing, ask and we will add it.',
     items: [
       {
-        question: 'What is the difference between grades I–IV?',
+        question: 'What is the difference between grades A-B and C?',
         answer:
-          'Grade is set by what the board is allowed to show, and the limits are in writing. Grade I permits live knots up to 3–5 mm and nothing else; Grade II adds live knots to 25–35 mm, black knots to 15–25 mm and up to 20–25 mm of sapwood; Grade III widens that to live knots up to 35 mm on narrow sections and 70 mm at 230 mm width, plus ingrown bark; Grade IV, produced at 230 mm, allows live knots to 120 mm. Pith, steam damage, woodworm, micro-cracks, end cracks and double sapwood are accepted in no grade at all.',
+          'A-B (Select) is the calmer grade: even colour, small sound knots and minimal sapwood. C (Rustic) is the lively one: pronounced grain, larger sound knots, filled cracks and sapwood are accepted. Both are the same board — 14 mm with a 3.2 mm oak wear layer — priced separately, so you choose the look, not a different product.',
       },
       {
-        question: 'Which sections and lengths do you produce?',
+        question: 'Which formats and sizes do you produce?',
         answer:
-          'Oak edged boards are sawn at a fixed 30 mm thickness in five widths — 80, 115, 150, 170 and 230 mm — with fixed lengths per section covering 320 to 2 450 mm. Pine construction timber is cut to your section list instead of a fixed catalogue.',
+          'Plank in 125 × 600–1 400, 145 × 800–1 600 and 195 × 1 700–2 500 mm, in random lengths; chevron and herringbone 125 mm wide, in 500, 600 and 700 mm blocks. Every format is 14 mm thick with a 3.2 mm oak wear layer.',
       },
       {
-        question: 'Can you produce non-standard sections or grade mixes?',
+        question: 'How is the board built?',
         answer:
-          'Yes. Non-standard sections, lengths and grade mixes are produced to order — send the specification and we confirm feasibility and price before you commit.',
+          'It is engineered (multi-layer) oak: a 3.2 mm European oak wear layer bonded to a stable base, 14 mm overall. The top layer is thick enough to sand and refinish, and the layered build moves less than solid oak as humidity changes.',
       },
       {
-        question: 'What moisture content do you supply?',
+        question: 'How are prices quoted?',
+        answer: `Per square metre, by format, size and grade — from ${from}/m² for C-grade plank at 125 mm to ${top}/m² for A-B chevron. The final figure depends on volume, finish and delivery terms, and is confirmed on the offer.`,
+      },
+      {
+        question: 'Can you produce other sizes, finishes or grade mixes?',
         answer:
-          'Kiln dried or air dried, specified per order. Tell us the target regime and the tolerance you work to and we will confirm it on the offer, because the moisture regime affects both the price and the batch size we can hold to one specification.',
+          'Yes. Other widths and lengths, oiled or lacquered, natural or toned finishes and grade mixes are produced to order — send the specification and we confirm feasibility and price before you commit.',
       },
       {
         question: 'Do you provide EUDR geolocation data and a DDS reference?',
         answer:
-          'Yes. Each consignment ships with the harvesting plot coordinates, species, volume and country of harvest per pack, legality evidence for the harvest, and the Due Diligence Statement reference you need for your EU submission. Confirm your import route with us and we will state the exact document set before you order.',
+          'Yes. Each consignment ships with the harvesting plot coordinates, species, volume and country of harvest, legality evidence for the harvest, and the Due Diligence Statement reference you need for your EU submission. Confirm your import route with us and we will state the exact document set before you order.',
       },
       {
         question: 'Which Incoterms do you work with?',
@@ -457,19 +471,19 @@ export const en: Dictionary = {
           'EXW, FCA, CPT and DAP. DAP is the usual choice for EU buyers who want the goods at their gate without arranging freight; FCA suits buyers with their own carrier.',
       },
       {
-        question: 'How is the timber packed and marked?',
+        question: 'How is the parquet packed?',
         answer:
-          'Each grade is packed separately into uniform strapped packs with edge protection, marked with section, grade and volume, and listed the same way on the packing list — so goods-in can check a delivery against the invoice in minutes rather than restacking it.',
-      },
-      {
-        question: 'How are prices quoted and how long do they hold?',
-        answer:
-          'Per cubic metre, by section and grade — our published oak price list runs from €700/m³ for mixed-grade 80 × 30 mm to €2 650/m³ for Grade I at 230 mm. The final figure depends on volume, moisture regime and delivery terms, and is confirmed per batch on the offer.',
+          'In cartons by format and grade, on pallets, shrink-wrapped and marked with format, size, grade and square metres — and listed the same way on the packing list, so goods-in can check a delivery against the invoice in minutes.',
       },
       {
         question: 'Do you send samples before an order?',
         answer:
-          'Yes. For parquet we send finish samples before order confirmation, and for sawn timber we can send graded sample boards so you can check our grading against your own standard before committing to a load.',
+          'Yes. We send samples of the grade and finish before order confirmation, so you can check the board against your own standard before committing to a load.',
+      },
+      {
+        question: 'Can I order on WhatsApp?',
+        answer:
+          'Yes. Send the format, grade, size and quantity — or simply a photo of the floor plan — and we reply with a quote. The picker on this page pre-fills the message for you.',
       },
       {
         question: 'What languages do you work in?',
@@ -492,10 +506,11 @@ export const en: Dictionary = {
   contact: {
     eyebrow: 'Request a quote',
     title: 'Tell us what you need',
-    lead: 'Send your sections, grades and volumes. If you are not sure yet, describe the application and we will propose the most economical specification.',
+    lead: 'Send the formats, grades and quantities you need. If you are not sure yet, describe the project and we will propose the most economical specification.',
     labels: {
       email: 'Email',
       phone: 'Phone',
+      whatsapp: 'WhatsApp',
       production: 'Production & export',
       hours: 'Office hours',
       languages: 'We speak',
@@ -505,6 +520,9 @@ export const en: Dictionary = {
       hours: 'Mon–Fri, 08:00–18:00 EET',
       languages: 'English, German, Polish, Ukrainian',
     },
+    whatsappTitle: 'Faster on WhatsApp',
+    whatsappBody:
+      'Send the format, grade and quantity — or just a photo of the floor plan — and we reply with a quote and availability.',
     noteBefore: 'Prefer email? Write directly to ',
     noteAfter: ' and attach your specification — we reply in English, German or Polish.',
   },
@@ -513,35 +531,35 @@ export const en: Dictionary = {
     name: 'Name *',
     namePlaceholder: 'Jan Kowalski',
     company: 'Company',
-    companyPlaceholder: 'Drewno Sp. z o.o.',
+    companyPlaceholder: 'Parkiet Sp. z o.o.',
     country: 'Country',
     countryPlaceholder: 'Poland',
     email: 'Email *',
     emailPlaceholder: 'purchasing@company.eu',
     phone: 'Phone',
     phonePlaceholder: '+48 000 000 000',
-    product: 'Product',
-    productPlaceholder: 'Select a product…',
-    productMixed: 'Mixed / several products',
+    product: 'Format',
+    productPlaceholder: 'Select a format…',
+    productMixed: 'Several formats',
     grade: 'Grade',
     gradeAny: 'Any / advise me',
-    dimensions: 'Dimensions (th × w × l)',
-    dimensionsPlaceholder: '30 × 230 × 2 050 mm',
-    volume: 'Volume per month',
-    volumePlaceholder: 'e.g. 40 m³',
-    moisture: 'Moisture',
-    moistureOptions: {
+    dimensions: 'Size (w × l × th)',
+    dimensionsPlaceholder: '125 × 600–1 400 × 14/3.2 mm',
+    volume: 'Quantity',
+    volumePlaceholder: 'e.g. 250 m²',
+    finish: 'Finish',
+    finishOptions: {
       any: 'Any / advise me',
-      kd: 'Kiln dried (KD)',
-      ad: 'Air dried (AD)',
-      fresh: 'Fresh sawn',
+      unfinished: 'Unfinished',
+      oiled: 'Oiled',
+      lacquered: 'Lacquered',
     },
     destination: 'Destination',
     destinationPlaceholder: 'City or port, e.g. Hamburg',
     incoterms: 'Delivery terms',
     incotermsAny: 'Not decided yet',
     message: 'Message *',
-    messagePlaceholder: 'Anything else that affects the quote — tolerances, packing, schedule…',
+    messagePlaceholder: 'Anything else that affects the quote — tone, packing, schedule…',
     submit: 'Send request',
     sending: 'Sending…',
     required: 'Fields marked * are required.',
@@ -566,11 +584,11 @@ export const en: Dictionary = {
       country: 'Country',
       email: 'Email',
       phone: 'Phone',
-      product: 'Product',
+      product: 'Format',
       grade: 'Grade',
       dimensions: 'Dimensions',
-      volume: 'Volume / month',
-      moisture: 'Moisture',
+      volume: 'Quantity',
+      finish: 'Finish',
       destination: 'Destination',
       incoterms: 'Delivery terms',
       notSpecified: 'Not specified',
@@ -578,19 +596,19 @@ export const en: Dictionary = {
   },
 
   productPage: {
-    aboutTitle: 'About this product',
+    aboutTitle: 'About this format',
+    configureTitle: 'Choose grade and size',
     specsEyebrow: 'Technical characteristics',
     specsTitle: 'Specification',
     specsLead:
       'Confirmed per order — send your requirement and we will state the exact figures on the offer.',
     pricesEyebrow: 'Price list',
-    pricesTitle: 'Prices by section and grade',
-    pricesLead:
-      'Our published price list. Sections are fixed; lengths within each section are available as listed.',
-    gradesEyebrow: 'Grading',
-    gradesTitle: 'What each grade allows',
+    pricesTitle: 'Prices by size and grade',
+    pricesLead: 'Straight from our price sheet, in euro per square metre.',
+    gradesEyebrow: 'Grades',
+    gradesTitle: 'A-B or C: what changes',
     gradesLead:
-      'Taken directly from our written specification for edged oak sawn timber. Tolerances differ between the narrow and wide width bands.',
+      'The same board in two grades. The grade decides how calm or lively the face is — and the price.',
     finishesEyebrow: 'Finishes',
     finishesTitle: 'Twelve production tones',
     finishesLead:
@@ -598,27 +616,17 @@ export const en: Dictionary = {
     inquiryEyebrow: 'Enquiry',
     inquiryTitle: 'Request a quote for {product}',
     inquiryLead:
-      'Tell us the sections, grades and volume you need. We reply with availability, price and delivery time for your destination.',
+      'Tell us the grade, size and quantity you need. We reply with availability, price and delivery time for your destination.',
     relatedEyebrow: 'Also produced',
-    relatedTitle: 'Other product lines',
-    priceInformation: 'Price information',
-    seePriceList: 'See price list',
-    permitted: 'Permitted',
-    notPermitted: 'Not permitted in any grade',
-    availableLengths: 'Available lengths',
-    priceColumn: 'Price',
-    gradeColumn: 'Grade',
-    gradeLabel: 'Grade {code}',
-    mixedGrade: 'Mixed grade',
-    priceFootnote:
-      'Prices are per cubic metre and indicative: the final figure depends on volume, moisture regime and delivery terms, and is confirmed per batch on the offer.',
+    relatedTitle: 'Other formats',
+    seePriceList: 'See the full price list',
   },
 
   footer: {
-    products: 'Products',
+    products: 'Parquet',
     company: 'Company',
     exportOffice: 'Export office',
-    claim: 'High-quality Ukrainian timber for the European market.',
+    claim: 'Engineered oak parquet from Ukraine for the European market.',
     rights: 'All rights reserved.',
   },
 
@@ -631,225 +639,24 @@ export const en: Dictionary = {
   },
 
   products: {
-    'oak-edged-boards': {
-      name: 'Oak Edged Boards',
-      kicker: 'Flagship product',
-      category: 'Edged sawn timber',
-      species: 'European oak (Quercus robur)',
-      tagline: 'Graded oak sawn timber in five fixed sections, priced by grade.',
+    'oak-chevron-parquet': {
+      name: 'Oak Chevron Parquet',
+      shortName: 'Chevron',
+      kicker: 'French herringbone',
+      category: 'Engineered parquet',
+      tagline: 'Blocks with angled ends that meet in one continuous V — the classic French pattern.',
       shortDescription:
-        'Our main product direction: oak edged boards known for exceptional strength, durability and natural beauty — graded I to IV against a written specification.',
+        'Engineered oak chevron, 125 mm wide in 500, 600 and 700 mm blocks, in grades A-B and C and twelve finishes.',
       description: [
-        'Oak edged boards are the backbone of our production. Every board is sawn to a fixed 30 mm thickness in one of five widths — 80, 115, 150, 170 or 230 mm — with parallel edges, square ends and a defined length range for each section.',
-        'Grading is not a matter of opinion. Each piece is assessed against written tolerances for live and black knots, sapwood, ingrown bark and cracks, and the limits differ between the narrow (150/170 mm) and wide (230 mm) width bands. Pith, woodworm damage, steam damage, micro-cracks, end cracks and double sapwood are accepted in no grade.',
-        'The result is a product you can buy repeatedly with confidence: the same grade delivers the same yield in your workshop, batch after batch.',
+        'Chevron blocks are cut with angled ends, so the pattern runs as one continuous V with a straight seam down the middle — the floor of Parisian apartments, and the most architectural of our three formats.',
+        'Each block is 125 mm wide, in 500, 600 or 700 mm lengths, on our 14 mm engineered construction with a 3.2 mm European oak wear layer. It is the same build as our plank and herringbone, so formats can meet at a threshold without a step.',
+        'Twelve production finishes are available, from whitewashed and greige tones through natural oak and honey to walnut, chocolate and dark espresso.',
       ],
-      keyFacts: [
-        { label: 'Thickness', value: '30 mm' },
-        { label: 'Widths', value: '80 / 115 / 150 / 170 / 230 mm' },
-        { label: 'Lengths', value: '320 – 2 450 mm' },
-        { label: 'Grades', value: 'I, II, III, IV' },
-      ],
-      priceNote: 'From €700 / m³ (80 × 30 mm, mixed grade). Grade I in 230 mm from €2 650 / m³.',
-      sizesSummary: '30 × 80–230 mm, lengths 320–2 450 mm',
-      gradesSummary: 'Grades I–IV and mixed-grade packs',
       advantages: [
-        'Five fixed sections in stock rotation — repeat orders arrive identical',
-        'Grade tolerances documented in writing, not agreed by phone',
-        'Grade-based price list, so you pay only for the quality you need',
-        'Packed and marked by grade for fast goods-in inspection',
-      ],
-      specs: [
-        {
-          group: 'Material',
-          items: [
-            { label: 'Species', value: 'European oak (Quercus robur)' },
-            { label: 'Product type', value: 'Edged sawn timber, planed on request' },
-            { label: 'Origin', value: 'Ukraine' },
-            { label: 'Grading', value: 'Grades I–IV to company specification' },
-          ],
-        },
-        {
-          group: 'Dimensions',
-          items: [
-            { label: 'Thickness', value: '30 mm' },
-            { label: 'Widths', value: '80, 115, 150, 170, 230 mm' },
-            { label: 'Length range', value: '320 – 2 450 mm, fixed lengths per section' },
-            { label: 'Edges / ends', value: 'Edged both sides, ends trimmed square' },
-          ],
-        },
-        {
-          group: 'Delivery',
-          items: [
-            // TO CONFIRM — moisture regime
-            { label: 'Moisture content', value: 'Kiln dried or air dried — specify on enquiry' },
-            { label: 'Packaging', value: 'Strapped packs, sorted by section and grade' },
-            { label: 'Marking', value: 'Section, grade and volume per pack' },
-            { label: 'Terms', value: 'EXW / FCA / CPT / DAP' },
-          ],
-        },
-      ],
-      gradeBands: [
-        {
-          widths: 'Widths 150 and 170 mm',
-          grades: [
-            { code: 'I', name: 'Grade I', allowances: ['Live knots up to 3–5 mm'] },
-            {
-              code: 'II',
-              name: 'Grade II',
-              allowances: [
-                'Live knots up to 25 mm',
-                'Black knots up to 15 mm, no closer than 10 mm to the edge',
-                'Sapwood 20 mm, without breaking through to one face',
-              ],
-            },
-            {
-              code: 'III',
-              name: 'Grade III',
-              allowances: [
-                'Live knots up to 35 mm',
-                'Black knots up to 25 mm, no closer than 10 mm to the edge',
-                'Ingrown bark up to 3 × 50 mm',
-                'Sapwood 35 mm on one face, 10 mm breaking through on the other',
-              ],
-            },
-          ],
-        },
-        {
-          widths: 'Width 230 mm',
-          grades: [
-            { code: 'I', name: 'Grade I', allowances: ['Live knots up to 5 mm'] },
-            {
-              code: 'II',
-              name: 'Grade II',
-              allowances: [
-                'Live knots 30–35 mm',
-                'Black knots up to 25 mm, no closer than 10 mm to the edge',
-                'Sapwood 25 mm, without breaking through to one face',
-                'Ingrown bark up to 50 mm',
-              ],
-            },
-            {
-              code: 'III',
-              name: 'Grade III',
-              allowances: [
-                'Live knots up to 70 mm',
-                'Black knots up to 40 mm, no closer than 10 mm to the edge',
-                'Ingrown bark up to 3 × 80 mm',
-                'Sapwood 10 mm on the face side, 30 mm on the reverse',
-              ],
-            },
-            {
-              code: 'IV',
-              name: 'Grade IV',
-              allowances: [
-                'Live knots up to 120 mm, no closer than 10 mm to the edge',
-                'Ingrown bark up to 5 × 100 mm',
-                'Sapwood 20 mm on the face side, unrestricted on the reverse',
-              ],
-            },
-          ],
-        },
-      ],
-      notPermitted: [
-        'Pith / heart centre',
-        'Steam damage',
-        'Woodworm damage',
-        'Micro-cracks',
-        'End cracks',
-        'Double sapwood',
-      ],
-    },
-
-    'pine-construction-timber': {
-      name: 'Pine Construction Timber',
-      kicker: 'Volume supply',
-      category: 'Construction timber',
-      species: 'Scots pine (Pinus sylvestris)',
-      tagline: 'Boards, battens and beams for residential, commercial and industrial building.',
-      shortDescription:
-        'Pine construction materials for residential, commercial and industrial construction — cut to your sections and supplied in large, repeatable volumes.',
-      description: [
-        'We supply pine timber materials for construction and finishing: edged boards, battens, rafters and squared beams. Sections are produced to your specification rather than forced into a fixed catalogue, which makes pine our most flexible product line.',
-        'Pine works hard and behaves predictably: light, straightforward to fix and cut on site, and stable once dried. It is the natural choice for framing, formwork, roof structures, joists, crating and interior finishing.',
-        'Because pine moves in volume, it is where our production scale shows. Bundles are strapped uniformly and cut to consistent lengths so a truck loads full — which keeps the freight cost per cubic metre down.',
-      ],
-      keyFacts: [
-        { label: 'Products', value: 'Boards, battens, beams' },
-        { label: 'Sections', value: 'Cut to specification' },
-        { label: 'Lengths', value: 'Up to 6 000 mm' }, // TO CONFIRM
-        { label: 'Supply', value: 'Full-truck volumes' },
-      ],
-      priceNote: 'Price on request — quoted per cubic metre against your section list.',
-      sizesSummary: 'Sections and lengths produced to order',
-      gradesSummary: 'Construction quality, sorted on request',
-      advantages: [
-        'Sections cut to your drawing instead of a fixed catalogue',
-        'Stable large-volume supply for multi-phase construction projects',
-        'Uniform bundles that load efficiently and unload fast',
-        'Suitable for structure, formwork, crating and interior finishing',
-      ],
-      specs: [
-        {
-          group: 'Material',
-          items: [
-            { label: 'Species', value: 'Scots pine (Pinus sylvestris)' },
-            { label: 'Product type', value: 'Edged boards, battens, squared beams' },
-            { label: 'Origin', value: 'Ukraine' },
-            { label: 'Applications', value: 'Framing, roofing, formwork, finishing, packaging' },
-          ],
-        },
-        {
-          // TO CONFIRM — indicative ranges, confirm with production
-          group: 'Dimensions',
-          items: [
-            { label: 'Board thickness', value: '25 – 50 mm' },
-            { label: 'Board width', value: '100 – 200 mm' },
-            { label: 'Beam sections', value: '50 × 50 to 150 × 150 mm' },
-            { label: 'Lengths', value: '3 000 – 6 000 mm' },
-          ],
-        },
-        {
-          group: 'Delivery',
-          items: [
-            { label: 'Moisture content', value: 'Fresh sawn or dried — specify on enquiry' },
-            { label: 'Packaging', value: 'Strapped bundles, edge protected' },
-            { label: 'Loading', value: 'Full truck or 40 ft container' },
-            { label: 'Terms', value: 'EXW / FCA / CPT / DAP' },
-          ],
-        },
-      ],
-      gradeBands: [],
-      notPermitted: [],
-    },
-
-    'oak-parquet-boards': {
-      name: 'Natural Wood Parquet Boards',
-      kicker: '12 finishes',
-      category: 'Flooring',
-      species: 'European oak',
-      tagline: 'Chevron oak parquet that combines elegant appearance with a long service life.',
-      shortDescription:
-        'Natural wood parquet boards combining elegant appearance, reliability and long service life — chevron format oak in twelve finishes.',
-      description: [
-        'Our parquet boards are made from the same oak we saw and grade ourselves, machined to chevron format so the finished floor reads as one continuous pattern rather than a field of separate planks.',
-        'Twelve finishes are produced, from whitewashed and greige tones through natural oak and honey to walnut, chocolate and dark espresso. The same board therefore serves a bright Scandinavian interior or a dark, formal one without changing supplier.',
-        'Parquet is where oak earns its reputation: hard-wearing under traffic, repairable rather than disposable, and better looking after a decade than most floors are on day one.',
-      ],
-      keyFacts: [
-        { label: 'Pattern', value: 'Chevron' },
-        { label: 'Species', value: 'European oak' },
-        { label: 'Finishes', value: '12 standard tones' },
-        { label: 'Format', value: 'To specification' },
-      ],
-      priceNote: 'Price on request — quoted per square metre by finish and format.',
-      sizesSummary: 'Chevron format, dimensions to specification',
-      gradesSummary: 'Select and rustic grades, 12 finishes',
-      advantages: [
-        'Twelve production finishes from whitewashed to dark espresso',
-        'Chevron format machined for tight, repeatable joints',
-        'Made from our own graded oak — one supplier from log to floor',
-        'Hard-wearing and repairable, built for long service life',
+        'Angled ends machined for tight, repeatable joints',
+        'Three block lengths to scale the pattern to the room',
+        'Twelve production finishes, custom tones on request',
+        'The same 14 mm build as our plank and herringbone',
       ],
       specs: [
         {
@@ -857,17 +664,17 @@ export const en: Dictionary = {
           items: [
             { label: 'Species', value: 'European oak' },
             { label: 'Pattern', value: 'Chevron (French herringbone)' },
-            { label: 'Finishes', value: '12 standard tones, custom tones on request' },
+            { label: 'Construction', value: 'Engineered, 14 mm with a 3.2 mm oak wear layer' },
             { label: 'Origin', value: 'Ukraine' },
           ],
         },
         {
-          // TO CONFIRM — construction, thickness and wear layer
           group: 'Format',
           items: [
-            { label: 'Construction', value: 'Solid or engineered — specify on enquiry' },
-            { label: 'Thickness', value: 'To specification' },
-            { label: 'Width / length', value: 'To specification' },
+            { label: 'Width', value: '125 mm' },
+            { label: 'Block lengths', value: '500 / 600 / 700 mm' },
+            { label: 'Grades', value: 'A-B Select, C Rustic' },
+            // TO CONFIRM — surface options
             { label: 'Surface', value: 'Oiled or lacquered, brushed on request' },
           ],
         },
@@ -876,52 +683,152 @@ export const en: Dictionary = {
           items: [
             { label: 'Packaging', value: 'Cartons on pallets, shrink wrapped' },
             { label: 'Sold by', value: 'Square metre' },
-            { label: 'Sampling', value: 'Finish samples sent before order confirmation' },
+            { label: 'Sampling', value: 'Grade and finish samples before order confirmation' },
             { label: 'Terms', value: 'EXW / FCA / CPT / DAP' },
           ],
         },
       ],
-      gradeBands: [],
-      notPermitted: [],
+    },
+
+    'oak-plank-flooring': {
+      name: 'Oak Plank Flooring',
+      shortName: 'Plank',
+      kicker: 'Three widths',
+      category: 'Engineered flooring',
+      tagline: 'Long, calm boards in 125, 145 and 195 mm — the most versatile oak floor.',
+      shortDescription:
+        'Engineered oak plank in three widths and random lengths up to 2 500 mm, in grades A-B and C.',
+      description: [
+        'Plank is the floor that suits almost any room: long boards laid in staggered rows, with the grain running the length of the space. We produce it in three widths — 125, 145 and 195 mm — so the scale of the board can follow the scale of the room.',
+        'Lengths are random within each width — 600–1 400 mm at 125, 800–1 600 mm at 145 and 1 700–2 500 mm at 195 mm — which keeps the joints from lining up and makes the floor read as natural wood rather than tiles.',
+        'Every plank is 14 mm engineered oak with a 3.2 mm wear layer, finished natural or toned on our own line and graded A-B or C board by board.',
+      ],
+      advantages: [
+        'Three widths, from a classic 125 mm to a wide 195 mm board',
+        'Random lengths up to 2 500 mm for a natural, staggered floor',
+        'Natural or toned finishes applied on our own line',
+        'The same 14 mm build as our chevron and herringbone',
+      ],
+      specs: [
+        {
+          group: 'Material',
+          items: [
+            { label: 'Species', value: 'European oak' },
+            { label: 'Format', value: 'Plank, laid in staggered rows' },
+            { label: 'Construction', value: 'Engineered, 14 mm with a 3.2 mm oak wear layer' },
+            { label: 'Origin', value: 'Ukraine' },
+          ],
+        },
+        {
+          group: 'Format',
+          items: [
+            { label: 'Widths', value: '125 / 145 / 195 mm' },
+            { label: 'Lengths', value: '600–1 400 / 800–1 600 / 1 700–2 500 mm' },
+            { label: 'Grades', value: 'A-B Select, C Rustic' },
+            // TO CONFIRM — surface options
+            { label: 'Surface', value: 'Natural or toned, oiled or lacquered' },
+          ],
+        },
+        {
+          group: 'Delivery',
+          items: [
+            { label: 'Packaging', value: 'Cartons on pallets, shrink wrapped' },
+            { label: 'Sold by', value: 'Square metre' },
+            { label: 'Sampling', value: 'Grade and finish samples before order confirmation' },
+            { label: 'Terms', value: 'EXW / FCA / CPT / DAP' },
+          ],
+        },
+      ],
+    },
+
+    'oak-herringbone-parquet': {
+      name: 'Oak Herringbone Parquet',
+      shortName: 'Herringbone',
+      kicker: 'English herringbone',
+      category: 'Engineered parquet',
+      tagline: 'Square-ended blocks laid in a zigzag — the classic English pattern.',
+      shortDescription:
+        'Engineered oak herringbone, 125 mm wide in 500, 600 and 700 mm blocks, in grades A-B and C.',
+      description: [
+        'Herringbone blocks have square ends: each one butts against the side of its neighbour, so the pattern steps in a zigzag instead of meeting in a straight seam. It is the classic English floor, and it hides the joints of a busy room better than any other layout.',
+        'Blocks are 125 mm wide, in 500, 600 or 700 mm lengths, on our 14 mm engineered construction with a 3.2 mm European oak wear layer — the same build as our plank and chevron.',
+        'At the same size and grade, herringbone is priced below chevron — the most economical way to a patterned floor in our range.',
+      ],
+      advantages: [
+        'Square-ended blocks for a traditional zigzag layout',
+        'Three block lengths to scale the pattern to the room',
+        'The most economical patterned floor in our range',
+        'The same 14 mm build as our plank and chevron',
+      ],
+      specs: [
+        {
+          group: 'Material',
+          items: [
+            { label: 'Species', value: 'European oak' },
+            { label: 'Pattern', value: 'Herringbone (English)' },
+            { label: 'Construction', value: 'Engineered, 14 mm with a 3.2 mm oak wear layer' },
+            { label: 'Origin', value: 'Ukraine' },
+          ],
+        },
+        {
+          group: 'Format',
+          items: [
+            { label: 'Width', value: '125 mm' },
+            { label: 'Block lengths', value: '500 / 600 / 700 mm' },
+            { label: 'Grades', value: 'A-B Select, C Rustic' },
+            // TO CONFIRM — surface options
+            { label: 'Surface', value: 'Oiled or lacquered, brushed on request' },
+          ],
+        },
+        {
+          group: 'Delivery',
+          items: [
+            { label: 'Packaging', value: 'Cartons on pallets, shrink wrapped' },
+            { label: 'Sold by', value: 'Square metre' },
+            { label: 'Sampling', value: 'Grade and finish samples before order confirmation' },
+            { label: 'Terms', value: 'EXW / FCA / CPT / DAP' },
+          ],
+        },
+      ],
     },
   },
 
   photos: {
-    oakGradeA: {
-      alt: 'Grade I oak edged boards with clean, even grain',
-      caption: 'Oak edged boards — Grade I',
+    showroom: {
+      alt: 'Showroom wall of oak chevron and herringbone parquet panels',
+      caption: 'Showroom — chevron and herringbone',
     },
-    oakGradeB: {
-      alt: 'Grade II oak edged boards with small sound knots',
-      caption: 'Oak edged boards — Grade II',
+    interiorPlank: {
+      alt: 'Wide oak plank floor leading into a bedroom laid in chevron',
+      caption: 'Plank and chevron, fitted',
     },
-    oakGradeC: {
-      alt: 'Grade III oak edged boards showing knots and sapwood',
-      caption: 'Oak edged boards — Grade III',
+    chevronInterior: {
+      alt: 'Natural oak chevron parquet fitted in a hallway under a staircase',
+      caption: 'Chevron, natural oak',
     },
-    oakEdge: {
-      alt: 'Edge detail of a planed oak board, 30 mm thick',
-      caption: 'Edge detail — 30 mm oak',
+    plankSelect: {
+      alt: 'Light A-B grade oak planks stacked on a pallet',
+      caption: 'Plank — grade A-B Select',
     },
-    machined: {
-      alt: 'Machined oak and pine boards stacked before packing',
-      caption: 'Machined boards before packing',
+    herringboneShowroom: {
+      alt: 'Two oak herringbone parquet panels in the showroom',
+      caption: 'Herringbone — showroom panels',
     },
-    pinePacks: {
-      alt: 'Strapped pine board packs stacked in the yard',
-      caption: 'Pine board packs, ready to load',
+    plankFinishingLinePoster: {
+      alt: 'Oak planks on the rollers of the finishing line',
+      caption: 'Plank on the finishing line',
     },
-    pineBundles: {
-      alt: 'Pine battens and boards bundled for export',
-      caption: 'Bundled pine sections',
+    plankShortBoardsPoster: {
+      alt: 'Oak boards leaving the finishing machine',
+      caption: 'Boards leaving the finishing line',
     },
-    pineBeams: {
-      alt: 'Squared pine beams and boards stacked at the sawmill',
-      caption: 'Squared pine beams',
+    chevronBlanksPoster: {
+      alt: 'Stacked chevron blanks with angled ends',
+      caption: 'Chevron blanks, cut and profiled',
     },
-    pineYard: {
-      alt: 'Large stacks of pine timber in the export yard',
-      caption: 'Yard stock — pine timber',
+    plankTonedLinePoster: {
+      alt: 'Grey-toned oak planks on the roller line',
+      caption: 'Toned plank on the line',
     },
     parquet1: {
       alt: 'Chevron oak parquet in a smoked cognac finish',
@@ -970,6 +877,25 @@ export const en: Dictionary = {
     parquet12: {
       alt: 'Chevron oak parquet in a dark chocolate finish',
       caption: 'Parquet — Chocolate',
+    },
+  },
+
+  videos: {
+    plankFinishingLine: {
+      alt: 'Video: oak planks moving along the finishing line',
+      caption: 'Plank on the finishing line',
+    },
+    plankShortBoards: {
+      alt: 'Video: oak boards coming out of the finishing machine',
+      caption: 'Boards leaving the finishing line',
+    },
+    chevronBlanks: {
+      alt: 'Video: chevron blanks with angled ends, stacked after profiling',
+      caption: 'Chevron blanks, cut and profiled',
+    },
+    plankTonedLine: {
+      alt: 'Video: grey-toned oak planks on the roller line',
+      caption: 'Toned plank on the line',
     },
   },
 

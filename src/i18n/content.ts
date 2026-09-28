@@ -1,74 +1,80 @@
 import { brand, productSlugs, type ProductSlug } from '../data/contact'
 import {
-  galleryTileIds,
-  parquetFinishPhotos,
+  galleryTiles,
+  heroInsetPhoto,
+  heroPhoto,
   photos,
-  processPhotos,
-  type PhotoCategory,
+  processMedia,
+  productMedia,
+  videos,
+  type MediaRef,
   type PhotoId,
+  type VideoId,
 } from '../data/media'
-import { formatNumber, oakPriceFrom, oakPriceGroups, type GradeCode } from '../data/pricing'
-import type { Dictionary, KeyFact, ProductText, SpecGroupText } from './types'
+import {
+  construction,
+  formatDecimal,
+  formatEuro,
+  formatNumber,
+  gradeDisplay,
+  lowestPrice,
+  priceFrom,
+  priceList,
+  type GradeCode,
+  type SizeOption,
+} from '../data/pricing'
+import type { Dictionary, KeyFact, ProductText } from './types'
 import type { IconName } from '../components/ui/Icon'
 
 /** A photo with its localised alt text and caption resolved. */
 export interface ResolvedPhoto {
+  kind: 'photo'
   id: PhotoId
   src: string
   width: number
   height: number
-  category: PhotoCategory
+  position?: string
   alt: string
   caption: string
 }
 
-export interface ResolvedGradePrice {
-  code: GradeCode
+/** A video with its localised text and its poster frame resolved. */
+export interface ResolvedVideo {
+  kind: 'video'
+  id: VideoId
+  src: string
+  poster: ResolvedPhoto
+  width: number
+  height: number
+  position?: string
+  alt: string
+  caption: string
+}
+
+export type ResolvedMedia = ResolvedPhoto | ResolvedVideo
+
+/** One orderable size of a format, with its labels in the current language. */
+export interface ResolvedSize extends SizeOption {
+  /** Stable key for React and form values, e.g. "125". */
+  key: string
+  /** "125 × 600–1 400 mm" */
   label: string
-  /** null → quoted on request. */
-  price: number | null
+  /** "600–1 400 mm" */
+  lengthLabel: string
+  /** "random lengths" / "fixed lengths" */
+  lengthNote: string
+  /** Full line as the price sheet writes it: "125 × 600–1 400 × 14/3.2 mm". */
+  spec: string
 }
 
-export interface ResolvedPriceGroup {
-  section: string
-  lengths: string[]
-  prices: ResolvedGradePrice[]
-}
-
-export interface ResolvedGrade {
-  code: GradeCode
-  name: string
-  allowances: string[]
-  photo: ResolvedPhoto
-}
-
-export interface ResolvedGradeBand {
-  widths: string
-  grades: ResolvedGrade[]
-}
-
-export interface ResolvedProduct {
+export interface ResolvedProduct extends ProductText {
   slug: ProductSlug
-  name: string
-  kicker: string
-  category: string
-  species: string
-  tagline: string
-  shortDescription: string
-  description: string[]
   keyFacts: KeyFact[]
-  specs: SpecGroupText[]
-  advantages: string[]
-  sizesSummary: string
-  gradesSummary: string
-  priceNote: string
-  priceFrom: number | null
+  sizes: ResolvedSize[]
+  priceFrom: number
   cardPhoto: ResolvedPhoto
-  heroPhoto: ResolvedPhoto
-  gallery: ResolvedPhoto[]
-  priceGroups: ResolvedPriceGroup[]
-  gradeBands: ResolvedGradeBand[]
-  notPermitted: string[]
+  /** Gallery and picker viewer, in order: photos and videos. */
+  media: ResolvedMedia[]
   finishes: { photo: ResolvedPhoto; name: string; tone: string }[]
 }
 
@@ -77,7 +83,7 @@ export interface ResolvedProcessStep {
   icon: IconName
   title: string
   body: string
-  photo: ResolvedPhoto
+  media: ResolvedMedia
 }
 
 /** Everything a component needs for one locale: strings plus resolved media. */
@@ -87,54 +93,21 @@ export interface Content {
   productBySlug: Record<ProductSlug, ResolvedProduct>
   /**
    * Every photo with its localised text, keyed by id. Sections that want one
-   * specific picture read `photo.oakEdge` — previously they searched the gallery
-   * array and asserted a hit, which broke silently the moment that array became
-   * a curated subset.
+   * specific picture read `photo.showroom` rather than searching an array.
    */
   photo: Record<PhotoId, ResolvedPhoto>
   /** The curated home-page gallery, in mosaic order. */
-  galleryTiles: ResolvedPhoto[]
+  galleryTiles: ResolvedMedia[]
   processSteps: ResolvedProcessStep[]
   heroPhoto: ResolvedPhoto
   heroInsetPhoto: ResolvedPhoto
   productOptions: { value: string; label: string }[]
-}
-
-/** Which photos illustrate each product; language-neutral, so it lives here. */
-const productMedia: Record<
-  ProductSlug,
-  { card: PhotoId; hero: PhotoId; gallery: PhotoId[]; hasPrices: boolean; hasFinishes: boolean }
-> = {
-  'oak-edged-boards': {
-    card: 'oakGradeA',
-    hero: 'oakEdge',
-    gallery: ['oakGradeA', 'oakGradeB', 'oakGradeC', 'oakEdge', 'machined'],
-    hasPrices: true,
-    hasFinishes: false,
-  },
-  'pine-construction-timber': {
-    card: 'pinePacks',
-    hero: 'pineBeams',
-    gallery: ['pinePacks', 'pineBundles', 'pineBeams', 'pineYard'],
-    hasPrices: false,
-    hasFinishes: false,
-  },
-  'oak-parquet-boards': {
-    card: 'parquet4',
-    hero: 'parquet8',
-    gallery: parquetFinishPhotos,
-    hasPrices: false,
-    hasFinishes: true,
-  },
-}
-
-/** Sample board photographed for each grade. */
-const gradePhoto: Record<GradeCode, PhotoId> = {
-  I: 'oakGradeA',
-  II: 'oakGradeB',
-  III: 'oakGradeC',
-  IV: 'oakGradeC',
-  mixed: 'oakGradeB',
+  /** Cheapest line on the price list. */
+  priceFrom: number
+  /** 52.5 → "€52.50" / "52,50 €". */
+  formatPrice: (value: number) => string
+  /** "AB" → "A-B Select". */
+  gradeName: (code: GradeCode) => string
 }
 
 const cache = new Map<string, Content>()
@@ -143,42 +116,73 @@ export function buildContent(t: Dictionary): Content {
   const cached = cache.get(t.locale)
   if (cached) return cached
 
-  const resolvePhoto = (id: PhotoId): ResolvedPhoto => ({ ...photos[id], ...t.photos[id] })
+  const mm = t.common.mm
+  const decimal = (value: number) => formatDecimal(value, t.decimalComma)
+  const formatPrice = (value: number) => formatEuro(value, t.decimalComma)
 
-  const gradeLabel = (code: GradeCode) =>
-    code === 'mixed'
-      ? t.productPage.mixedGrade
-      : t.productPage.gradeLabel.replace('{code}', code)
+  const resolvePhoto = (id: PhotoId): ResolvedPhoto => ({
+    kind: 'photo',
+    ...photos[id],
+    ...t.photos[id],
+  })
 
-  const priceGroups: ResolvedPriceGroup[] = oakPriceGroups.map((group) => ({
-    section: `${group.width} × ${group.thickness} ${t.common.mm}`,
-    lengths: group.lengths.map((length) => `${formatNumber(length)} ${t.common.mm}`),
-    prices: group.prices.map((price) => ({
-      code: price.grade,
-      label: gradeLabel(price.grade),
-      price: price.price,
-    })),
-  }))
+  const resolveVideo = (id: VideoId): ResolvedVideo => {
+    const video = videos[id]
+    const poster = resolvePhoto(video.poster)
+    return {
+      kind: 'video',
+      id,
+      src: video.src,
+      poster,
+      width: video.width,
+      height: video.height,
+      position: poster.position,
+      ...t.videos[id],
+    }
+  }
+
+  const resolveMedia = (ref: MediaRef): ResolvedMedia =>
+    ref.kind === 'photo' ? resolvePhoto(ref.id) : resolveVideo(ref.id)
+
+  const lengthText = (size: SizeOption) =>
+    size.lengthKind === 'range'
+      ? size.lengths.map(formatNumber).join('–')
+      : size.lengths.map(formatNumber).join(' / ')
+
+  const resolveSize = (size: SizeOption): ResolvedSize => ({
+    ...size,
+    key: String(size.width),
+    label: `${size.width} × ${lengthText(size)} ${mm}`,
+    lengthLabel: `${lengthText(size)} ${mm}`,
+    lengthNote: size.lengthKind === 'range' ? t.catalog.randomLengths : t.catalog.fixedLengths,
+    spec: `${size.width} × ${lengthText(size)} × ${construction.thickness}/${decimal(construction.wearLayer)} ${mm}`,
+  })
+
+  /** One size prints as it is; several collapse to the overall range. */
+  const overallLength = (sizes: ResolvedSize[]) => {
+    if (sizes.length === 1) return sizes[0].lengthLabel
+    const all = sizes.flatMap((size) => size.lengths)
+    return `${formatNumber(Math.min(...all))}–${formatNumber(Math.max(...all))} ${mm}`
+  }
 
   const buildProduct = (slug: ProductSlug): ResolvedProduct => {
-    const text: ProductText = t.products[slug]
     const media = productMedia[slug]
+    const sizes = priceList[slug].map(resolveSize)
+    const spec = t.catalog.specs
 
     return {
       slug,
-      ...text,
-      priceFrom: media.hasPrices ? oakPriceFrom : null,
+      ...t.products[slug],
+      keyFacts: [
+        { label: spec.thickness, value: `${construction.thickness} ${mm}` },
+        { label: spec.wearLayer, value: `${decimal(construction.wearLayer)} ${mm}` },
+        { label: spec.width, value: `${sizes.map((size) => size.width).join(' / ')} ${mm}` },
+        { label: spec.length, value: overallLength(sizes) },
+      ],
+      sizes,
+      priceFrom: lowestPrice(slug),
       cardPhoto: resolvePhoto(media.card),
-      heroPhoto: resolvePhoto(media.hero),
-      gallery: media.gallery.map(resolvePhoto),
-      priceGroups: media.hasPrices ? priceGroups : [],
-      gradeBands: text.gradeBands.map((band) => ({
-        widths: band.widths,
-        grades: band.grades.map((grade) => ({
-          ...grade,
-          photo: resolvePhoto(gradePhoto[grade.code]),
-        })),
-      })),
+      media: media.media.map(resolveMedia),
       finishes: media.hasFinishes
         ? t.finishes.map((finish) => ({
             photo: resolvePhoto(finish.id),
@@ -201,15 +205,18 @@ export function buildContent(t: Dictionary): Content {
     photo: Object.fromEntries(
       (Object.keys(photos) as PhotoId[]).map((id) => [id, resolvePhoto(id)]),
     ) as Record<PhotoId, ResolvedPhoto>,
-    galleryTiles: galleryTileIds.map(resolvePhoto),
+    galleryTiles: galleryTiles.map(resolveMedia),
     processSteps: t.process.steps.map((step, i) => ({
       ...step,
       step: `0${i + 1}`,
-      photo: resolvePhoto(processPhotos[i] ?? 'pinePacks'),
+      media: resolveMedia(processMedia[i] ?? { kind: 'photo', id: 'plankSelect' }),
     })),
-    heroPhoto: { ...resolvePhoto('pinePacks'), alt: t.hero.imageAlt },
-    heroInsetPhoto: resolvePhoto('oakGradeA'),
+    heroPhoto: { ...resolvePhoto(heroPhoto), alt: t.hero.imageAlt },
+    heroInsetPhoto: resolvePhoto(heroInsetPhoto),
     productOptions: products.map((product) => ({ value: product.slug, label: product.name })),
+    priceFrom,
+    formatPrice,
+    gradeName: (code) => `${gradeDisplay[code]} ${t.grades[code].name}`,
   }
 
   cache.set(t.locale, content)

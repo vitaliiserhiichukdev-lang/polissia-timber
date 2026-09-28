@@ -1,7 +1,9 @@
-import { useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Icon from '../ui/Icon'
 import { brand } from '../../data/contact'
+import { gradeCodes, type GradeCode } from '../../data/pricing'
 import { fill } from '../../i18n/content'
 import { useI18n } from '../../i18n/useI18n'
 import { cn } from '../../lib/cn'
@@ -22,6 +24,17 @@ interface QuoteFormProps {
 type Status = 'idle' | 'sending' | 'sent' | 'mail' | 'error'
 
 /**
+ * A selection made in the parquet picker, carried to the form in the router's
+ * location state — so "Request a quote" arrives with format, grade and size
+ * already filled in rather than asking for them a second time.
+ */
+export interface QuotePreset {
+  product?: string
+  grade?: string
+  dimensions?: string
+}
+
+/**
  * An RFQ, not a contact form. Every field here is something we would otherwise
  * have to ask for by email before the request can be priced at all — so asking
  * up front turns five rounds of correspondence into one quotable brief.
@@ -36,7 +49,7 @@ interface FormState {
   grade: string
   dimensions: string
   volume: string
-  moisture: string
+  finish: string
   destination: string
   incoterms: string
   message: string
@@ -52,22 +65,32 @@ const emptyForm = (defaultProduct: string): FormState => ({
   grade: '',
   dimensions: '',
   volume: '',
-  moisture: '',
+  finish: '',
   destination: '',
   incoterms: '',
   message: '',
 })
 
-/** Grades the oak specification defines, plus a mixed-grade pack. */
-const GRADES = ['I', 'II', 'III', 'IV', 'mixed'] as const
+const FINISHES = ['unfinished', 'oiled', 'lacquered'] as const
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 export default function QuoteForm({ defaultProduct = '', compact = false }: QuoteFormProps) {
-  const { t, productOptions } = useI18n()
+  const { t, productOptions, gradeName } = useI18n()
+  const { state } = useLocation()
   const [form, setForm] = useState<FormState>(emptyForm(defaultProduct))
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [status, setStatus] = useState<Status>('idle')
+
+  // A fresh state object arrives with every "Request a quote" click, so this
+  // re-applies each time — including a second pick after a sent enquiry, which
+  // brings the form back instead of leaving the thank-you panel up.
+  const preset = (state as { quote?: QuotePreset } | null)?.quote
+  useEffect(() => {
+    if (!preset) return
+    setForm((prev) => ({ ...prev, ...preset }))
+    setStatus((current) => (current === 'sending' ? current : 'idle'))
+  }, [preset])
 
   /**
    * Captcha-free bot filtering, checked again on the server:
@@ -93,15 +116,14 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
     return Object.keys(next).length === 0
   }
 
-  const gradeLabel = (code: string) => {
-    if (!code) return t.form.mailFields.notSpecified
-    if (code === 'mixed') return t.productPage.mixedGrade
-    return t.productPage.gradeLabel.replace('{code}', code)
-  }
+  const gradeLabel = (code: string) =>
+    gradeCodes.includes(code as GradeCode)
+      ? gradeName(code as GradeCode)
+      : t.form.mailFields.notSpecified
 
-  const moistureLabel = (value: string) =>
+  const finishLabel = (value: string) =>
     value
-      ? t.form.moistureOptions[value as keyof typeof t.form.moistureOptions]
+      ? t.form.finishOptions[value as keyof typeof t.form.finishOptions]
       : t.form.mailFields.notSpecified
 
   const composeMail = () => {
@@ -121,7 +143,7 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
       `${f.grade}: ${gradeLabel(form.grade)}`,
       `${f.dimensions}: ${form.dimensions || dash}`,
       `${f.volume}: ${form.volume || dash}`,
-      `${f.moisture}: ${moistureLabel(form.moisture)}`,
+      `${f.finish}: ${finishLabel(form.finish)}`,
       `${f.destination}: ${form.destination || dash}`,
       `${f.incoterms}: ${form.incoterms || dash}`,
       '',
@@ -340,7 +362,7 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
               onChange={update('grade')}
             >
               <option value="">{t.form.gradeAny}</option>
-              {GRADES.map((code) => (
+              {gradeCodes.map((code) => (
                 <option key={code} value={code}>
                   {gradeLabel(code)}
                 </option>
@@ -379,20 +401,22 @@ export default function QuoteForm({ defaultProduct = '', compact = false }: Quot
         </div>
 
         <div className={fieldWrap}>
-          <label className={labelClass} htmlFor="qf-moisture">
-            {t.form.moisture}
+          <label className={labelClass} htmlFor="qf-finish">
+            {t.form.finish}
           </label>
           <div className="relative">
             <select
-              id="qf-moisture"
+              id="qf-finish"
               className="field appearance-none pr-11"
-              value={form.moisture}
-              onChange={update('moisture')}
+              value={form.finish}
+              onChange={update('finish')}
             >
-              <option value="">{t.form.moistureOptions.any}</option>
-              <option value="kd">{t.form.moistureOptions.kd}</option>
-              <option value="ad">{t.form.moistureOptions.ad}</option>
-              <option value="fresh">{t.form.moistureOptions.fresh}</option>
+              <option value="">{t.form.finishOptions.any}</option>
+              {FINISHES.map((value) => (
+                <option key={value} value={value}>
+                  {t.form.finishOptions[value]}
+                </option>
+              ))}
             </select>
             <span className={selectChevron}>
               <Icon name="chevronDown" size={18} />

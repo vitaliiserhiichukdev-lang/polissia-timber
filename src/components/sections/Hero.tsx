@@ -1,7 +1,10 @@
 import { useRef } from 'react'
 import Link from '../ui/LocaleLink'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import Icon from '../ui/Icon'
+import WhatsAppIcon from '../ui/WhatsAppIcon'
+import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion'
+import { whatsappHref } from '../../data/contact'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { useI18n } from '../../i18n/useI18n'
 
@@ -12,74 +15,49 @@ const fadeUp = {
 
 const easeExpo = [0.16, 1, 0.3, 1] as const
 
+/**
+ * Copy on the left, the showroom on the right.
+ *
+ * The photography is portrait — phone shots of a showroom wall and fitted
+ * floors — so it is framed as a tall panel instead of being stretched across
+ * the viewport, where a 960 px frame would be cropped to a strip and blown up
+ * to twice its size.
+ */
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
-  const reduceMotion = useReducedMotion()
-  const isDesktop = useMediaQuery('(min-width: 768px)')
-  const { t, heroPhoto, heroInsetPhoto } = useI18n()
+  const reduceMotion = usePrefersReducedMotion()
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
+  const { t, heroPhoto, heroInsetPhoto, priceFrom, formatPrice } = useI18n()
 
-  /**
-   * Scroll-linked parallax is a desktop-only flourish. On a phone the hero
-   * fills the viewport, so the fade starts on the very first swipe and leaves
-   * the headline sitting on a composited layer at fractional opacity — which
-   * mobile browsers render with different antialiasing, so the text reads as a
-   * slightly wrong colour. Keeping the layer flat on small screens fixes it.
-   */
+  // Scroll-linked drift is a desktop-only flourish: on a phone it would start
+  // on the first swipe and leave the panel on a composited layer mid-transform.
   const parallax = isDesktop && !reduceMotion
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
   })
-  // Background drifts slower than the page; content lifts and fades out.
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1.04, 1.14])
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, -60])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0])
+  const photoY = useTransform(scrollYProgress, [0, 1], ['0%', '8%'])
+  const insetY = useTransform(scrollYProgress, [0, 1], [0, -70])
 
   return (
     <section
       ref={sectionRef}
-      // -mt-header pulls the hero under the sticky header so the image runs edge to edge.
-      className="relative isolate -mt-header flex min-h-[94svh] items-end overflow-hidden bg-ink-900 pt-40 pb-12 md:min-h-svh md:pb-16"
+      // -mt-header pulls the hero under the sticky header, which is transparent here.
+      className="relative isolate -mt-header overflow-hidden bg-ink-900 pt-[calc(var(--spacing-header)+2.5rem)] pb-14 md:pb-20 lg:min-h-svh"
       aria-labelledby="hero-title"
     >
-      {/* Parallax background */}
-      <motion.div
-        className="absolute inset-0 -z-20"
-        style={parallax ? { y: bgY, scale: bgScale } : undefined}
-      >
-        <img
-          src={heroPhoto.src}
-          alt={heroPhoto.alt}
-          width={heroPhoto.width}
-          height={heroPhoto.height}
-          fetchPriority="high"
-          decoding="async"
-          className="size-full object-cover"
-        />
-      </motion.div>
-
-      {/* Legibility scrim — warm, not grey */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-t from-ink-900 via-ink-900/72 to-ink-900/45"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-[radial-gradient(120%_85%_at_15%_5%,rgba(20,18,15,0)_0%,rgba(20,18,15,0.5)_75%)]"
-      />
       <span aria-hidden="true" className="grain-layer-dark -z-10" />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(90%_70%_at_85%_30%,rgba(180,129,62,0.18)_0%,rgba(20,18,15,0)_70%)]"
+      />
 
-      <motion.div
-        className="container-page relative"
-        style={parallax ? { y: contentY, opacity: contentOpacity } : undefined}
-      >
+      <div className="container-page grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
         <motion.div
           initial="hidden"
           animate="show"
           transition={{ staggerChildren: 0.09, delayChildren: 0.1 }}
-          className="max-w-4xl"
         >
           <motion.p
             variants={fadeUp}
@@ -93,7 +71,7 @@ export default function Hero() {
             id="hero-title"
             variants={fadeUp}
             transition={{ duration: 0.9, ease: easeExpo }}
-            className="mt-5 text-h1 text-inverse"
+            className="mt-5 text-h1 text-inverse lg:text-[4.25rem]"
           >
             {t.hero.titleLead}
             <span className="block text-oak-400 italic">{t.hero.titleAccent}</span>
@@ -102,7 +80,7 @@ export default function Hero() {
           <motion.p
             variants={fadeUp}
             transition={{ duration: 0.8, ease: easeExpo }}
-            className="mt-7 max-w-2xl text-lead text-inverse-muted"
+            className="mt-7 max-w-xl text-lead text-inverse-muted"
           >
             {t.hero.lead}
           </motion.p>
@@ -110,34 +88,38 @@ export default function Hero() {
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.8, ease: easeExpo }}
-            className="mt-10 flex flex-wrap items-center gap-3"
+            className="mt-9 flex flex-wrap items-center gap-3"
           >
-            <Link to="/#contact" className="btn btn-oak">
-              {t.common.requestQuote}
+            <Link to="/#products" className="btn btn-oak">
+              {t.common.viewProducts}
               <span className="btn-icon">
                 <Icon name="arrowRight" size={18} />
               </span>
             </Link>
-            <Link to="/#products" className="btn btn-glass">
-              {t.common.viewProducts}
-              <span className="btn-icon">
-                <Icon name="arrowUpRight" size={18} />
-              </span>
+            <a
+              href={whatsappHref(t.whatsapp.general)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-whatsapp"
+            >
+              <WhatsAppIcon size={19} />
+              {t.common.whatsapp}
+            </a>
+            <Link to="/#contact" className="btn btn-glass">
+              {t.common.requestQuote}
             </Link>
           </motion.div>
-        </motion.div>
 
-        {/* Stats + inset product photo */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.55, ease: easeExpo }}
-          className="mt-14 grid gap-6 border-t border-line-inverse pt-8 lg:grid-cols-[1fr_auto] lg:items-end"
-        >
-          <dl className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
+          <motion.dl
+            variants={fadeUp}
+            transition={{ duration: 0.8, ease: easeExpo }}
+            className="mt-12 grid grid-cols-2 gap-x-6 gap-y-7 border-t border-line-inverse pt-8 sm:grid-cols-4"
+          >
             {t.stats.map((stat) => (
               <div key={stat.label}>
-                <dt className="font-display text-4xl leading-none text-oak-400">{stat.value}</dt>
+                <dt className="font-display text-3xl leading-none text-oak-400 md:text-4xl">
+                  {stat.value}
+                </dt>
                 <dd className="mt-2">
                   <span className="block text-sm font-medium text-inverse">{stat.label}</span>
                   <span className="mt-1 block text-xs leading-snug text-inverse-muted">
@@ -146,9 +128,52 @@ export default function Hero() {
                 </dd>
               </div>
             ))}
-          </dl>
+          </motion.dl>
+        </motion.div>
 
-          <figure className="hidden w-56 shrink-0 overflow-hidden rounded-2xl border border-white/15 shadow-lift xl:block">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.25, ease: easeExpo }}
+          className="relative mx-auto w-full max-w-md lg:max-w-none"
+        >
+          <div className="relative aspect-4/5 overflow-hidden rounded-4xl border border-white/10 shadow-lift lg:aspect-auto lg:h-[min(78svh,46rem)]">
+            <motion.img
+              src={heroPhoto.src}
+              alt={heroPhoto.alt}
+              width={heroPhoto.width}
+              height={heroPhoto.height}
+              fetchPriority="high"
+              decoding="async"
+              className="size-full scale-[1.08] object-cover"
+              style={{
+                objectPosition: heroPhoto.position,
+                ...(parallax ? { y: photoY } : {}),
+              }}
+            />
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 bg-gradient-to-t from-ink-900/55 via-transparent to-transparent"
+            />
+
+            {/* Price anchor, straight off the sheet: the cheapest line. */}
+            <div className="absolute right-4 bottom-4 rounded-2xl border border-white/15 bg-ink-900/80 px-4 py-3 text-right backdrop-blur-md">
+              <span className="block text-[0.7rem] font-semibold tracking-[0.14em] text-oak-400 uppercase">
+                {t.hero.priceBadge}
+              </span>
+              <span className="font-display text-2xl text-inverse tabular-nums">
+                {formatPrice(priceFrom)}
+                <span className="ml-1 font-sans text-xs text-inverse-muted">
+                  {t.common.perSquareMetre}
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <motion.figure
+            className="absolute -bottom-6 -left-4 hidden w-40 overflow-hidden rounded-2xl border border-white/15 bg-ink-800 shadow-lift sm:block lg:-left-10 xl:w-48"
+            style={parallax ? { y: insetY } : undefined}
+          >
             <img
               src={heroInsetPhoto.src}
               alt={heroInsetPhoto.alt}
@@ -156,25 +181,15 @@ export default function Hero() {
               height={heroInsetPhoto.height}
               loading="lazy"
               decoding="async"
-              className="h-36 w-full object-cover"
+              className="h-44 w-full object-cover xl:h-52"
+              style={{ objectPosition: heroInsetPhoto.position }}
             />
-            <figcaption className="bg-ink-800/90 px-4 py-3 text-xs text-inverse-muted backdrop-blur">
+            <figcaption className="px-3.5 py-2.5 text-xs text-inverse-muted">
               {t.hero.insetCaption}
             </figcaption>
-          </figure>
+          </motion.figure>
         </motion.div>
-      </motion.div>
-
-      {/* Scroll cue */}
-      <motion.a
-        href="#products"
-        aria-label={t.hero.scrollLabel}
-        className="absolute right-gutter bottom-8 hidden size-12 place-items-center rounded-full border border-white/25 text-inverse transition-colors duration-300 hover:bg-white/10 md:grid"
-        animate={reduceMotion ? undefined : { y: [0, 7, 0] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <Icon name="chevronDown" size={20} />
-      </motion.a>
+      </div>
     </section>
   )
 }

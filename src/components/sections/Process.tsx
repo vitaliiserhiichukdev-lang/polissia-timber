@@ -1,33 +1,29 @@
-import { useRef } from 'react'
+import { useState } from 'react'
 import Link from '../ui/LocaleLink'
-import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import SectionHeader from '../ui/SectionHeader'
 import Reveal from '../ui/Reveal'
 import Icon from '../ui/Icon'
+import Lightbox from '../ui/Lightbox'
 import SectionReveal from '../ui/SectionReveal'
 import { confirmed } from '../../data/pending'
 import { useI18n } from '../../i18n/useI18n'
 
+/**
+ * Production as four steps, each shown with a frame from our own line.
+ *
+ * Portrait cards, because the footage is portrait phone video. The clips do
+ * not autoplay here — four at once would be the heaviest thing on the page —
+ * so each card shows its poster and opens the clip full size on demand.
+ */
 export default function Process() {
-  const trackRef = useRef<HTMLOListElement>(null)
-  const reduceMotion = useReducedMotion()
   const { t, processSteps } = useI18n()
-  // Photographs of a sawmill are not an argument; throughput figures are. Any
-  // metric production has not confirmed stays hidden rather than being guessed.
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  // Throughput figures production has not confirmed stay hidden, not guessed.
   const capacity = confirmed(t.process.capacity, (metric) => [metric.value])
-
-  const { scrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ['start 65%', 'end 60%'],
-  })
-  // Spring keeps the progress rail from twitching on fast scrolls.
-  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 26, restDelta: 0.001 })
+  const media = processSteps.map((step) => step.media)
 
   return (
-    <section
-      id="production"
-      className="grain relative bg-ink-900 py-section text-inverse"
-    >
+    <section id="production" className="grain relative bg-ink-900 py-section text-inverse">
       <span aria-hidden="true" className="grain-layer-dark" />
 
       <SectionReveal className="container-page relative">
@@ -38,55 +34,47 @@ export default function Process() {
           lead={t.process.lead}
         />
 
-        <ol ref={trackRef} className="relative flex flex-col gap-14 md:gap-20">
-          {/* Progress rail */}
-          <span
-            aria-hidden="true"
-            className="absolute top-6 bottom-6 left-[19px] hidden w-px bg-white/12 md:block"
-          >
-            <motion.span
-              className="block h-full w-px origin-top bg-oak-500"
-              style={reduceMotion ? { transform: 'scaleY(1)' } : { scaleY: progress }}
-            />
-          </span>
-
-          {processSteps.map((step, i) => (
-            <li key={step.step} className="relative md:pl-16">
-              <span
-                aria-hidden="true"
-                className="absolute top-0 left-0 hidden size-10 place-items-center rounded-full border border-white/20 bg-ink-800 text-oak-400 md:grid"
-              >
-                <Icon name={step.icon} size={18} />
-              </span>
-
-              <Reveal
-                delay={0.05}
-                className={`grid items-center gap-6 lg:grid-cols-2 lg:gap-12 ${
-                  i % 2 === 1 ? 'lg:[&>figure]:order-first' : ''
-                }`}
-              >
-                <div>
-                  <span className="font-display text-sm tracking-[0.2em] text-oak-500">
-                    {step.step}
-                  </span>
-                  <h3 className="mt-3 text-h3 text-inverse">{step.title}</h3>
-                  <p className="mt-4 max-w-xl text-inverse-muted">{step.body}</p>
-                </div>
-
-                <figure className="overflow-hidden rounded-3xl border border-white/10">
+        <ol className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+          {processSteps.map((step, i) => {
+            const still = step.media.kind === 'video' ? step.media.poster : step.media
+            return (
+              <Reveal as="li" key={step.step} delay={i * 0.08} className="flex flex-col">
+                <button
+                  type="button"
+                  onClick={() => setLightboxIndex(i)}
+                  aria-label={`${step.media.kind === 'video' ? t.common.playVideo : t.common.openImage}: ${step.media.caption}`}
+                  className="group relative block aspect-3/4 overflow-hidden rounded-3xl border border-white/10 text-left"
+                >
                   <img
-                    src={step.photo.src}
-                    alt={step.photo.alt}
-                    width={step.photo.width}
-                    height={step.photo.height}
+                    src={still.src}
+                    alt={step.media.alt}
+                    width={still.width}
+                    height={still.height}
                     loading="lazy"
                     decoding="async"
-                    className="aspect-16/10 w-full object-cover transition-transform duration-[900ms] ease-expo hover:scale-105"
+                    className="size-full object-cover transition-transform duration-[900ms] ease-expo group-hover:scale-105"
+                    style={still.position ? { objectPosition: still.position } : undefined}
                   />
-                </figure>
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-gradient-to-b from-ink-900/55 via-transparent to-ink-900/40"
+                  />
+                  <span className="absolute top-4 left-4 grid size-10 place-items-center rounded-full border border-white/20 bg-ink-900/70 text-oak-400 backdrop-blur">
+                    <Icon name={step.icon} size={18} />
+                  </span>
+                  <span className="absolute top-4 right-4 font-display text-sm tracking-[0.2em] text-oak-200">
+                    {step.step}
+                  </span>
+                  <span className="absolute right-4 bottom-4 grid size-10 place-items-center rounded-full border border-white/25 bg-white/10 text-inverse backdrop-blur transition duration-300 group-hover:border-transparent group-hover:bg-oak-600">
+                    <Icon name={step.media.kind === 'video' ? 'play' : 'plus'} size={16} />
+                  </span>
+                </button>
+
+                <h3 className="mt-5 text-h4 text-inverse">{step.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-inverse-muted">{step.body}</p>
               </Reveal>
-            </li>
-          ))}
+            )
+          })}
         </ol>
 
         {capacity.length > 0 && (
@@ -127,7 +115,7 @@ export default function Process() {
               <h3 className="text-h4 text-inverse">{t.process.callout.title}</h3>
               <p className="mt-3 text-sm text-inverse-muted">{t.process.callout.body}</p>
             </div>
-            <Link to="/products/oak-edged-boards#grades" className="btn btn-glass shrink-0">
+            <Link to="/#prices" className="btn btn-glass shrink-0">
               {t.process.callout.action}
               <span className="btn-icon">
                 <Icon name="arrowRight" size={18} />
@@ -136,6 +124,13 @@ export default function Process() {
           </div>
         </Reveal>
       </SectionReveal>
+
+      <Lightbox
+        images={media}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onNavigate={setLightboxIndex}
+      />
     </section>
   )
 }

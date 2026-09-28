@@ -8,8 +8,8 @@ import { useI18n } from '../../i18n/useI18n'
 
 export default function About() {
   const { t, photo } = useI18n()
-  const edgePhoto = photo.oakEdge
-  const yardPhoto = photo.pineYard
+  const mainPhoto = photo.interiorPlank
+  const detailPhoto = photo.plankSelect
 
   return (
     <section id="about" className="grain relative py-section">
@@ -32,23 +32,24 @@ export default function About() {
           <Reveal variant="right" className="relative">
             <div className="overflow-hidden rounded-4xl border border-line bg-sand-100 shadow-mid">
               <img
-                src={edgePhoto.src}
-                alt={edgePhoto.alt}
-                width={edgePhoto.width}
-                height={edgePhoto.height}
+                src={mainPhoto.src}
+                alt={mainPhoto.alt}
+                width={mainPhoto.width}
+                height={mainPhoto.height}
                 loading="lazy"
                 decoding="async"
-                className="aspect-4/3 w-full object-cover"
+                className="aspect-square w-full object-cover"
+                style={{ objectPosition: mainPhoto.position }}
               />
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-4">
               <div className="overflow-hidden rounded-2xl border border-line bg-sand-100">
                 <img
-                  src={yardPhoto.src}
-                  alt={yardPhoto.alt}
-                  width={yardPhoto.width}
-                  height={yardPhoto.height}
+                  src={detailPhoto.src}
+                  alt={detailPhoto.alt}
+                  width={detailPhoto.width}
+                  height={detailPhoto.height}
                   loading="lazy"
                   decoding="async"
                   className="aspect-square w-full object-cover"
