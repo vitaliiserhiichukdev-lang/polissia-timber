@@ -1,87 +1,132 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
+import AutoVideo from '../ui/AutoVideo'
 import Lightbox from '../ui/Lightbox'
 import Icon from '../ui/Icon'
 import { useI18n } from '../../i18n/useI18n'
-import type { ResolvedPhoto } from '../../i18n/content'
+import type { ResolvedMedia, ResolvedPhoto } from '../../i18n/content'
 import { cn } from '../../lib/cn'
 
 interface ProductGalleryProps {
-  images: ResolvedPhoto[]
+  /** Photos and clips of one format. Key the component by format to reset it. */
+  media: ResolvedMedia[]
   name: string
+  className?: string
 }
 
-/** Large lead image with a thumbnail grid; both open the lightbox. */
-export default function ProductGallery({ images, name }: ProductGalleryProps) {
+/**
+ * Lead frame plus thumbnails; a clip plays in place while it is on screen, and
+ * either kind opens full size in the lightbox.
+ *
+ * The frame is portrait because the material is: the clips are 9:16 phone
+ * footage and most photographs 3:4. A landscape photo is letterboxed over a
+ * blurred copy of itself instead of being cropped to a sliver.
+ */
+export default function ProductGallery({ media, name, className }: ProductGalleryProps) {
   const { t } = useI18n()
   const [selected, setSelected] = useState(0)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
-  // Switching product (or locale) resets the selection to the lead image.
-  useEffect(() => setSelected(0), [images])
-
-  const active = images[selected]
+  const active = media[selected] ?? media[0]
   if (!active) return null
 
-  return (
-    <div className="flex flex-col gap-4">
-      <button
-        type="button"
-        onClick={() => setLightboxIndex(selected)}
-        className="group relative block overflow-hidden rounded-4xl border border-line bg-sand-100"
-        aria-label={`${t.common.openImage}: ${name}`}
-      >
-        <motion.img
-          key={active.src}
-          src={active.src}
-          alt={active.alt}
-          width={active.width}
-          height={active.height}
-          initial={{ opacity: 0, scale: 1.02 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="aspect-4/3 w-full object-cover"
-        />
-        <span className="pointer-events-none absolute right-4 bottom-4 flex items-center gap-2 rounded-full bg-ink-900/80 px-3.5 py-2 text-xs font-medium text-inverse opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
-          <Icon name="plus" size={14} />
-          {t.common.viewFullSize}
-        </span>
-        <span className="absolute top-4 left-4 rounded-full border border-white/15 bg-ink-900/75 px-3 py-1.5 text-xs font-medium text-inverse backdrop-blur-sm">
-          {active.caption}
-        </span>
-      </button>
+  const still = (item: ResolvedMedia): ResolvedPhoto => (item.kind === 'video' ? item.poster : item)
+  const landscape = active.kind === 'photo' && active.width > active.height
 
-      <ul className="flex flex-wrap gap-3">
-        {images.map((image, i) => (
-          <li key={image.id}>
-            <button
-              type="button"
-              onClick={() => setSelected(i)}
-              aria-current={i === selected}
-              title={image.caption}
-              className={cn(
-                'block overflow-hidden rounded-xl border-2 transition duration-300',
-                i === selected
-                  ? 'border-oak-500 shadow-soft'
-                  : 'border-transparent opacity-65 hover:opacity-100',
-              )}
-            >
+  return (
+    <div className={cn('flex flex-col gap-4', className)}>
+      <div className="relative aspect-4/5 overflow-hidden rounded-4xl border border-line bg-ink-800 shadow-mid">
+        {active.kind === 'video' ? (
+          <AutoVideo key={active.id} video={active} className="size-full" />
+        ) : (
+          <motion.div
+            key={active.id}
+            className="size-full"
+            initial={{ opacity: 0, scale: 1.02 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {landscape && (
               <img
-                src={image.src}
+                src={active.src}
                 alt=""
-                width={160}
-                height={120}
-                loading="lazy"
-                decoding="async"
-                className="size-18 object-cover"
+                aria-hidden="true"
+                className="absolute inset-0 size-full scale-110 object-cover opacity-60 blur-2xl"
               />
-            </button>
-          </li>
-        ))}
-      </ul>
+            )}
+            <img
+              src={active.src}
+              alt={active.alt}
+              width={active.width}
+              height={active.height}
+              decoding="async"
+              className={cn('relative size-full', landscape ? 'object-contain' : 'object-cover')}
+              style={!landscape && active.position ? { objectPosition: active.position } : undefined}
+            />
+          </motion.div>
+        )}
+
+        <span className="pointer-events-none absolute top-4 left-4 z-10 flex max-w-[calc(100%-5rem)] items-center gap-1.5 rounded-full border border-white/15 bg-ink-900/75 px-3 py-1.5 text-xs font-medium text-inverse backdrop-blur-sm">
+          {active.kind === 'video' && <Icon name="play" size={12} />}
+          <span className="truncate">{active.caption}</span>
+        </span>
+
+        <button
+          type="button"
+          onClick={() => setLightboxIndex(selected)}
+          aria-label={`${t.common.viewFullSize}: ${name} — ${active.caption}`}
+          title={t.common.viewFullSize}
+          className="absolute top-3 right-3 z-10 grid size-10 place-items-center rounded-full border border-white/25 bg-ink-900/70 text-inverse backdrop-blur transition duration-300 hover:bg-oak-600"
+        >
+          <Icon name="plus" size={16} />
+        </button>
+      </div>
+
+      {media.length > 1 && (
+        <ul className="flex flex-wrap gap-2.5">
+          {media.map((item, i) => {
+            const thumb = still(item)
+            return (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  onClick={() => setSelected(i)}
+                  aria-pressed={i === selected}
+                  aria-label={item.kind === 'video' ? `${t.common.video}: ${item.caption}` : item.caption}
+                  title={item.caption}
+                  className={cn(
+                    'relative block overflow-hidden rounded-xl border-2 transition duration-300',
+                    i === selected
+                      ? 'border-oak-500 shadow-soft'
+                      : 'border-transparent opacity-70 hover:opacity-100',
+                  )}
+                >
+                  <img
+                    src={thumb.src}
+                    alt=""
+                    width={144}
+                    height={144}
+                    loading="lazy"
+                    decoding="async"
+                    className="size-16 object-cover sm:size-18"
+                    style={thumb.position ? { objectPosition: thumb.position } : undefined}
+                  />
+                  {item.kind === 'video' && (
+                    <span className="absolute inset-0 grid place-items-center bg-ink-900/25 text-white">
+                      <span className="grid size-7 place-items-center rounded-full bg-ink-900/70 backdrop-blur-sm">
+                        <Icon name="play" size={12} />
+                      </span>
+                    </span>
+                  )}
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      )}
 
       <Lightbox
-        images={images}
+        images={media}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onNavigate={(index) => {

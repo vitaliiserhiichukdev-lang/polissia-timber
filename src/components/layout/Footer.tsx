@@ -1,7 +1,8 @@
 import Link from '../ui/LocaleLink'
 import Logo from './Logo'
 import Icon from '../ui/Icon'
-import { brand } from '../../data/contact'
+import WhatsAppIcon from '../ui/WhatsAppIcon'
+import { brand, whatsappHref } from '../../data/contact'
 import { useI18n } from '../../i18n/useI18n'
 
 const headingClass =
@@ -72,6 +73,17 @@ export default function Footer() {
               <a href={`tel:${brand.phoneHref}`} className={itemClass}>
                 <Icon name="phone" size={16} />
                 {brand.phone}
+              </a>
+            </li>
+            <li>
+              <a
+                href={whatsappHref(t.whatsapp.general)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={itemClass}
+              >
+                <WhatsAppIcon size={16} />
+                {t.contact.labels.whatsapp}
               </a>
             </li>
             <li className="inline-flex items-center gap-2">

@@ -1,8 +1,8 @@
-# Polissia Timber — bilingual export website
+# Polissia Timber — multilingual export website
 
-Premium B2B site for a Ukrainian timber producer and exporter: oak edged boards,
-pine construction timber and natural oak parquet. React 19 + TypeScript + Vite,
-styled with Tailwind CSS v4, animated with Framer Motion.
+Premium B2B site for a Ukrainian producer and exporter of engineered oak
+parquet: plank, chevron and herringbone, each in grades A-B and C. React 19 +
+TypeScript + Vite, styled with Tailwind CSS v4, animated with Framer Motion.
 
 ```bash
 yarn install
@@ -48,7 +48,7 @@ Two constraints follow, and breaking either is easy:
 ## Languages (EN / DE / PL / UA)
 
 Each locale has its own URL: English at the root, the rest under a prefix — `/de`,
-`/pl`, `/uk` and e.g. `/de/products/oak-edged-boards`. The locale is read from the
+`/pl`, `/uk` and e.g. `/de/products/oak-chevron-parquet`. The locale is read from the
 path, never from state: a language with no URL cannot be indexed, and `hreflang`
 has nothing to point at. `localStorage` (`polissia.locale`) only remembers a
 deliberate choice, to redirect a returning visitor who lands on the bare root.
@@ -88,14 +88,16 @@ Routes, `hreflang`, the sitemap and the prerender target list are all derived fr
 type error rather than a blank page.
 
 > **Have `de.ts` and `pl.ts` reviewed by a native speaker in the trade before
-> publishing.** The grading and drying vocabulary is load-bearing — Festast /
-> Schwarzast / Splintholz, sęk zdrowy / sęk czarny / biel — and a mistranslated
-> tolerance is a commercial dispute, not a typo. Both files carry this warning at
-> the top.
+> publishing.** The flooring vocabulary is load-bearing — Mehrschichtparkett /
+> Nutzschicht / Fischgrät, deska warstwowa / warstwa użytkowa / jodełka — and a
+> mistranslated specification is a commercial dispute, not a typo. (In German,
+> „Englischer Verband“ is a different laying pattern, which is why it is not
+> used for herringbone.) Both files carry this warning at the top.
 
-**Editing copy:** change `en.ts` / `uk.ts` only. Prices, image paths and slugs
-are language-neutral and live in `src/data/`, so they cannot drift between
-locales.
+**Editing copy:** change the dictionaries only. Prices, sizes, construction
+figures, media paths and slugs are language-neutral and live in `src/data/`, so
+they cannot drift between locales — the FAQ and meta description even read the
+"from" price straight out of `pricing.ts`.
 
 ## Data
 
@@ -103,21 +105,26 @@ Language-neutral facts are separated from copy:
 
 | File | Contents |
 | --- | --- |
-| `src/data/pricing.ts` | oak price list: sections, lengths, grade prices |
-| `src/data/media.ts` | photo registry (path, intrinsic size, category) |
-| `src/data/contact.ts` | brand name, email, phone, Incoterms, product slugs |
+| `src/data/pricing.ts` | parquet price list: sizes per format, prices per grade, construction |
+| `src/data/media.ts` | photo and video registry, and which media illustrate each format |
+| `src/data/contact.ts` | brand name, email, phone, WhatsApp, Incoterms, product slugs |
 
 Provenance of the product data:
 
-- **Grades I–IV and their tolerances** (live/black knots, sapwood, ingrown bark,
-  and the defects excluded from every grade) are transcribed from the company's
-  written specification — `public/specifications/document_1.jpg`.
-- **Sections, lengths and prices** come from the company price list —
-  `public/specifications/document_2.jpg`. `list` is the printed price; `current`
-  is the revised handwritten price where the sheet gives one. Grade IV in 230 mm
-  is struck through on the sheet, so it renders as "on request".
-- Prices are treated as **EUR per m³** (the usual unit for sawn timber; the
-  sheet itself states no unit — confirm before publishing).
+- **Formats, sizes, construction and prices** are transcribed line for line
+  from the company price list — `docs/price-list-2026-09.jpg` (kept out of
+  `public/`, so it is not served). Every line is 14 mm with a 3.2 mm oak wear
+  layer; plank comes in 125 / 145 / 195 mm, chevron and herringbone in 125 mm
+  with 500 / 600 / 700 mm blocks.
+- Prices are shown as **EUR per m²**, the unit parquet is sold in; the sheet
+  itself prints only "€" — confirm before publishing.
+- **Grade descriptions** (what A-B and C look like) are the usual trade reading
+  of those grades, not a company document — marked `TO CONFIRM` in every
+  dictionary until written grading rules exist.
+
+The price, the specification and the pre-filled WhatsApp message in the picker
+all come from the same `SizeOption`, so what a buyer selects is exactly the line
+they are quoted.
 
 ### Placeholders to replace
 
@@ -132,8 +139,8 @@ Currently hidden, and what it takes to reveal each:
 
 | Where | Needs |
 | --- | --- |
-| `process.capacity` | monthly output, shift throughput, kiln count and charge volume |
-| `exportSection.loads` | minimum order quantity |
+| `process.capacity` | monthly m² output and finishing-line throughput |
+| `exportSection.loads` | m² per full truck and per container, minimum order quantity |
 | `exportSection.leadTimes` | transit days per destination |
 | `exportSection.cases` | three real shipments from dispatch records |
 | `compliance.documents` | FSC/PEFC certificate number, or delete the entry |
@@ -146,15 +153,20 @@ Currently hidden, and what it takes to reveal each:
   JSON-LD, so it should match the register.
 - The address wording in the `contact.values` block of each dictionary — it is
   currently only "Kyiv region, Ukraine".
-- Pine dimensions and parquet construction/thickness (no written spec supplied).
-- Moisture regime for oak; the indicative list of export destinations.
+- `brand.whatsapp` — currently the office number; confirm it is the WhatsApp
+  account.
+- Surface options per format (`Surface` rows in each product's specs) and the
+  twelve chevron finishes, carried over from the previous site.
+- The indicative list of export destinations.
 - The domain is `polissiatimber.com`, set in `brand.site` and `public/robots.txt`.
   Transactional mail is sent from the `send.` subdomain so its SPF/DKIM cannot
   collide with the Zoho records on the apex — see `server/quote.ts`.
 
 **The compliance section states regulatory facts** (EUDR data provided per
-consignment, phytosanitary, ISPM-15, EUR.1). It carries a review notice in both
-dictionaries and must be signed off by the company before launch — see
+consignment, ISPM-15, EUR.1). The phytosanitary certificate was removed along
+with the sawn timber — confirm whether any import route needs one for finished
+flooring before adding it back. The section carries a review notice in every
+dictionary and must be signed off by the company before launch — see
 `compliance` in `en.ts` / `uk.ts`.
 
 ## Structure
@@ -162,23 +174,31 @@ dictionaries and must be signed off by the company before launch — see
 ```
 src/
   components/
-    layout/    Header, Footer, Logo, LanguageSwitcher, ScrollManager
+    layout/    Header, Footer, Logo, LanguageSwitcher, ScrollManager, WhatsAppButton
     sections/  Hero, Compliance, About, Catalog, Process, Advantages,
                Gallery, Export, Faq, Contact
-    product/   ProductCard, ProductGallery, SpecTable, PriceTable, GradeGuide, QuoteForm
-    ui/        Icon, Reveal, SectionReveal, SectionHeader, Lightbox, LocaleLink
+    product/   ParquetConfigurator, FormatPattern, ProductGallery, PriceTable,
+               GradeGuide, SpecTable, QuoteForm
+    ui/        Icon, WhatsAppIcon, AutoVideo, Reveal, SectionReveal, SectionHeader,
+               Lightbox, LocaleLink
   pages/       Home, ProductPage, NotFound
   seo/         pageHead.ts (single source for head + JSON-LD), faq.ts
-  hooks/       useSeo, useMediaQuery, useBodyLock
+  hooks/       useSeo, useMediaQuery, useBodyLock, usePrefersReducedMotion
   entry-server.tsx  build-time render + route list + sitemap
   index.css    design tokens (@theme) + component classes (.btn, .card-surface, .field…)
 ```
 
-Routes: `/` and `/products/:slug` (`oak-edged-boards`,
-`pine-construction-timber`, `oak-parquet-boards`), each mirrored under `/uk`.
+Routes: `/` and `/products/:slug` (`oak-chevron-parquet`, `oak-plank-flooring`,
+`oak-herringbone-parquet`), each mirrored under `/de`, `/pl` and `/uk`.
 
-Home page order is deliberate: `Catalog` comes first, then `Compliance`. Products
-lead because a visitor has to know what is sold before EUDR means anything, and
+The retired URLs — `oak-edged-boards`, `pine-construction-timber` and the old
+`oak-parquet-boards` — answer with a 301 in both `vercel.json` and
+`netlify.toml`: the old parquet page to the chevron page, the other two to the
+home page of the same language.
+
+Home page order is deliberate: `Catalog` — the format / grade / size picker and
+the full price list — comes first, then `Compliance`. Products lead because a
+visitor has to know what is sold, and at what price, before EUDR means anything, and
 compliance follows immediately because it is the filter that decides whether a
 shipment is possible at all. `nav` in each dictionary mirrors this order — keep
 them in step.
@@ -201,15 +221,28 @@ rather than a segmented control, `common.quoteShort` for the CTA, and a nav that
 is the only flexible zone and may scroll rather than push the actions off-screen.
 Adding a nav item or a long label means re-checking this at 1280px.
 
-**The gallery is a curated seven, not the library.** `galleryTileIds` in
-`src/data/media.ts` picks them and the order *is* the composition — the two widest
-mosaic cells need the landscape frames. The photographs range from 691×1280
-portrait to 1280×960 landscape, so the cell owns the shape: a fixed height per
-band plus `object-cover`, which is what stopped the old masonry layout coming out
-ragged. Parquet is excluded on purpose (studio shots on white crop to empty
-backdrop, and they have a proper grid on the parquet page, which the section links
-to). Swapping a photo needs no layout change; adding an eighth means giving a band
-a fourth `count`.
+**The gallery is a curated eight, not the library.** `galleryTiles` in
+`src/data/media.ts` picks them and the order *is* the composition: the opening
+band is three tall cells for the portrait interiors, and the wide cells of the
+other two take the landscape frames. The cell owns the shape — a fixed height
+per band plus `object-cover` — so swapping a photo needs no layout change. Clips
+appear as their poster frame and play in the lightbox. The twelve chevron finish
+shots are excluded on purpose (studio shots on white crop to empty backdrop);
+they have their own grid on the chevron page, which the section links to.
+
+**Media.** Everything in `public/media/` is the company's own material: the
+showroom, fitted floors and the finishing line. The clips are re-encoded for the
+web — H.264, no audio track (they only ever play muted), index at the front of
+the file — and each has a poster frame in `public/media/posters/`. A clip plays
+only while it is on screen (`components/ui/AutoVideo.tsx`: `preload="none"`,
+visibility-driven, with a pause button), so a page never downloads more than the
+one being watched. `media.ts` sets an `object-position` per photo: most are
+portrait phone shots whose subject — the floor — sits in the lower half.
+
+**WhatsApp** is offered wherever a buyer might act: a floating button on every
+page (after the first scroll), the hero, the picker, the contact section, the
+product enquiry block, the mobile menu and the footer. The picker's link opens
+the chat with the selected format, grade, size and price already written.
 
 **The shipping map is projected, not drawn.** `src/data/destinations.ts` holds
 lat/long; `ShippingMap.tsx` projects them equirectangularly with longitude
@@ -223,6 +256,16 @@ which the caption says.
 **Motion.** `Reveal` animates individual items; `SectionReveal` lifts a whole
 section as it scrolls in; gallery tiles wipe up via `clip-path`; map routes draw
 via `pathLength` with SMIL `animateMotion` cargo along them.
+
+**Reduced motion** comes from `hooks/usePrefersReducedMotion`, never from Framer's
+`useReducedMotion` directly. Framer reads the media query during the first client
+render, which the prerender cannot know; for a visitor with reduced motion on,
+the two renders disagreed — structurally on the map, which threw the whole tree
+away, and in attributes everywhere else, which React keeps from the server, so
+content prerendered at `opacity: 0` stayed invisible. The hook holds the
+preference back by one commit, and animated components keep the same element
+and simply jump to their end state (`duration: 0`) instead of rendering a
+different one.
 
 The FAQ accordion is the exception — pure CSS on a native `<details>`, animated
 with `::details-content` (see `.faq-item` in `index.css`). React state would have
@@ -348,7 +391,7 @@ and two header rules:
 it against a closed schema — a `comment` key fails the build outright with
 `should NOT have additional property`. Explanations belong here instead.
 
-Images in `public/` are served as-is (JPEG, ≤1280 px, ~100–200 kB each) with
+Images in `public/` are served as-is (JPEG, ≤1280 px, ~80–260 kB each) with
 `loading="lazy"`, `decoding="async"` and intrinsic dimensions set to avoid
-layout shift. Generating WebP/AVIF variants is the next optimisation step if
+layout shift. The four clips total ~15 MB but load one at a time, on demand. Generating WebP/AVIF variants is the next optimisation step if
 Lighthouse asks for it.

@@ -12,7 +12,7 @@ const JSON_LD_ID = 'page-jsonld'
  * Tags are created when missing rather than only updated, because in dev there
  * is no prerendered head to patch.
  *
- * @param path Locale-independent path, e.g. `/products/oak-edged-boards`.
+ * @param path Locale-independent path, e.g. `/products/oak-chevron-parquet`.
  */
 export default function useSeo(path: string) {
   const { locale } = useI18n()

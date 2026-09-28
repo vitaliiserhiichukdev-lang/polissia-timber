@@ -3,15 +3,10 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Icon from './Icon'
 import useBodyLock from '../../hooks/useBodyLock'
 import { useI18n } from '../../i18n/useI18n'
-
-export interface LightboxImage {
-  src: string
-  alt: string
-  caption?: string
-}
+import type { ResolvedMedia } from '../../i18n/content'
 
 interface LightboxProps {
-  images: LightboxImage[]
+  images: ResolvedMedia[]
   index: number | null
   onClose: () => void
   onNavigate: (index: number) => void
@@ -22,8 +17,9 @@ const controlClass =
   'text-inverse transition duration-300 hover:scale-105 hover:border-white/40 hover:bg-white/20'
 
 /**
- * Full-screen image viewer, controlled by the parent (`index === null` closes).
- * Arrow keys navigate, Escape closes, backdrop click closes.
+ * Full-screen viewer for photos and clips, controlled by the parent
+ * (`index === null` closes). Arrow keys navigate, Escape closes, backdrop click
+ * closes. A clip opens playing, with native controls.
  */
 export default function Lightbox({ images, index, onClose, onNavigate }: LightboxProps) {
   const { t } = useI18n()
@@ -69,7 +65,7 @@ export default function Lightbox({ images, index, onClose, onNavigate }: Lightbo
           className="fixed inset-0 z-[300] flex flex-col bg-[#0e0c0a]/95 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
-          aria-label={image.caption ?? image.alt}
+          aria-label={image.caption || image.alt}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -115,16 +111,28 @@ export default function Lightbox({ images, index, onClose, onNavigate }: Lightbo
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <img
-                src={image.src}
-                alt={image.alt}
-                className="max-h-[74vh] w-auto rounded-2xl object-contain shadow-[0_30px_90px_rgba(0,0,0,0.6)]"
-              />
-              {(image.caption ?? image.alt) && (
-                <figcaption className="text-center text-sm text-inverse-muted">
-                  {image.caption ?? image.alt}
-                </figcaption>
+              {image.kind === 'video' ? (
+                <video
+                  src={image.src}
+                  poster={image.poster.src}
+                  aria-label={image.alt}
+                  controls
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="max-h-[74vh] w-auto rounded-2xl bg-black shadow-[0_30px_90px_rgba(0,0,0,0.6)]"
+                />
+              ) : (
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="max-h-[74vh] w-auto rounded-2xl object-contain shadow-[0_30px_90px_rgba(0,0,0,0.6)]"
+                />
               )}
+              <figcaption className="text-center text-sm text-inverse-muted">
+                {image.caption || image.alt}
+              </figcaption>
             </motion.figure>
 
             <button

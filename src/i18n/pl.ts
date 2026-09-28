@@ -1,30 +1,34 @@
 import type { Dictionary } from './types'
 import { brand } from '../data/contact'
+import { formatEuro, highestPrice, priceFrom } from '../data/pricing'
+
+const from = formatEuro(priceFrom, true)
+const top = formatEuro(highestPrice('oak-chevron-parquet'), true)
 
 /**
  * Polska wersja.
  *
- * Terminologia klasyfikacji i suszenia odpowiada pisemnej specyfikacji firmy
- * (sęk zdrowy, sęk czarny, biel, wrośnięta kora, rdzeń, zaparzenie, uszkodzenia
- * przez owady). Te pojęcia decydują o zakupie: błędnie przetłumaczona tolerancja
- * to spór handlowy — przed publikacją zweryfikować z native speakerem z branży.
+ * Terminologia parkietowa: deska warstwowa, warstwa użytkowa, jodełka
+ * francuska (chevron), jodełka klasyczna; klasy A-B (Select) i C (Rustic)
+ * jak w cenniku firmy. Przed publikacją zweryfikować z native speakerem
+ * z branży — błędnie przetłumaczony parametr to spór handlowy.
  */
 export const pl: Dictionary = {
   locale: 'pl',
   htmlLang: 'pl',
   label: 'Polski',
   short: 'PL',
+  decimalComma: true,
 
   meta: {
-    homeTitle: `${brand.name} — tarcica z Ukrainy na rynki europejskie`,
-    homeDescription:
-      'Ukraiński producent i eksporter tarcicy: deski dębowe obrzynane w klasach I–IV, drewno konstrukcyjne sosnowe i deska parkietowa z dębu. Stabilne duże wolumeny i dostawa w całej Europie.',
+    homeTitle: `${brand.name} — dębowy parkiet warstwowy z Ukrainy`,
+    homeDescription: `Ukraiński producent i eksporter dębowego parkietu warstwowego: deska, jodełka francuska i jodełka klasyczna w klasach A-B i C, 14 mm z warstwą użytkową dębu 3,2 mm. Ceny od ${from} za m², dostawa w całej Europie.`,
     notFoundTitle: `Nie znaleziono strony | ${brand.name}`,
     notFoundDescription: 'Szukana strona nie istnieje.',
   },
 
   nav: [
-    { key: 'products', label: 'Produkty', href: '/#products' },
+    { key: 'products', label: 'Parkiet', href: '/#products' },
     { key: 'compliance', label: 'Dokumenty', href: '/#compliance' },
     { key: 'about', label: 'O firmie', href: '/#about' },
     { key: 'production', label: 'Produkcja', href: '/#production' },
@@ -37,99 +41,127 @@ export const pl: Dictionary = {
   common: {
     requestQuote: 'Zapytaj o wycenę',
     quoteShort: 'Wycena',
-    viewProducts: 'Zobacz produkty',
-    viewDetails: 'Szczegóły',
-    viewProduct: 'Przejdź do produktu',
-    onRequest: 'Na zapytanie',
-    priceFrom: 'Cena od',
-    pricing: 'Cena',
-    quotedPerSpecification: 'Wycena według specyfikacji',
-    gradeBased: 'Zależnie od klasy, EUR / m³',
+    viewProducts: 'Wybierz parkiet',
+    viewProduct: 'Zobacz format',
+    priceFrom: 'od',
     skipToContent: 'Przejdź do treści',
     openMenu: 'Otwórz menu',
     closeMenu: 'Zamknij menu',
     language: 'Język',
     home: 'Strona główna',
-    products: 'Produkty',
-    perCubicMetre: '/ m³',
-    priceUnit: 'EUR / m³',
+    products: 'Parkiet',
+    perSquareMetre: '/ m²',
+    priceUnit: 'EUR / m²',
     openImage: 'Otwórz zdjęcie',
-    closeViewer: 'Zamknij przeglądarkę zdjęć',
-    previousImage: 'Poprzednie zdjęcie',
-    nextImage: 'Następne zdjęcie',
+    closeViewer: 'Zamknij podgląd',
+    previousImage: 'Poprzednie',
+    nextImage: 'Następne',
     viewFullSize: 'Zobacz w pełnym rozmiarze',
+    playVideo: 'Odtwórz wideo',
+    pauseVideo: 'Zatrzymaj wideo',
+    video: 'Wideo',
     mm: 'mm',
-    logoSub: 'Tarcica z Ukrainy · Eksport',
+    logoSub: 'Parkiet dębowy · Eksport',
+    whatsapp: 'WhatsApp',
+    whatsappCta: 'Napisz na WhatsApp',
+  },
+
+  whatsapp: {
+    general:
+      'Dzień dobry! Interesuje mnie Państwa parkiet dębowy. Proszę o aktualny cennik i dostępność.',
+    selection:
+      'Dzień dobry! Interesuje mnie {product}, klasa {grade}, {size} — {price} za m² według cennika. Proszę o potwierdzenie dostępności i dostawy do: ',
   },
 
   hero: {
-    eyebrow: 'Ukraina · Producent i eksporter',
-    titleLead: 'Tarcica z Ukrainy',
-    titleAccent: 'na rynki europejskie',
-    lead: 'Produkujemy i eksportujemy tarcicę do krajów Europy: deski dębowe obrzynane klasyfikowane według pisemnej specyfikacji, drewno konstrukcyjne sosnowe i deskę parkietową z litego dębu. Kontrola jakości na każdym etapie, pakowanie i dokumenty gotowe do eksportu.',
-    insetCaption: 'Deska dębowa obrzynana · klasa I · 30 mm',
-    scrollLabel: 'Przejdź do sekcji produktów',
-    imageAlt: 'Pakiety ukraińskiej tarcicy ułożone na placu eksportowym',
+    eyebrow: 'Ukraina · Producent i eksporter parkietu',
+    titleLead: 'Dębowy parkiet warstwowy',
+    titleAccent: 'deska, chevron, jodełka',
+    lead: 'Dąb europejski na desce 14 mm z warstwą użytkową 3,2 mm, w klasie A-B lub C, z jawnymi cenami za metr kwadratowy. Produkujemy, wykańczamy i pakujemy sami, dostarczamy w całej Europie.',
+    insetCaption: 'Jodełka francuska po montażu',
+    priceBadge: 'Cennik od',
+    imageAlt: 'Ściana showroomu z panelami parkietu dębowego w jodełkę francuską i klasyczną',
   },
 
   stats: [
-    {
-      value: '4',
-      label: 'Klasy jakości',
-      detail: 'Klasy I–IV oceniane według naszej pisemnej specyfikacji dla dębu.',
-    },
-    {
-      value: '5',
-      label: 'Standardowe przekroje dębu',
-      detail: 'Szerokości od 80 do 230 mm, grubość 30 mm.',
-    },
-    {
-      value: '12',
-      label: 'Odcieni parkietu',
-      detail: 'Parkiet dębowy chevron: od bielonego do ciemnego espresso.',
-    },
-    {
-      value: 'UE',
-      label: 'Obszar dostaw',
-      detail: 'Regularne dostawy całopojazdowe i kontenerowe w całej Europie.',
-    },
+    { value: '3', label: 'Formaty', detail: 'Deska, jodełka francuska i klasyczna.' },
+    { value: '2', label: 'Klasy', detail: 'A-B Select i C Rustic, wyceniane osobno.' },
+    { value: '3,2 mm', label: 'Warstwa użytkowa', detail: 'Na desce 14 mm — można ją cyklinować i odnawiać.' },
+    { value: '12', label: 'Kolorów', detail: 'Chevron od bielonego do espresso.' },
   ],
 
   about: {
     eyebrow: 'O firmie',
-    title: 'Ukraiński producent nastawiony na europejskiego nabywcę',
-    lead: 'Oferujemy szeroki asortyment produktów z drewna litego, wytwarzanych zgodnie z aktualnymi standardami jakości i wymaganiami rynków międzynarodowych — i kontrolujemy całą drogę od kłody do załadowanej naczepy.',
+    title: 'Ukraiński producent parkietu dla europejskich klientów',
+    lead: 'Produkujemy dębowe podłogi warstwowe w trzech formatach i dwóch klasach — i kontrolujemy całą drogę od dębowej lameli do załadowanej naczepy.',
     action: 'Jak produkujemy',
     quote:
       '„Stawiamy na długoterminowe partnerstwo i gwarantujemy wysoką jakość produktu w każdym zamówieniu”.',
     highlights: [
       {
         title: 'Produkcja i eksport w jednych rękach',
-        body: 'Specjalizujemy się w produkcji i eksporcie tarcicy do krajów Europy i obsługujemy całą drogę — od przyjęcia surowca do załadowanej naczepy. Oznacza to jeden punkt odpowiedzialności za zamówienie, a nie łańcuch pośredników.',
+        body: 'Sami produkujemy deski, wykańczamy je i wysyłamy. To jeden punkt odpowiedzialności za Twoje zamówienie — a nie łańcuch pośredników między fabryką a Twoim magazynem.',
       },
       {
-        title: 'Kontrola na każdym etapie',
-        body: 'Każdy etap produkcji jest kontrolowany — od wyboru surowca przez przetarcie, suszenie i sortowanie do pakowania i dostawy. Każda partia jest sprawdzana względem pisemnej specyfikacji, zanim opuści zakład.',
+        title: 'Każda deska sortowana',
+        body: 'Każdą deskę klasyfikujemy jako A-B lub C przed zapakowaniem, więc ponowne zamówienie w tej samej klasie daje tę samą podłogę — partia za partią, inwestycja za inwestycją.',
       },
       {
-        title: 'Gotowość eksportowa zgodna z wymogami UE',
-        body: 'Wszystkie produkty przechodzą kontrolę jakości, spełniają wymagania europejskie i są przygotowane do eksportu: posortowane według klasy, spięte, oznakowane i udokumentowane, aby odprawa i rozładunek przebiegły bez niespodzianek.',
+        title: 'Gotowość eksportowa według wymagań UE',
+        body: 'Pakowane według formatu i klasy w kartony na paletach, oznakowane i udokumentowane — aby dostawa przeszła odprawę i rozładunek bez niespodzianek.',
       },
     ],
-    tags: ['Własna produkcja', 'Pisemne specyfikacje', 'Dokumenty eksportowe'],
+    tags: ['Własna produkcja', 'Jawny cennik', 'Dokumenty eksportowe'],
   },
 
   catalog: {
-    eyebrow: 'Katalog produktów',
-    title: 'Trzy linie produktowe, jeden standard',
-    lead: 'Deski dębowe obrzynane to nasz główny kierunek. Obok nich dostarczamy drewno konstrukcyjne sosnowe i deskę parkietową z litego dębu — wszystko produkujemy, sortujemy i pakujemy sami.',
-    action: 'Zapytaj o pełny cennik',
+    eyebrow: 'Oferta parkietu',
+    title: 'Wybierz format, klasę i wymiar',
+    lead: 'Trzy formaty w dwóch klasach, wszystkie na tej samej desce warstwowej 14 mm. Wybierz kombinację, aby zobaczyć cenę za metr kwadratowy, wymiary i nagrania z naszej linii — i wyślij ją jako zapytanie lub wiadomość na WhatsApp.',
     footnote:
-      'Niestandardowe przekroje, długości i mieszanki klas wykonujemy na zamówienie — prześlij specyfikację, potwierdzimy możliwość i cenę.',
-    cardLabels: {
-      woodType: 'Gatunek',
-      sizes: 'Dostępne wymiary',
-      grade: 'Klasa',
+      'Inne szerokości, długości, wykończenia i miksy klas produkujemy na zamówienie — prześlij specyfikację, a potwierdzimy wykonalność i cenę.',
+    formatStep: 'Format',
+    gradeStep: 'Klasa',
+    sizeStep: 'Wymiar',
+    priceLabel: 'Cena',
+    priceNote: 'Za m², według aktualnego cennika. Ostateczną cenę potwierdzamy w ofercie.',
+    specs: { thickness: 'Grubość', wearLayer: 'Warstwa użytkowa', width: 'Szerokość', length: 'Długość' },
+    randomLengths: 'różne długości',
+    fixedLengths: 'długości klepek',
+    details: 'Wszystko o: {product}',
+  },
+
+  priceList: {
+    eyebrow: 'Cennik',
+    title: 'Wszystkie formaty i klasy w jednym miejscu',
+    lead: 'Pełny cennik, pozycja po pozycji, w euro za metr kwadratowy. Każda deska ma 14 mm i warstwę użytkową dębu 3,2 mm.',
+    size: 'Wymiar',
+    footnote:
+      'Ceny za metr kwadratowy mają charakter orientacyjny: ostateczna kwota zależy od ilości, wykończenia i warunków dostawy i jest potwierdzana w ofercie.',
+  },
+
+  // TO CONFIRM — opisy klas odpowiadają przyjętemu w branży rozumieniu A-B i C;
+  // zastąpić pisemnymi zasadami sortowania firmy.
+  grades: {
+    AB: {
+      name: 'Select',
+      summary: 'Spokojne, równe usłojenie dla czystej, jednolitej podłogi.',
+      traits: [
+        'Jednolity kolor, niewielkie różnice między deskami',
+        'Tylko małe zdrowe sęki, pojedyncze',
+        'Minimalny udział bielu',
+        'Do nowoczesnych i minimalistycznych wnętrz',
+      ],
+    },
+    C: {
+      name: 'Rustic',
+      summary: 'Żywe usłojenie, sęki i gra kolorów — najbardziej naturalny wygląd.',
+      traits: [
+        'Wyraziste usłojenie i naturalne różnice kolorystyczne',
+        'Większe zdrowe sęki i wypełnione pęknięcia',
+        'Biel dopuszczalny',
+        'Podłoga z charakterem w niższej cenie',
+      ],
     },
   },
 
@@ -142,15 +174,15 @@ export const pl: Dictionary = {
   compliance: {
     eyebrow: 'Dokumenty i zgodność',
     title: 'Gotowość EUDR: dane geolokalizacyjne działek i numer DDS dla każdej dostawy',
-    lead: 'Odkąd obowiązuje rozporządzenie UE w sprawie wylesiania, importer nie może wprowadzić drewna na rynek UE bez danych o pochodzeniu na poziomie działki i oświadczenia o due diligence. Ten pakiet przygotowujemy razem z dostawą, a nie po zapytaniu.',
+    lead: 'Odkąd obowiązuje rozporządzenie UE w sprawie wylesiania, importer nie może wprowadzić drewnianych podłóg na rynek UE bez danych o pochodzeniu na poziomie działki i oświadczenia o due diligence. Ten pakiet przygotowujemy razem z dostawą, a nie po zapytaniu.',
     eudr: {
       badge: 'EUDR',
       title: 'Co otrzymujesz z każdą dostawą',
-      body: 'Rozporządzenie (UE) 2023/1115 nakłada na importera obowiązek udowodnienia, że drewno nie jest powiązane z wylesianiem i zostało pozyskane legalnie. Te dowody musi dostarczyć dostawca, dlatego zbieramy je jako część zamówienia, a nie jako formalności na końcu.',
+      body: 'Rozporządzenie (UE) 2023/1115 nakłada na importera obowiązek udowodnienia, że dąb nie jest powiązany z wylesianiem i zostało pozyskane legalnie. Te dowody musi dostarczyć dostawca, dlatego zbieramy je jako część zamówienia, a nie jako formalności na końcu.',
       points: [
         'Współrzędne geolokalizacyjne działek pozyskania dla danej partii',
-        'Gatunek, objętość i kraj pozyskania dla każdego pakietu, zgodnie z listą pakową',
-        'Dowód legalności pozyskania, możliwy do prześledzenia od kłody do pakietu',
+        'Gatunek, objętość i kraj pozyskania dla partii, zgodnie z listą pakową',
+        'Dowód legalności pozyskania, możliwy do prześledzenia od kłody do palety',
         'Numer oświadczenia DDS do zgłoszenia w systemie EU TRACES',
       ],
       note: 'Prześlij specyfikację i kierunek — potwierdzimy dokładny zestaw dokumentów dla Twojej trasy importu jeszcze przed zamówieniem.',
@@ -158,15 +190,9 @@ export const pl: Dictionary = {
     documentsTitle: 'Zestaw dokumentów eksportowych',
     documents: [
       {
-        icon: 'shield',
-        title: 'Świadectwo fitosanitarne',
-        body: 'Wydawane przez państwową inspekcję fitosanitarną dla każdej dostawy tarcicy opuszczającej Ukrainę.',
-        status: 'Do każdej dostawy',
-      },
-      {
         icon: 'box',
         title: 'ISPM-15, obróbka termiczna',
-        body: 'Oznakowanie opakowań drewnianych, przekładek i palet zabezpieczających ładunek.',
+        body: 'Oznakowanie drewnianych palet i przekładek, na których jadą kartony.',
         status: 'Do każdej dostawy',
       },
       {
@@ -178,7 +204,7 @@ export const pl: Dictionary = {
       {
         icon: 'stack',
         title: 'Lista pakowa i specyfikacja',
-        body: 'Objętość, przekrój i klasa dla każdego pakietu, zgodnie z oznaczeniem na spinaczach, aby przyjęcie towaru mogło sprawdzić dostawę względem faktury.',
+        body: 'Format, wymiar, klasa i metry kwadratowe dla każdej palety, zgodnie z etykietami kartonów, aby przyjęcie towaru mogło sprawdzić dostawę względem faktury.',
         status: 'Z każdym załadunkiem',
       },
       {
@@ -195,129 +221,112 @@ export const pl: Dictionary = {
 
   process: {
     eyebrow: 'Jakość i produkcja',
-    title: 'Pięć kontrolowanych etapów, od kłody do załadunku',
-    lead: 'Kontrolujemy każdy etap produkcji — od wyboru surowca do pakowania i dostawy. Na każdym etapie jest określona kontrola, zanim materiał pójdzie dalej.',
+    title: 'Cztery kontrolowane etapy, od lameli do palety',
+    lead: 'Każda deska przechodzi tę samą linię i te same kontrole przed zapakowaniem. Kadry i nagrania poniżej pochodzą z naszej własnej produkcji.',
     steps: [
       {
         icon: 'oak',
-        title: 'Wybór surowca',
-        body: 'Kłody dobieramy według gatunku, średnicy i zdrowotności jeszcze przed trakiem. Materiał z wadami rdzenia, uszkodzeniami przez owady lub zaparzeniem odrzucamy na przyjęciu — tam usunięcie wady jest najtańsze.',
+        title: 'Warstwa użytkowa z dębu',
+        body: 'Dębowe lamele dobieramy pod względem usłojenia i koloru i łączymy jako warstwę użytkową 3,2 mm ze stabilnym podkładem — tak powstaje deska warstwowa 14 mm.',
       },
       {
         icon: 'factory',
-        title: 'Przetarcie i produkcja',
-        body: 'Deski obrzynane cięte są w stałych przekrojach — grubość 30 mm, szerokość od 80 do 230 mm — z czystymi, równoległymi krawędziami i prostopadle uciętymi końcami. Przekroje sosnowe wykonujemy pod wymiary konkretnego projektu.',
+        title: 'Rozkrój i profilowanie',
+        body: 'Deski tniemy na format — deski w różnych długościach, klepki jodełki z prostymi końcami, półfabrykaty chevronu ze skośnymi końcami — i profilujemy tak, aby łączenia zamykały się szczelnie.',
       },
       {
-        icon: 'shield',
-        title: 'Suszenie i kontrola jakości',
-        body: 'Deski układamy do kontrolowanego suszenia, a następnie sortujemy sztuka po sztuce według pisemnej specyfikacji: wielkość i rodzaj sęków, biel, wrośnięta kora, pęknięcia. Rdzeń, uszkodzenia przez owady, zaparzenie i pęknięcia czołowe nie są dopuszczalne w żadnej klasie.',
+        icon: 'layers',
+        title: 'Wykończenie powierzchni',
+        body: 'Szlifowanie, szczotkowanie i naturalne lub barwione wykończenie na linii wałkowej, aby każda deska w zamówieniu miała tę samą powierzchnię.',
       },
       {
         icon: 'box',
-        title: 'Pakowanie',
-        body: 'Każdą klasę pakujemy oddzielnie w jednolite pakiety: spięte, z ochroną krawędzi i oznaczeniem wymiaru, klasy i objętości, aby magazyn odbiorcy sprawdził dostawę w kilka minut.',
-      },
-      {
-        icon: 'truck',
-        title: 'Eksport i dostawa',
-        body: 'Ładujemy naczepy i kontenery z pełnym zestawem dokumentów eksportowych i informujemy o statusie od wysyłki do rozładunku w każdym miejscu Europy.',
+        title: 'Sortowanie i pakowanie',
+        body: 'Każdą deskę klasyfikujemy jako A-B lub C, pakujemy w kartony według formatu i klasy, układamy na paletach i znakujemy dla szybkiego przyjęcia.',
       },
     ],
     callout: {
-      title: 'Pisemne specyfikacje, nie obietnice ustne',
-      body: 'Nasze zasady klasyfikacji dębu określają dokładnie, co dopuszcza każda klasa — wielkość i rodzaj sęków, biel, wrośnięta kora — oraz co nie jest dopuszczalne nigdy: rdzeń, zaparzenie, uszkodzenia przez owady, mikropęknięcia, pęknięcia czołowe i podwójny biel.',
-      action: 'Zasady klasyfikacji',
+      title: 'Jawny cennik zamiast „cena na zapytanie”',
+      body: 'Każdy format, wymiar i klasa ma opublikowaną cenę za metr kwadratowy. To, co widzisz w wyborze, to pozycja, według której wyceniamy.',
+      action: 'Zobacz cennik',
     },
     capacityTitle: 'Moce produkcyjne',
     capacityLead:
-      'Liczby, które warto sprawdzić, zanim zaplanujesz sezon produkcji u jednego dostawcy.',
-    // TO CONFIRM — dane musi podać produkcja przed uruchomieniem.
+      'Liczby, które warto sprawdzić, zanim zaplanujesz sezon inwestycji u jednego dostawcy.',
+    // TO CONFIRM — dane z produkcji. Pozycje z `TBC` nie są wyświetlane.
     capacity: [
       {
         value: 'TBC',
-        unit: 'm³ / miesiąc',
-        label: 'Produkcja tarcicy dębowej',
-        detail: 'Deski obrzynane 30 mm we wszystkich pięciu standardowych przekrojach.',
+        unit: 'm² / miesiąc',
+        label: 'Produkcja parkietu',
+        detail: 'We wszystkich trzech formatach i obu klasach.',
       },
       {
         value: 'TBC',
-        unit: 'm³ / zmianę',
-        label: 'Wydajność traka',
-        detail: 'Od przyjęcia kłody do deski obrzynanej z uciętymi końcami.',
+        unit: 'm² / zmianę',
+        label: 'Linia wykończeniowa',
+        detail: 'Deski oszlifowane i wykończone na zmianę.',
       },
       {
-        value: 'TBC',
-        unit: 'komór',
-        label: 'Moce suszarnicze',
-        detail: 'Liczba pracujących komór suszarniczych i objętość załadunku.',
+        value: '3',
+        unit: 'formaty',
+        label: 'Deska, chevron, jodełka',
+        detail: 'Wszystkie w jednej konstrukcji warstwowej 14 mm.',
       },
       {
-        value: 'TBC',
-        unit: 'm³ / załadunek',
-        label: 'Wsad komory',
-        detail: 'Objętość suszona w jednym cyklu — wyznacza wielkość partii o jednej wilgotności.',
-      },
-      {
-        value: '5',
-        unit: 'przekrojów',
-        label: 'Standardowe przekroje dębu',
-        detail: 'Szerokości 80, 115, 150, 170 i 230 mm — w stałej rotacji, nie na zamówienie.',
-      },
-      {
-        value: '4',
+        value: '2',
         unit: 'klasy',
-        label: 'Klasy jakości',
-        detail: 'Klasy I–IV, ocena sztuka po sztuce według pisemnej specyfikacji.',
+        label: 'A-B i C',
+        detail: 'Każda deska klasyfikowana przed zapakowaniem.',
       },
     ],
     capacityNote:
-      'Każda sztuka jest sortowana według pisemnej specyfikacji przed pakowaniem, dlatego ponowne zamówienie tej samej klasy daje w Twoim zakładzie tę samą wydajność.',
+      'Każda deska jest klasyfikowana przed zapakowaniem, więc ponowne zamówienie w tej samej klasie daje tę samą podłogę.',
   },
 
   advantages: {
     eyebrow: 'Nasze atuty',
-    title: 'Dlaczego europejscy nabywcy pracują z nami',
-    lead: 'Wszystko poniżej to zobowiązania, z których jesteśmy rozliczani: jakość, wolumen, logistyka i cena.',
+    title: 'Dlaczego europejscy klienci z nami pracują',
+    lead: 'Wszystko poniżej to zobowiązania, z których jesteśmy rozliczani: jakość, konstrukcja, logistyka i cena.',
     items: [
       {
         icon: 'oak',
-        title: 'Drewno o wolnym przyroście',
-        body: 'Wolno rosnący ukraiński dąb i sosna o gęstej, równej strukturze — surowiec, który daje wytrzymałość i trwałość, za które nas wybierają.',
+        title: 'Dąb europejski, ukraińska produkcja',
+        body: 'Gęsty, wolno rosnący dąb o równym usłojeniu na warstwę użytkową — materiał, który nadaje podłodze wygląd i trwałość.',
       },
       {
         icon: 'shield',
-        title: 'Europejskie standardy jakości',
-        body: 'Produkty wytwarzane są zgodnie z aktualnymi standardami jakości i wymaganiami rynków międzynarodowych oraz sortowane według udokumentowanej specyfikacji z określonymi tolerancjami.',
+        title: 'Stabilna konstrukcja warstwowa',
+        body: 'Deska 14 mm z warstwą użytkową dębu 3,2 mm pracuje mniej niż lite drewno przy sezonowych zmianach wilgotności, a warstwa wierzchnia jest wystarczająco gruba do cyklinowania i odnowienia.',
       },
       {
-        icon: 'stack',
-        title: 'Produkcja w dużych wolumenach',
-        body: 'Stabilne duże wolumeny z powtarzalnym sortowaniem — możesz zaplanować sezon produkcji u nas, zamiast szukać przypadkowych partii.',
+        icon: 'layers',
+        title: 'Trzy formaty, jedna konstrukcja',
+        body: 'Deska, chevron i jodełka mają tę samą budowę, więc formaty można łączyć w jednym projekcie bez progu na styku.',
       },
       {
         icon: 'truck',
         title: 'Niezawodna logistyka',
-        body: 'Terminowa dostawa w całej Europie naczepami lub kontenerami, z pakowaniem i dokumentami eksportowymi przygotowanymi przed wysyłką.',
+        body: 'Terminowa dostawa w całej Europie pełnymi naczepami lub kontenerami, z pakowaniem i dokumentami eksportowymi przygotowanymi przed wysyłką.',
       },
       {
         icon: 'tag',
-        title: 'Konkurencyjne ceny',
-        body: 'Ceny bezpośrednio od producenta z przejrzystym cennikiem według klas — bez marży pośrednika między tartakiem a Twoim magazynem.',
+        title: 'Przejrzyste ceny',
+        body: 'Opublikowana cena za metr kwadratowy dla każdego formatu, wymiaru i klasy — bezpośrednio od producenta, bez marży pośrednika.',
       },
       {
         icon: 'partners',
         title: 'Indywidualne podejście',
-        body: 'Wymiary, klasy i pakowanie pod Twoją specyfikację. Stawiamy na długoterminowe partnerstwo i każde zamówienie traktujemy jako jego część.',
+        body: 'Szerokości, długości, wykończenia i pakowanie dopasowane do Twojego projektu. Cenimy długoterminowe partnerstwo i traktujemy każde zamówienie jako jego część.',
       },
     ],
   },
 
   gallery: {
     eyebrow: 'Galeria',
-    title: 'Nasze drewno w stanie, w jakim jedzie do Ciebie',
-    lead: 'Siedem kadrów, a nie arkusz stykowy: krawędź posortowanej deski, pakiety, w których wyjeżdża z placu, zapas stojący za ponownym zamówieniem. Zdjęcia z naszego placu i hali, a nie z banku zdjęć.',
-    action: 'Zobacz wszystkie dwanaście odcieni parkietu',
+    title: 'Nasz parkiet na zdjęciach i wideo',
+    lead: 'Showroom, ułożone podłogi i nasza własna linia wykończeniowa — zdjęcia i krótkie nagrania z produkcji, a nie z banku zdjęć.',
+    action: 'Zobacz wszystkie dwanaście kolorów chevronu',
   },
 
   exportSection: {
@@ -333,7 +342,7 @@ export const pl: Dictionary = {
       {
         icon: 'stack',
         title: 'Stabilne dostawy',
-        body: 'Stabilne duże wolumeny z własnej produkcji, z uzgodnionymi wolumenami miesięcznymi dla klientów kontraktowych.',
+        body: 'Stabilne wolumeny z własnej produkcji, z uzgodnionymi ilościami miesięcznymi dla klientów kontraktowych.',
       },
       {
         icon: 'globe',
@@ -367,30 +376,31 @@ export const pl: Dictionary = {
       EE: 'Estonia',
       DK: 'Dania',
     },
-    originLabel: 'Nasz plac',
+    originLabel: 'Produkcja',
     ringLabel: '{km} km',
     mapNote:
-      'Okręgi to odległość w linii prostej od placu, a nie drogowa — pokazują zasięg, nie wycenę. Zapytaj o czas dostawy na konkretny adres, a potwierdzimy go.',
+      'Okręgi to odległość w linii prostej od produkcji, a nie drogowa — pokazują zasięg, nie wycenę. Zapytaj o czas dostawy na konkretny adres, a potwierdzimy go.',
     loadsTitle: 'Co wchodzi w jeden załadunek',
     loadsLead:
-      'Fracht liczony jest od załadunku, a nie od metra sześciennego, więc najtańsze zamówienie to zwykle pełne.',
+      'Fracht liczony jest od załadunku, a nie od metra kwadratowego, więc najtańsze zamówienie to zwykle pełne.',
+    // TO CONFIRM — liczba m² w ładunku zależy od formatu palet. Ukryte, dopóki `TBC`.
     loads: [
       {
-        value: '22–24',
-        unit: 'm³',
+        value: 'TBC',
+        unit: 'm²',
         label: 'Pełna naczepa',
-        detail: 'Standardowa firanka 13,6 m ze spiętych pakietów — typowa dostawa drogowa w UE.',
+        detail: 'Standardowa firanka 13,6 m z kartonami na paletach — typowa dostawa drogowa w UE.',
       },
       {
-        value: '25–28',
-        unit: 'm³',
+        value: 'TBC',
+        unit: 'm²',
         label: 'Kontener 40 stóp',
         detail: 'Do dalszego frachtu morskiego lub kierunków poza zasięgiem transportu drogowego.',
       },
       {
         // TO CONFIRM — decyzja handlowa, nie pomiar.
         value: 'TBC',
-        unit: 'm³',
+        unit: 'm²',
         label: 'Minimalne zamówienie',
         detail: 'Mniejsze wolumeny konsolidujemy z inną dostawą w tym samym kierunku.',
       },
@@ -411,7 +421,7 @@ export const pl: Dictionary = {
     leadTimeNote:
       'Przejście graniczne i odprawa celna są uwzględnione w powyższych czasach. Dostępne warunki dostawy: EXW, FCA, CPT i DAP — DAP oznacza towar pod Twoją bramą z uregulowanymi należnościami.',
     casesTitle: 'Ostatnie dostawy',
-    casesLead: 'Bez nazw klientów, ale prawdziwe: przekroje, wolumeny i trasy, które realnie ładujemy.',
+    casesLead: 'Bez nazw klientów, ale prawdziwe: formaty, wolumeny i trasy, które realnie ładujemy.',
     // TO CONFIRM — uzupełnić z rejestru wysyłek. Ukryte dopóki `TBC`.
     cases: [
       { volume: 'TBC', spec: 'TBC', destination: 'TBC', terms: 'DAP', days: 'TBC' },
@@ -428,68 +438,71 @@ export const pl: Dictionary = {
   },
 
   faq: {
-    eyebrow: 'Pytania nabywców',
-    title: 'Klasy, wolumeny, dokumenty i dostawa',
+    eyebrow: 'Pytania kupujących',
+    title: 'Klasy, wymiary, ceny i dostawa',
     lead: 'Odpowiedzi, których udzielamy przez telefon — na piśmie. Jeśli czegoś brakuje, zapytaj, dodamy.',
     items: [
       {
-        question: 'Czym różnią się klasy I–IV?',
+        question: 'Czym różnią się klasy A-B i C?',
         answer:
-          'Klasa wynika z tego, co deska może pokazywać, a granice są zapisane na piśmie. Klasa I dopuszcza sęki zdrowe do 3–5 mm i nic więcej; klasa II dodaje sęki zdrowe do 25–35 mm, sęki czarne do 15–25 mm i biel do 20–25 mm; klasa III rozszerza to do sęków zdrowych 35 mm na wąskich przekrojach i 70 mm przy szerokości 230 mm, plus wrośnięta kora; klasa IV, produkowana przy 230 mm, dopuszcza sęki zdrowe do 120 mm. Rdzeń, zaparzenie, uszkodzenia przez owady, mikropęknięcia, pęknięcia czołowe i podwójny biel nie są dopuszczalne w żadnej klasie.',
+          'A-B (Select) to klasa spokojniejsza: jednolity kolor, małe zdrowe sęki i minimalny udział bielu. C (Rustic) to klasa żywa: wyraziste usłojenie, większe zdrowe sęki, wypełnione pęknięcia i biel są dopuszczalne. Obie to ta sama deska — 14 mm z warstwą użytkową dębu 3,2 mm — wyceniana osobno, więc wybierasz wygląd, a nie inny produkt.',
       },
       {
-        question: 'Jakie przekroje i długości produkujecie?',
+        question: 'Jakie formaty i wymiary produkujecie?',
         answer:
-          'Deski dębowe obrzynane cięte są przy stałej grubości 30 mm w pięciu szerokościach — 80, 115, 150, 170 i 230 mm — ze stałymi długościami dla każdego przekroju w zakresie 320–2 450 mm. Drewno konstrukcyjne sosnowe cięte jest według Twojej listy przekrojów, a nie stałego katalogu.',
+          'Deskę 125 × 600–1 400, 145 × 800–1 600 i 195 × 1 700–2 500 mm w różnych długościach; jodełkę francuską (chevron) i klasyczną o szerokości 125 mm z klepkami 500, 600 i 700 mm. Wszystkie formaty mają 14 mm grubości i warstwę użytkową dębu 3,2 mm.',
       },
       {
-        question: 'Czy wykonujecie niestandardowe przekroje lub mieszanki klas?',
+        question: 'Jaka jest konstrukcja deski?',
         answer:
-          'Tak. Niestandardowe przekroje, długości i mieszanki klas wykonujemy na zamówienie — prześlij specyfikację, a potwierdzimy możliwość i cenę, zanim się zobowiążesz.',
+          'To parkiet warstwowy: warstwa użytkowa z dębu europejskiego 3,2 mm na stabilnym podkładzie, łącznie 14 mm. Warstwa wierzchnia jest wystarczająco gruba do cyklinowania i odnowienia, a budowa warstwowa pracuje mniej niż lite drewno przy zmianach wilgotności.',
       },
       {
-        question: 'Jaką wilgotność dostarczacie?',
+        question: 'Jak podajecie ceny?',
+        answer: `Za metr kwadratowy, według formatu, wymiaru i klasy — od ${from}/m² za deskę 125 mm w klasie C do ${top}/m² za chevron A-B. Ostateczna kwota zależy od ilości, wykończenia i warunków dostawy i jest potwierdzana w ofercie.`,
+      },
+      {
+        question: 'Czy produkujecie inne wymiary, wykończenia lub miksy klas?',
         answer:
-          'Suszenie komorowe lub na powietrzu, określane dla każdego zamówienia. Podaj docelową wilgotność i tolerancję, w której pracujesz — potwierdzimy ją w ofercie, ponieważ tryb suszenia wpływa i na cenę, i na wielkość partii, którą możemy utrzymać w jednej specyfikacji.',
+          'Tak. Inne szerokości i długości, olej lub lakier, naturalne lub barwione wykończenia oraz miksy klas produkujemy na zamówienie — prześlij specyfikację, a potwierdzimy wykonalność i cenę, zanim się zobowiążesz.',
       },
       {
         question: 'Czy dostarczacie dane geolokalizacyjne EUDR i numer DDS?',
         answer:
-          'Tak. Z każdą dostawą przekazujemy współrzędne działek pozyskania, gatunek, objętość i kraj pozyskania dla pakietów, dowód legalności pozyskania oraz numer oświadczenia DDS potrzebny do zgłoszenia w UE. Ustal z nami trasę importu, a podamy dokładny zestaw dokumentów przed zamówieniem.',
+          'Tak. Każda dostawa ma współrzędne działek pozyskania, gatunek, objętość i kraj pozyskania, dowód legalności pozyskania oraz numer oświadczenia DDS do Twojego zgłoszenia w UE. Uzgodnij z nami trasę importu, a podamy dokładny zestaw dokumentów przed zamówieniem.',
       },
       {
-        question: 'Z jakimi warunkami Incoterms pracujecie?',
+        question: 'Z jakimi Incoterms pracujecie?',
         answer:
-          'EXW, FCA, CPT i DAP. DAP zwykle wybierają nabywcy z UE, którzy chcą otrzymać towar na swoim placu bez organizowania frachtu; FCA pasuje tym, którzy mają własnego przewoźnika.',
+          'EXW, FCA, CPT i DAP. DAP to typowy wybór klientów z UE, którzy chcą otrzymać towar pod bramę bez organizowania frachtu; FCA pasuje klientom z własnym przewoźnikiem.',
       },
       {
-        question: 'Jak drewno jest pakowane i oznaczane?',
+        question: 'Jak pakowany jest parkiet?',
         answer:
-          'Każda klasa jest pakowana oddzielnie w jednolite, spięte pakiety z ochroną krawędzi, oznaczone przekrojem, klasą i objętością, i tak samo ujęte na liście pakowej — dzięki temu przyjęcie towaru sprawdza dostawę względem faktury w kilka minut, zamiast przekładać ją od nowa.',
-      },
-      {
-        question: 'Jak ustalane są ceny i jak długo obowiązują?',
-        answer:
-          'Za metr sześcienny, według przekroju i klasy — nasz opublikowany cennik dębu zaczyna się od 700 €/m³ za klasę mieszaną 80 × 30 mm i sięga 2 650 €/m³ za klasę I przy 230 mm. Ostateczna kwota zależy od wolumenu, trybu suszenia i warunków dostawy i jest potwierdzana dla partii w ofercie.',
+          'W kartony według formatu i klasy, na paletach, owinięte folią i oznakowane formatem, wymiarem, klasą i metrami kwadratowymi — tak samo w liście pakowej, aby przyjęcie towaru mogło sprawdzić dostawę względem faktury w kilka minut.',
       },
       {
         question: 'Czy wysyłacie próbki przed zamówieniem?',
         answer:
-          'Tak. Dla parkietu wysyłamy próbki odcieni przed potwierdzeniem zamówienia, a dla tarcicy możemy wysłać posortowane próbki desek, abyś porównał nasze sortowanie z własnym standardem przed zamówieniem załadunku.',
+          'Tak. Wysyłamy próbki klasy i wykończenia przed potwierdzeniem zamówienia, abyś mógł porównać deskę z własnym standardem, zanim zdecydujesz się na ładunek.',
+      },
+      {
+        question: 'Czy mogę zamówić przez WhatsApp?',
+        answer:
+          'Tak. Wyślij format, klasę, wymiar i ilość — albo po prostu zdjęcie rzutu pomieszczenia — a odpowiemy wyceną. Wybór na tej stronie sam wypełnia wiadomość.',
       },
       {
         question: 'W jakich językach pracujecie?',
-        answer:
-          'Polski, angielski, niemiecki i ukraiński — zarówno w korespondencji, jak i w dokumentach.',
+        answer: 'Polski, angielski, niemiecki i ukraiński — w korespondencji i dokumentach.',
       },
       {
         question: 'Jakie jest minimalne zamówienie?',
-        // TO CONFIRM — decyzja handlowa. Ukryte do udzielenia odpowiedzi.
+        // TO CONFIRM — decyzja handlowa. Ukryte do czasu odpowiedzi.
         answer: 'TBC',
       },
       {
         question: 'Jaki jest czas dostawy do Niemiec lub Polski?',
-        // TO CONFIRM — zob. exportSection.leadTimes. Ukryte do udzielenia odpowiedzi.
+        // TO CONFIRM — zob. exportSection.leadTimes. Ukryte do czasu odpowiedzi.
         answer: 'TBC',
       },
     ],
@@ -498,10 +511,11 @@ export const pl: Dictionary = {
   contact: {
     eyebrow: 'Zapytanie o wycenę',
     title: 'Powiedz, czego potrzebujesz',
-    lead: 'Prześlij przekroje, klasy i wolumeny. Jeśli jeszcze nie wiesz — opisz zastosowanie, a my zaproponujemy najbardziej ekonomiczną specyfikację.',
+    lead: 'Prześlij formaty, klasy i ilości. Jeśli jeszcze nie wiesz — opisz projekt, a my zaproponujemy najbardziej ekonomiczną specyfikację.',
     labels: {
       email: 'E-mail',
       phone: 'Telefon',
+      whatsapp: 'WhatsApp',
       production: 'Produkcja i eksport',
       hours: 'Godziny pracy',
       languages: 'Mówimy',
@@ -511,6 +525,9 @@ export const pl: Dictionary = {
       hours: 'Pn–Pt, 08:00–18:00 (EET)',
       languages: 'polski, angielski, niemiecki, ukraiński',
     },
+    whatsappTitle: 'Szybciej przez WhatsApp',
+    whatsappBody:
+      'Wyślij format, klasę i ilość — albo po prostu zdjęcie rzutu pomieszczenia — a odpowiemy wyceną i dostępnością.',
     noteBefore: 'Wolisz e-mail? Napisz bezpośrednio na ',
     noteAfter: ' i dołącz specyfikację — odpowiadamy po polsku, angielsku lub niemiecku.',
   },
@@ -519,35 +536,35 @@ export const pl: Dictionary = {
     name: 'Imię i nazwisko *',
     namePlaceholder: 'Jan Kowalski',
     company: 'Firma',
-    companyPlaceholder: 'Drewno Sp. z o.o.',
+    companyPlaceholder: 'Parkiet Sp. z o.o.',
     country: 'Kraj',
     countryPlaceholder: 'Polska',
     email: 'E-mail *',
     emailPlaceholder: 'zakupy@firma.pl',
     phone: 'Telefon',
     phonePlaceholder: '+48 000 000 000',
-    product: 'Produkt',
-    productPlaceholder: 'Wybierz produkt…',
-    productMixed: 'Kilka pozycji / mix',
+    product: 'Format',
+    productPlaceholder: 'Wybierz format…',
+    productMixed: 'Kilka formatów',
     grade: 'Klasa',
     gradeAny: 'Dowolna / doradźcie',
-    dimensions: 'Wymiary (gr. × szer. × dł.)',
-    dimensionsPlaceholder: '30 × 230 × 2 050 mm',
-    volume: 'Wolumen na miesiąc',
-    volumePlaceholder: 'np. 40 m³',
-    moisture: 'Wilgotność',
-    moistureOptions: {
-      any: 'Dowolna / doradźcie',
-      kd: 'Suszona komorowo (KD)',
-      ad: 'Suszona na powietrzu (AD)',
-      fresh: 'Świeżo tarta',
+    dimensions: 'Wymiar (szer. × dł. × gr.)',
+    dimensionsPlaceholder: '125 × 600–1 400 × 14/3,2 mm',
+    volume: 'Ilość',
+    volumePlaceholder: 'np. 250 m²',
+    finish: 'Wykończenie',
+    finishOptions: {
+      any: 'Dowolne / doradźcie',
+      unfinished: 'Surowe',
+      oiled: 'Olejowane',
+      lacquered: 'Lakierowane',
     },
     destination: 'Kierunek dostawy',
     destinationPlaceholder: 'Miasto lub port, np. Hamburg',
     incoterms: 'Warunki dostawy',
     incotermsAny: 'Jeszcze nieustalone',
     message: 'Wiadomość *',
-    messagePlaceholder: 'Co jeszcze wpływa na wycenę — tolerancje, pakowanie, harmonogram…',
+    messagePlaceholder: 'Co jeszcze wpływa na wycenę — kolor, pakowanie, harmonogram…',
     submit: 'Wyślij zapytanie',
     sending: 'Wysyłanie…',
     required: 'Pola oznaczone * są obowiązkowe.',
@@ -572,11 +589,11 @@ export const pl: Dictionary = {
       country: 'Kraj',
       email: 'E-mail',
       phone: 'Telefon',
-      product: 'Produkt',
+      product: 'Format',
       grade: 'Klasa',
       dimensions: 'Wymiary',
-      volume: 'Wolumen / miesiąc',
-      moisture: 'Wilgotność',
+      volume: 'Ilość',
+      finish: 'Wykończenie',
       destination: 'Kierunek',
       incoterms: 'Warunki dostawy',
       notSpecified: 'Nie podano',
@@ -584,47 +601,37 @@ export const pl: Dictionary = {
   },
 
   productPage: {
-    aboutTitle: 'O tym produkcie',
-    specsEyebrow: 'Dane techniczne',
+    aboutTitle: 'O tym formacie',
+    configureTitle: 'Wybierz klasę i wymiar',
+    specsEyebrow: 'Parametry techniczne',
     specsTitle: 'Specyfikacja',
     specsLead:
-      'Potwierdzana dla zamówienia — prześlij wymagania, a dokładne wartości zapiszemy w ofercie.',
+      'Potwierdzane dla każdego zamówienia — prześlij wymagania, a dokładne wartości podamy w ofercie.',
     pricesEyebrow: 'Cennik',
-    pricesTitle: 'Ceny według przekroju i klasy',
-    pricesLead:
-      'Nasz opublikowany cennik. Przekroje są stałe; długości w ramach każdego przekroju dostępne według wykazu.',
-    gradesEyebrow: 'Klasyfikacja',
-    gradesTitle: 'Co dopuszcza każda klasa',
+    pricesTitle: 'Ceny według wymiaru i klasy',
+    pricesLead: 'Prosto z naszego cennika, w euro za metr kwadratowy.',
+    gradesEyebrow: 'Klasy',
+    gradesTitle: 'A-B czy C: co się zmienia',
     gradesLead:
-      'Wprost z naszej pisemnej specyfikacji dla obrzynanej tarcicy dębowej. Tolerancje różnią się dla wąskich i szerokich przekrojów.',
-    finishesEyebrow: 'Odcienie',
-    finishesTitle: 'Dwanaście odcieni produkcyjnych',
+      'Ta sama deska w dwóch klasach. Klasa decyduje, jak spokojna lub żywa jest powierzchnia — i o cenie.',
+    finishesEyebrow: 'Kolory',
+    finishesTitle: 'Dwanaście kolorów produkcyjnych',
     finishesLead:
-      'Każdy odcień nakładamy na tę samą dębową lamelę chevron, więc w ramach projektu można łączyć tony bez zmiany dostawcy i formatu.',
+      'Każdy kolor nakładamy na tę samą dębową klepkę chevron, więc w jednym projekcie można łączyć odcienie bez zmiany dostawcy czy formatu.',
     inquiryEyebrow: 'Zapytanie',
-    inquiryTitle: 'Zapytanie o wycenę: {product}',
+    inquiryTitle: 'Zapytaj o wycenę: {product}',
     inquiryLead:
-      'Podaj potrzebne przekroje, klasy i wolumen. Odpowiadamy z dostępnością, ceną i czasem dostawy dla Twojego kierunku.',
+      'Podaj klasę, wymiar i ilość. Odpowiemy z dostępnością, ceną i czasem dostawy do Twojego kierunku.',
     relatedEyebrow: 'Produkujemy również',
-    relatedTitle: 'Inne linie produktowe',
-    priceInformation: 'Informacja o cenie',
-    seePriceList: 'Zobacz cennik',
-    permitted: 'Dopuszczalne',
-    notPermitted: 'Niedopuszczalne w żadnej klasie',
-    availableLengths: 'Dostępne długości',
-    priceColumn: 'Cena',
-    gradeColumn: 'Klasa',
-    gradeLabel: 'Klasa {code}',
-    mixedGrade: 'Klasa mieszana',
-    priceFootnote:
-      'Ceny podane są za metr sześcienny i mają charakter orientacyjny: ostateczna kwota zależy od wolumenu, trybu suszenia i warunków dostawy i jest potwierdzana dla partii w ofercie handlowej.',
+    relatedTitle: 'Inne formaty',
+    seePriceList: 'Zobacz pełny cennik',
   },
 
   footer: {
-    products: 'Produkty',
+    products: 'Parkiet',
     company: 'Firma',
     exportOffice: 'Dział eksportu',
-    claim: 'Tarcica z Ukrainy na rynek europejski.',
+    claim: 'Dębowy parkiet warstwowy z Ukrainy dla rynku europejskiego.',
     rights: 'Wszelkie prawa zastrzeżone.',
   },
 
@@ -637,300 +644,196 @@ export const pl: Dictionary = {
   },
 
   products: {
-    'oak-edged-boards': {
-      name: 'Deski dębowe obrzynane',
-      kicker: 'Produkt główny',
-      category: 'Tarcica obrzynana',
-      species: 'Dąb europejski (Quercus robur)',
-      tagline: 'Klasyfikowana tarcica dębowa w pięciu stałych przekrojach, cena według klasy.',
+    'oak-chevron-parquet': {
+      name: 'Parkiet dębowy jodełka francuska',
+      shortName: 'Chevron',
+      kicker: 'Jodełka francuska',
+      category: 'Parkiet warstwowy',
+      tagline: 'Klepki ze skośnymi końcami łączą się w ciągłe „V” — klasyczny francuski wzór.',
       shortDescription:
-        'Nasz główny kierunek: deski dębowe obrzynane, znane z wytrzymałości, trwałości i naturalnego wyglądu — klasyfikowane od I do IV według pisemnej specyfikacji.',
+        'Warstwowy chevron dębowy o szerokości 125 mm, klepki 500, 600 i 700 mm, w klasach A-B i C i dwunastu kolorach.',
       description: [
-        'Deski dębowe obrzynane to podstawa naszej produkcji. Każda deska cięta jest przy stałej grubości 30 mm w jednej z pięciu szerokości — 80, 115, 150, 170 lub 230 mm — z równoległymi krawędziami, prostopadle uciętymi końcami i określonym zakresem długości dla każdego przekroju.',
-        'Klasyfikacja nie jest kwestią opinii. Każda sztuka oceniana jest względem pisemnych tolerancji dla sęków zdrowych i czarnych, bieli, wrośniętej kory i pęknięć, a granice różnią się dla przekrojów wąskich (150/170 mm) i szerokich (230 mm). Rdzeń, uszkodzenia przez owady, zaparzenie, mikropęknięcia, pęknięcia czołowe i podwójny biel nie są dopuszczalne w żadnej klasie.',
-        'Efektem jest produkt, który można kupować wielokrotnie z pewnością: ta sama klasa daje w Twoim zakładzie tę samą wydajność, partia po partii.',
+        'Klepki chevronu mają skośnie cięte końce, więc wzór biegnie jako ciągłe „V” z prostą spoiną pośrodku — podłoga paryskich kamienic i najbardziej architektoniczny z naszych trzech formatów.',
+        'Każda klepka ma 125 mm szerokości i 500, 600 lub 700 mm długości, na naszej konstrukcji warstwowej 14 mm z warstwą użytkową z dębu europejskiego 3,2 mm. Ta sama budowa co deska i jodełka klasyczna, więc formaty mogą się spotkać w progu bez uskoku.',
+        'Dostępnych jest dwanaście kolorów produkcyjnych, od bielonych i szarobeżowych przez naturalny i miodowy dąb po orzech, czekoladę i ciemne espresso.',
       ],
-      keyFacts: [
-        { label: 'Grubość', value: '30 mm' },
-        { label: 'Szerokości', value: '80 / 115 / 150 / 170 / 230 mm' },
-        { label: 'Długości', value: '320 – 2 450 mm' },
-        { label: 'Klasy', value: 'I, II, III, IV' },
-      ],
-      priceNote: 'Od 700 €/m³ (80 × 30 mm, klasa mieszana). Klasa I w 230 mm od 2 650 €/m³.',
-      sizesSummary: '30 × 80–230 mm, długości 320–2 450 mm',
-      gradesSummary: 'Klasy I–IV oraz pakiety klasy mieszanej',
       advantages: [
-        'Pięć stałych przekrojów w ciągłej rotacji — powtórne zamówienia przychodzą identyczne',
-        'Tolerancje klas udokumentowane na piśmie, a nie ustalane telefonicznie',
-        'Cennik według klas, płacisz tylko za jakość, której potrzebujesz',
-        'Pakowane i oznaczone według klas dla szybkiego przyjęcia towaru',
-      ],
-      specs: [
-        {
-          group: 'Materiał',
-          items: [
-            { label: 'Gatunek', value: 'Dąb europejski (Quercus robur)' },
-            { label: 'Rodzaj produktu', value: 'Tarcica obrzynana, strugana na życzenie' },
-            { label: 'Pochodzenie', value: 'Ukraina' },
-            { label: 'Klasyfikacja', value: 'Klasy I–IV według specyfikacji zakładowej' },
-          ],
-        },
-        {
-          group: 'Wymiary',
-          items: [
-            { label: 'Grubość', value: '30 mm' },
-            { label: 'Szerokości', value: '80, 115, 150, 170, 230 mm' },
-            { label: 'Zakres długości', value: '320 – 2 450 mm, stałe długości dla przekroju' },
-            { label: 'Krawędzie / końce', value: 'Obrzynane dwustronnie, końce ucięte prostopadle' },
-          ],
-        },
-        {
-          group: 'Dostawa',
-          items: [
-            // TO CONFIRM — tryb suszenia
-            { label: 'Wilgotność', value: 'Suszona komorowo lub na powietrzu — podać w zapytaniu' },
-            { label: 'Pakowanie', value: 'Spięte pakiety, sortowane według przekroju i klasy' },
-            { label: 'Oznaczenie', value: 'Przekrój, klasa i objętość na pakiecie' },
-            { label: 'Warunki', value: 'EXW / FCA / CPT / DAP' },
-          ],
-        },
-      ],
-      gradeBands: [
-        {
-          widths: 'Szerokości 150 i 170 mm',
-          grades: [
-            { code: 'I', name: 'Klasa I', allowances: ['Sęki zdrowe do 3–5 mm'] },
-            {
-              code: 'II',
-              name: 'Klasa II',
-              allowances: [
-                'Sęki zdrowe do 25 mm',
-                'Sęki czarne do 15 mm, nie bliżej niż 10 mm od krawędzi',
-                'Biel 20 mm, bez przejścia na jedną stronę',
-              ],
-            },
-            {
-              code: 'III',
-              name: 'Klasa III',
-              allowances: [
-                'Sęki zdrowe do 35 mm',
-                'Sęki czarne do 25 mm, nie bliżej niż 10 mm od krawędzi',
-                'Wrośnięta kora do 3 × 50 mm',
-                'Biel 35 mm na jednej stronie, 10 mm z przejściem na drugiej',
-              ],
-            },
-          ],
-        },
-        {
-          widths: 'Szerokość 230 mm',
-          grades: [
-            { code: 'I', name: 'Klasa I', allowances: ['Sęki zdrowe do 5 mm'] },
-            {
-              code: 'II',
-              name: 'Klasa II',
-              allowances: [
-                'Sęki zdrowe 30–35 mm',
-                'Sęki czarne do 25 mm, nie bliżej niż 10 mm od krawędzi',
-                'Biel 25 mm, bez przejścia na jedną stronę',
-                'Wrośnięta kora do 50 mm',
-              ],
-            },
-            {
-              code: 'III',
-              name: 'Klasa III',
-              allowances: [
-                'Sęki zdrowe do 70 mm',
-                'Sęki czarne do 40 mm, nie bliżej niż 10 mm od krawędzi',
-                'Wrośnięta kora do 3 × 80 mm',
-                'Biel 10 mm na stronie licowej, 30 mm na odwrotnej',
-              ],
-            },
-            {
-              code: 'IV',
-              name: 'Klasa IV',
-              allowances: [
-                'Sęki zdrowe do 120 mm, nie bliżej niż 10 mm od krawędzi',
-                'Wrośnięta kora do 5 × 100 mm',
-                'Biel 20 mm na stronie licowej, bez ograniczeń na odwrotnej',
-              ],
-            },
-          ],
-        },
-      ],
-      notPermitted: [
-        'Rdzeń',
-        'Zaparzenie',
-        'Uszkodzenia przez owady',
-        'Mikropęknięcia',
-        'Pęknięcia czołowe',
-        'Podwójny biel',
-      ],
-    },
-
-    'pine-construction-timber': {
-      name: 'Drewno konstrukcyjne sosnowe',
-      kicker: 'Duże wolumeny',
-      category: 'Drewno konstrukcyjne',
-      species: 'Sosna zwyczajna (Pinus sylvestris)',
-      tagline: 'Deski, łaty i belki do budownictwa mieszkaniowego, komercyjnego i przemysłowego.',
-      shortDescription:
-        'Sosnowe materiały budowlane do budownictwa mieszkaniowego, komercyjnego i przemysłowego — cięte pod Twoje przekroje i dostarczane w dużych, powtarzalnych wolumenach.',
-      description: [
-        'Dostarczamy drewno sosnowe do budowy i wykończeń: deski obrzynane, łaty, krokwie i belki. Przekroje wykonujemy według Twojej specyfikacji, a nie wtłaczamy w stały katalog, co czyni sosnę naszą najbardziej elastyczną linią produktową.',
-        'Sosna pracuje solidnie i zachowuje się przewidywalnie: jest lekka, łatwa do mocowania i cięcia na budowie, a po wysuszeniu stabilna. To naturalny wybór do konstrukcji szkieletowych, szalunków, dachów, stropów, opakowań i wykończeń wnętrz.',
-        'Ponieważ sosna idzie w wolumenach, tu widać skalę naszej produkcji. Wiązki są jednolicie spinane i cięte na stałe długości, aby naczepa ładowała się w pełni — co obniża koszt frachtu na metr sześcienny.',
-      ],
-      keyFacts: [
-        { label: 'Produkty', value: 'Deski, łaty, belki' },
-        { label: 'Przekroje', value: 'Według specyfikacji' },
-        { label: 'Długości', value: 'Do 6 000 mm' }, // TO CONFIRM
-        { label: 'Dostawa', value: 'Pełne naczepy' },
-      ],
-      priceNote: 'Cena na zapytanie — wycena za metr sześcienny na podstawie Twojej listy przekrojów.',
-      sizesSummary: 'Przekroje i długości na zamówienie',
-      gradesSummary: 'Jakość konstrukcyjna, sortowanie na zapytanie',
-      advantages: [
-        'Przekroje cięte według Twojego rysunku, a nie stałego katalogu',
-        'Stabilne duże wolumeny dla wieloetapowych projektów budowlanych',
-        'Jednolite wiązki, które efektywnie się ładują i szybko rozładowują',
-        'Odpowiednie do konstrukcji, szalunków, opakowań i wykończeń wnętrz',
-      ],
-      specs: [
-        {
-          group: 'Materiał',
-          items: [
-            { label: 'Gatunek', value: 'Sosna zwyczajna (Pinus sylvestris)' },
-            { label: 'Rodzaj produktu', value: 'Deski obrzynane, łaty, belki' },
-            { label: 'Pochodzenie', value: 'Ukraina' },
-            {
-              label: 'Zastosowania',
-              value: 'Szkielet, dach, szalunki, wykończenia, opakowania',
-            },
-          ],
-        },
-        {
-          // TO CONFIRM — zakresy orientacyjne, potwierdzić z produkcją
-          group: 'Wymiary',
-          items: [
-            { label: 'Grubość deski', value: '25 – 50 mm' },
-            { label: 'Szerokość deski', value: '100 – 200 mm' },
-            { label: 'Przekroje belek', value: 'Od 50 × 50 do 150 × 150 mm' },
-            { label: 'Długości', value: '3 000 – 6 000 mm' },
-          ],
-        },
-        {
-          group: 'Dostawa',
-          items: [
-            { label: 'Wilgotność', value: 'Świeżo tarta lub suszona — podać w zapytaniu' },
-            { label: 'Pakowanie', value: 'Spięte wiązki, z ochroną krawędzi' },
-            { label: 'Załadunek', value: 'Pełna naczepa lub kontener 40 stóp' },
-            { label: 'Warunki', value: 'EXW / FCA / CPT / DAP' },
-          ],
-        },
-      ],
-      gradeBands: [],
-      notPermitted: [],
-    },
-
-    'oak-parquet-boards': {
-      name: 'Deska parkietowa z drewna litego',
-      kicker: '12 odcieni',
-      category: 'Podłogi',
-      species: 'Dąb europejski',
-      tagline: 'Parkiet dębowy chevron, który łączy elegancki wygląd z długą żywotnością.',
-      shortDescription:
-        'Deska parkietowa z drewna litego łącząca elegancki wygląd, niezawodność i długą żywotność — dąb w formacie chevron w dwunastu odcieniach.',
-      description: [
-        'Nasz parkiet powstaje z tego samego dębu, który sami przecieramy i sortujemy, frezowanego w formacie chevron, aby gotowa podłoga czytała się jako jeden ciągły wzór, a nie pole osobnych desek.',
-        'Produkujemy dwanaście odcieni: od bielonego i greige przez naturalny dąb i miodowy do orzecha, czekolady i ciemnego espresso. Ta sama lamela obsłuży więc jasne wnętrze skandynawskie i ciemne, formalne — bez zmiany dostawcy.',
-        'W parkiecie dąb pokazuje, skąd ma swoją reputację: odporny na ruch, naprawialny, a nie jednorazowy, i po dekadzie wyglądający lepiej niż wiele podłóg pierwszego dnia.',
-      ],
-      keyFacts: [
-        { label: 'Wzór', value: 'Chevron' },
-        { label: 'Gatunek', value: 'Dąb europejski' },
-        { label: 'Odcienie', value: '12 odcieni standardowych' },
-        { label: 'Format', value: 'Według specyfikacji' },
-      ],
-      priceNote: 'Cena na zapytanie — wycena za metr kwadratowy według odcienia i formatu.',
-      sizesSummary: 'Format chevron, wymiary według specyfikacji',
-      gradesSummary: 'Klasy select i rustykalna, 12 odcieni',
-      advantages: [
-        'Dwanaście odcieni produkcyjnych od bielonego do ciemnego espresso',
-        'Format chevron frezowany pod ciasne, powtarzalne styki',
-        'Z naszego własnego sortowanego dębu — jeden dostawca od kłody do podłogi',
-        'Odporny i naprawialny, zaprojektowany na długą żywotność',
+        'Skośne końce frezowane pod szczelne, powtarzalne łączenia',
+        'Trzy długości klepki, by dopasować skalę wzoru do wnętrza',
+        'Dwanaście kolorów produkcyjnych, indywidualne na zamówienie',
+        'Ta sama konstrukcja 14 mm co deska i jodełka klasyczna',
       ],
       specs: [
         {
           group: 'Materiał',
           items: [
             { label: 'Gatunek', value: 'Dąb europejski' },
-            { label: 'Wzór', value: 'Chevron (jodła francuska)' },
-            { label: 'Odcienie', value: '12 odcieni standardowych, inne na zapytanie' },
+            { label: 'Wzór', value: 'Jodełka francuska (chevron)' },
+            { label: 'Konstrukcja', value: 'Warstwowa, 14 mm z warstwą użytkową dębu 3,2 mm' },
             { label: 'Pochodzenie', value: 'Ukraina' },
           ],
         },
         {
-          // TO CONFIRM — konstrukcja, grubość i warstwa użytkowa
           group: 'Format',
           items: [
-            { label: 'Konstrukcja', value: 'Lita lub warstwowa — podać w zapytaniu' },
-            { label: 'Grubość', value: 'Według specyfikacji' },
-            { label: 'Szerokość / długość', value: 'Według specyfikacji' },
-            { label: 'Powierzchnia', value: 'Olejowana lub lakierowana, szczotkowana na życzenie' },
+            { label: 'Szerokość', value: '125 mm' },
+            { label: 'Długości klepek', value: '500 / 600 / 700 mm' },
+            { label: 'Klasy', value: 'A-B Select, C Rustic' },
+            // TO CONFIRM — opcje wykończenia
+            { label: 'Powierzchnia', value: 'Olejowana lub lakierowana, szczotkowana na zamówienie' },
           ],
         },
         {
           group: 'Dostawa',
           items: [
-            { label: 'Pakowanie', value: 'Kartony na paletach, foliowane' },
+            { label: 'Opakowanie', value: 'Kartony na paletach, owinięte folią' },
             { label: 'Jednostka sprzedaży', value: 'Metr kwadratowy' },
-            { label: 'Próbki', value: 'Próbki odcieni przed potwierdzeniem zamówienia' },
+            { label: 'Próbki', value: 'Próbki klasy i koloru przed potwierdzeniem zamówienia' },
             { label: 'Warunki', value: 'EXW / FCA / CPT / DAP' },
           ],
         },
       ],
-      gradeBands: [],
-      notPermitted: [],
+    },
+
+    'oak-plank-flooring': {
+      name: 'Deska dębowa warstwowa',
+      shortName: 'Deska',
+      kicker: 'Trzy szerokości',
+      category: 'Deska warstwowa',
+      tagline: 'Długie, spokojne deski 125, 145 i 195 mm — najbardziej uniwersalna podłoga dębowa.',
+      shortDescription:
+        'Warstwowa deska dębowa w trzech szerokościach i różnych długościach do 2 500 mm, w klasach A-B i C.',
+      description: [
+        'Deska pasuje niemal do każdego wnętrza: długie deski układane w przesuniętych rzędach, usłojenie wzdłuż pomieszczenia. Produkujemy trzy szerokości — 125, 145 i 195 mm — aby skala deski odpowiadała skali pokoju.',
+        'Długości w każdej szerokości są różne — 600–1 400 mm przy 125, 800–1 600 mm przy 145 i 1 700–2 500 mm przy 195 mm — dzięki czemu łączenia nie układają się w linii, a podłoga wygląda jak naturalne drewno, a nie płytki.',
+        'Każda deska to warstwowy dąb 14 mm z warstwą użytkową 3,2 mm, wykończony naturalnie lub barwiony na naszej własnej linii i klasyfikowany jako A-B lub C.',
+      ],
+      advantages: [
+        'Trzy szerokości, od klasycznych 125 mm po szeroką deskę 195 mm',
+        'Różne długości do 2 500 mm dla naturalnego układu',
+        'Naturalne lub barwione wykończenie na własnej linii',
+        'Ta sama konstrukcja 14 mm co chevron i jodełka klasyczna',
+      ],
+      specs: [
+        {
+          group: 'Materiał',
+          items: [
+            { label: 'Gatunek', value: 'Dąb europejski' },
+            { label: 'Format', value: 'Deska, układ w przesuniętych rzędach' },
+            { label: 'Konstrukcja', value: 'Warstwowa, 14 mm z warstwą użytkową dębu 3,2 mm' },
+            { label: 'Pochodzenie', value: 'Ukraina' },
+          ],
+        },
+        {
+          group: 'Format',
+          items: [
+            { label: 'Szerokości', value: '125 / 145 / 195 mm' },
+            { label: 'Długości', value: '600–1 400 / 800–1 600 / 1 700–2 500 mm' },
+            { label: 'Klasy', value: 'A-B Select, C Rustic' },
+            // TO CONFIRM — opcje wykończenia
+            { label: 'Powierzchnia', value: 'Naturalna lub barwiona, olej lub lakier' },
+          ],
+        },
+        {
+          group: 'Dostawa',
+          items: [
+            { label: 'Opakowanie', value: 'Kartony na paletach, owinięte folią' },
+            { label: 'Jednostka sprzedaży', value: 'Metr kwadratowy' },
+            { label: 'Próbki', value: 'Próbki klasy i koloru przed potwierdzeniem zamówienia' },
+            { label: 'Warunki', value: 'EXW / FCA / CPT / DAP' },
+          ],
+        },
+      ],
+    },
+
+    'oak-herringbone-parquet': {
+      name: 'Parkiet dębowy jodełka klasyczna',
+      shortName: 'Jodełka',
+      kicker: 'Jodełka klasyczna',
+      category: 'Parkiet warstwowy',
+      tagline: 'Klepki z prostymi końcami układane w zygzak — klasyczny wzór jodełki.',
+      shortDescription:
+        'Warstwowa jodełka klasyczna z dębu o szerokości 125 mm, klepki 500, 600 i 700 mm, w klasach A-B i C.',
+      description: [
+        'Klepki jodełki mają proste końce: każda dochodzi do boku sąsiedniej, więc wzór biegnie schodkowym zygzakiem, a nie spotyka się w prostej spoinie. To klasyczna podłoga, która najlepiej ukrywa łączenia w często uczęszczanych pomieszczeniach.',
+        'Klepki mają 125 mm szerokości i 500, 600 lub 700 mm długości, na naszej konstrukcji warstwowej 14 mm z warstwą użytkową z dębu europejskiego 3,2 mm — ta sama budowa co deska i chevron.',
+        'Przy tym samym wymiarze i klasie jodełka klasyczna jest tańsza od chevronu — to najbardziej ekonomiczna droga do podłogi we wzór w naszej ofercie.',
+      ],
+      advantages: [
+        'Klepki z prostymi końcami do tradycyjnego układu w zygzak',
+        'Trzy długości klepki, by dopasować skalę wzoru do wnętrza',
+        'Najbardziej ekonomiczna podłoga we wzór w ofercie',
+        'Ta sama konstrukcja 14 mm co deska i chevron',
+      ],
+      specs: [
+        {
+          group: 'Materiał',
+          items: [
+            { label: 'Gatunek', value: 'Dąb europejski' },
+            { label: 'Wzór', value: 'Jodełka klasyczna' },
+            { label: 'Konstrukcja', value: 'Warstwowa, 14 mm z warstwą użytkową dębu 3,2 mm' },
+            { label: 'Pochodzenie', value: 'Ukraina' },
+          ],
+        },
+        {
+          group: 'Format',
+          items: [
+            { label: 'Szerokość', value: '125 mm' },
+            { label: 'Długości klepek', value: '500 / 600 / 700 mm' },
+            { label: 'Klasy', value: 'A-B Select, C Rustic' },
+            // TO CONFIRM — opcje wykończenia
+            { label: 'Powierzchnia', value: 'Olejowana lub lakierowana, szczotkowana na zamówienie' },
+          ],
+        },
+        {
+          group: 'Dostawa',
+          items: [
+            { label: 'Opakowanie', value: 'Kartony na paletach, owinięte folią' },
+            { label: 'Jednostka sprzedaży', value: 'Metr kwadratowy' },
+            { label: 'Próbki', value: 'Próbki klasy i koloru przed potwierdzeniem zamówienia' },
+            { label: 'Warunki', value: 'EXW / FCA / CPT / DAP' },
+          ],
+        },
+      ],
     },
   },
 
   photos: {
-    oakGradeA: {
-      alt: 'Deski dębowe obrzynane klasy I o czystej, równej strukturze',
-      caption: 'Deski dębowe obrzynane — klasa I',
+    showroom: {
+      alt: 'Ściana showroomu z panelami parkietu dębowego w jodełkę francuską i klasyczną',
+      caption: 'Showroom — chevron i jodełka',
     },
-    oakGradeB: {
-      alt: 'Deski dębowe obrzynane klasy II z małymi zdrowymi sękami',
-      caption: 'Deski dębowe obrzynane — klasa II',
+    interiorPlank: {
+      alt: 'Szeroka deska dębowa w korytarzu, a w sypialni za nim chevron',
+      caption: 'Deska i chevron po montażu',
     },
-    oakGradeC: {
-      alt: 'Deski dębowe obrzynane klasy III z sękami i bielą',
-      caption: 'Deski dębowe obrzynane — klasa III',
+    chevronInterior: {
+      alt: 'Naturalny dębowy chevron ułożony w holu pod schodami',
+      caption: 'Chevron, dąb naturalny',
     },
-    oakEdge: {
-      alt: 'Detal krawędzi struganej deski dębowej o grubości 30 mm',
-      caption: 'Detal krawędzi — dąb 30 mm',
+    plankSelect: {
+      alt: 'Jasne deski dębowe klasy A-B ułożone na palecie',
+      caption: 'Deska — klasa A-B Select',
     },
-    machined: {
-      alt: 'Obrobione deski dębowe i sosnowe ułożone przed pakowaniem',
-      caption: 'Obrobione deski przed pakowaniem',
+    herringboneShowroom: {
+      alt: 'Dwa panele dębowej jodełki klasycznej w showroomie',
+      caption: 'Jodełka klasyczna — panele w showroomie',
     },
-    pinePacks: {
-      alt: 'Spięte pakiety desek sosnowych ułożone na placu',
-      caption: 'Pakiety desek sosnowych, gotowe do załadunku',
+    plankFinishingLinePoster: {
+      alt: 'Deski dębowe na wałkach linii wykończeniowej',
+      caption: 'Deska na linii wykończeniowej',
     },
-    pineBundles: {
-      alt: 'Łaty i deski sosnowe powiązane na eksport',
-      caption: 'Powiązane przekroje sosnowe',
+    plankShortBoardsPoster: {
+      alt: 'Deski dębowe wychodzące z maszyny wykończeniowej',
+      caption: 'Deski na wyjściu z linii',
     },
-    pineBeams: {
-      alt: 'Belki i deski sosnowe ułożone w tartaku',
-      caption: 'Belki sosnowe',
+    chevronBlanksPoster: {
+      alt: 'Ułożone półfabrykaty chevronu ze skośnymi końcami',
+      caption: 'Półfabrykaty chevronu po profilowaniu',
     },
-    pineYard: {
-      alt: 'Duże stosy drewna sosnowego na placu eksportowym',
-      caption: 'Zapas na placu — drewno sosnowe',
+    plankTonedLinePoster: {
+      alt: 'Szaro barwione deski dębowe na linii wałkowej',
+      caption: 'Barwiona deska na linii',
     },
     parquet1: {
       alt: 'Parkiet dębowy chevron w odcieniu Smoked Cognac',
@@ -979,6 +882,25 @@ export const pl: Dictionary = {
     parquet12: {
       alt: 'Parkiet dębowy chevron w odcieniu Chocolate',
       caption: 'Parkiet — Chocolate',
+    },
+  },
+
+  videos: {
+    plankFinishingLine: {
+      alt: 'Wideo: deski dębowe przesuwają się po linii wykończeniowej',
+      caption: 'Deska na linii wykończeniowej',
+    },
+    plankShortBoards: {
+      alt: 'Wideo: deski dębowe wychodzą z maszyny wykończeniowej',
+      caption: 'Deski na wyjściu z linii',
+    },
+    chevronBlanks: {
+      alt: 'Wideo: półfabrykaty chevronu ze skośnymi końcami po profilowaniu',
+      caption: 'Półfabrykaty chevronu',
+    },
+    plankTonedLine: {
+      alt: 'Wideo: szaro barwione deski dębowe na linii wałkowej',
+      caption: 'Barwiona deska na linii',
     },
   },
 

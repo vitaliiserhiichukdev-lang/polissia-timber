@@ -33,7 +33,7 @@ const LIMITS = {
   grade: 40,
   dimensions: 200,
   volume: 200,
-  moisture: 40,
+  finish: 40,
   destination: 160,
   incoterms: 20,
   message: 4000,
@@ -69,32 +69,29 @@ const clean = (value: unknown, field: Field): string =>
   typeof value === 'string' ? value.trim().slice(0, LIMITS[field]) : ''
 
 /**
- * The form posts machine values — a product slug, a grade numeral, a moisture
- * code. Left as they are, the email reads "oak-edged-boards" and "kd". These
+ * The form posts machine values — a product slug, a grade code, a finish
+ * code. Left as they are, the email reads "oak-chevron-parquet" and "AB". These
  * maps turn them back into something a person can act on.
  *
  * Deliberately English regardless of the visitor's language: one inbox, one
  * reading language, and the enquiry's own language is stated on its own row.
  */
 const PRODUCTS: Record<string, string> = {
-  'oak-edged-boards': 'Oak edged boards',
-  'pine-construction-timber': 'Pine construction timber',
-  'oak-parquet-boards': 'Natural wood parquet boards',
-  mixed: 'Mixed / several products',
+  'oak-chevron-parquet': 'Oak chevron parquet',
+  'oak-plank-flooring': 'Oak plank flooring',
+  'oak-herringbone-parquet': 'Oak herringbone parquet',
+  mixed: 'Mixed / several formats',
 }
 
 const GRADES: Record<string, string> = {
-  I: 'Grade I',
-  II: 'Grade II',
-  III: 'Grade III',
-  IV: 'Grade IV',
-  mixed: 'Mixed grade',
+  AB: 'Grade A-B (Select)',
+  C: 'Grade C (Rustic)',
 }
 
-const MOISTURE: Record<string, string> = {
-  kd: 'Kiln dried (KD)',
-  ad: 'Air dried (AD)',
-  fresh: 'Fresh sawn',
+const FINISHES: Record<string, string> = {
+  unfinished: 'Unfinished',
+  oiled: 'Oiled',
+  lacquered: 'Lacquered',
 }
 
 const LANGUAGES: Record<string, string> = {
@@ -144,7 +141,7 @@ export async function handleQuote(request: Request): Promise<Response> {
     grade: clean(payload.grade, 'grade'),
     dimensions: clean(payload.dimensions, 'dimensions'),
     volume: clean(payload.volume, 'volume'),
-    moisture: clean(payload.moisture, 'moisture'),
+    finish: clean(payload.finish, 'finish'),
     destination: clean(payload.destination, 'destination'),
     incoterms: clean(payload.incoterms, 'incoterms'),
     message: clean(payload.message, 'message'),
@@ -184,8 +181,8 @@ export async function handleQuote(request: Request): Promise<Response> {
     ['Product', productName],
     ['Grade', label(GRADES, form.grade)],
     ['Dimensions', form.dimensions || '—'],
-    ['Volume / month', form.volume || '—'],
-    ['Moisture', label(MOISTURE, form.moisture)],
+    ['Quantity', form.volume || '—'],
+    ['Finish', label(FINISHES, form.finish)],
     ['Destination', form.destination || '—'],
     ['Delivery terms', form.incoterms || '—'],
     ['Language', label(LANGUAGES, payload.locale ?? '', 'Unknown')],

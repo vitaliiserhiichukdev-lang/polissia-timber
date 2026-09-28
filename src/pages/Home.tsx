@@ -17,11 +17,10 @@ export default function Home() {
     <>
       <Hero />
       {/*
-        Products first. The audit argued for compliance directly under the hero,
-        and EUDR is the filter that decides whether a shipment is possible at all
-        — but a first-time visitor has to know what is being sold before any of
-        that means anything, and the three lines were previously four sections
-        down where nobody found them. Compliance follows immediately.
+        The parquet picker first. EUDR is the filter that decides whether a
+        shipment is possible at all, but a first-time visitor has to know what
+        is being sold — and at what price — before any of that means anything.
+        Compliance follows immediately.
       */}
       <Catalog />
       <Compliance />

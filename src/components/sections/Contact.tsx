@@ -3,12 +3,12 @@ import Reveal from '../ui/Reveal'
 import Icon, { type IconName } from '../ui/Icon'
 import SectionReveal from '../ui/SectionReveal'
 import QuoteForm from '../product/QuoteForm'
-import { brand } from '../../data/contact'
+import WhatsAppIcon from '../ui/WhatsAppIcon'
+import { brand, whatsappHref } from '../../data/contact'
 import { useI18n } from '../../i18n/useI18n'
 
 export default function Contact() {
-  const { t, photo } = useI18n()
-  const sidePhoto = photo.oakGradeB
+  const { t } = useI18n()
 
   const rows: { icon: IconName; label: string; value: string; href?: string }[] = [
     { icon: 'mail', label: t.contact.labels.email, value: brand.email, href: `mailto:${brand.email}` },
@@ -54,16 +54,25 @@ export default function Contact() {
               ))}
             </ul>
 
-            <div className="overflow-hidden rounded-3xl border border-line">
-              <img
-                src={sidePhoto.src}
-                alt={sidePhoto.alt}
-                width={sidePhoto.width}
-                height={sidePhoto.height}
-                loading="lazy"
-                decoding="async"
-                className="h-56 w-full object-cover"
-              />
+            {/* The fastest channel gets its own panel: a buyer on a phone would
+                rather send a photo of a floor plan than fill in a form. */}
+            <div className="flex flex-col gap-4 rounded-3xl bg-ink-900 p-6 text-inverse">
+              <span className="grid size-12 place-items-center rounded-2xl bg-whatsapp text-white">
+                <WhatsAppIcon size={26} />
+              </span>
+              <div>
+                <h3 className="text-h4 text-inverse">{t.contact.whatsappTitle}</h3>
+                <p className="mt-2 text-sm text-inverse-muted">{t.contact.whatsappBody}</p>
+              </div>
+              <a
+                href={whatsappHref(t.whatsapp.general)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-whatsapp self-start"
+              >
+                <WhatsAppIcon size={18} />
+                {t.common.whatsappCta}
+              </a>
             </div>
 
             <p className="text-sm text-muted">

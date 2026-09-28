@@ -1,31 +1,36 @@
 import type { Dictionary } from './types'
 import { brand } from '../data/contact'
+import { formatEuro, highestPrice, priceFrom } from '../data/pricing'
+
+const from = formatEuro(priceFrom, true)
+const top = formatEuro(highestPrice('oak-chevron-parquet'), true)
 
 /**
  * German copy.
  *
- * Sortier- und Trocknungsbegriffe folgen der schriftlichen Spezifikation des
- * Unternehmens (Festast, Schwarzast, Splintholz, eingewachsene Rinde, Markröhre,
- * Dampfschaden, Holzwurmbefall). Diese Begriffe sind kaufentscheidend: eine
- * falsch übersetzte Toleranz ist ein Handelsstreit — vor der Veröffentlichung
- * von einem Muttersprachler aus der Branche prüfen lassen.
+ * Parkettbegriffe: Mehrschichtparkett, Nutzschicht, Landhausdiele, Chevron
+ * (französisches Fischgrät), Fischgrät. „Englischer Verband“ ist im Deutschen
+ * ein anderes Verlegemuster und wird deshalb bewusst nicht für Fischgrät
+ * verwendet. Sortierungen A-B (Select) und C (Rustikal) wie auf der Preisliste.
+ * Vor der Veröffentlichung von einem Muttersprachler aus der Branche prüfen
+ * lassen — eine falsch übersetzte Angabe ist ein Handelsstreit.
  */
 export const de: Dictionary = {
   locale: 'de',
   htmlLang: 'de',
   label: 'Deutsch',
   short: 'DE',
+  decimalComma: true,
 
   meta: {
-    homeTitle: `${brand.name} — Schnittholz aus der Ukraine für europäische Märkte`,
-    homeDescription:
-      'Ukrainischer Hersteller und Exporteur von Schnittholz: besäumte Eichenbretter der Klassen I–IV, Kiefernbauholz und Eichenparkett. Stabile Liefermengen und Zustellung in ganz Europa.',
+    homeTitle: `${brand.name} — Mehrschichtparkett aus Eiche aus der Ukraine`,
+    homeDescription: `Ukrainischer Hersteller und Exporteur von Eichen-Mehrschichtparkett: Landhausdiele, Chevron und Fischgrät in den Sortierungen A-B und C, 14 mm mit 3,2 mm Nutzschicht. Preise ab ${from} pro m², Lieferung in ganz Europa.`,
     notFoundTitle: `Seite nicht gefunden | ${brand.name}`,
     notFoundDescription: 'Die gesuchte Seite existiert nicht.',
   },
 
   nav: [
-    { key: 'products', label: 'Produkte', href: '/#products' },
+    { key: 'products', label: 'Parkett', href: '/#products' },
     { key: 'compliance', label: 'Nachweise', href: '/#compliance' },
     { key: 'about', label: 'Unternehmen', href: '/#about' },
     { key: 'production', label: 'Produktion', href: '/#production' },
@@ -38,99 +43,127 @@ export const de: Dictionary = {
   common: {
     requestQuote: 'Angebot anfragen',
     quoteShort: 'Angebot',
-    viewProducts: 'Produkte ansehen',
-    viewDetails: 'Details ansehen',
-    viewProduct: 'Zum Produkt',
-    onRequest: 'Auf Anfrage',
-    priceFrom: 'Preis ab',
-    pricing: 'Preis',
-    quotedPerSpecification: 'Angebot nach Spezifikation',
-    gradeBased: 'Nach Sortierklasse, EUR / m³',
+    viewProducts: 'Parkett wählen',
+    viewProduct: 'Zum Format',
+    priceFrom: 'ab',
     skipToContent: 'Zum Inhalt springen',
     openMenu: 'Menü öffnen',
     closeMenu: 'Menü schließen',
     language: 'Sprache',
     home: 'Startseite',
-    products: 'Produkte',
-    perCubicMetre: '/ m³',
-    priceUnit: 'EUR / m³',
+    products: 'Parkett',
+    perSquareMetre: '/ m²',
+    priceUnit: 'EUR / m²',
     openImage: 'Bild öffnen',
-    closeViewer: 'Bildansicht schließen',
-    previousImage: 'Vorheriges Bild',
-    nextImage: 'Nächstes Bild',
+    closeViewer: 'Ansicht schließen',
+    previousImage: 'Vorheriges',
+    nextImage: 'Nächstes',
     viewFullSize: 'In voller Größe ansehen',
+    playVideo: 'Video abspielen',
+    pauseVideo: 'Video anhalten',
+    video: 'Video',
     mm: 'mm',
-    logoSub: 'Schnittholz aus der Ukraine · Export',
+    logoSub: 'Eichenparkett · Export',
+    whatsapp: 'WhatsApp',
+    whatsappCta: 'Per WhatsApp schreiben',
+  },
+
+  whatsapp: {
+    general:
+      'Guten Tag! Ich interessiere mich für Ihr Eichenparkett. Könnten Sie mir die aktuelle Preisliste und Verfügbarkeit senden?',
+    selection:
+      'Guten Tag! Ich interessiere mich für {product}, Sortierung {grade}, {size} — {price} pro m² laut Ihrer Preisliste. Bitte bestätigen Sie Verfügbarkeit und Lieferung nach: ',
   },
 
   hero: {
-    eyebrow: 'Ukraine · Hersteller & Exporteur',
-    titleLead: 'Schnittholz aus der Ukraine',
-    titleAccent: 'für europäische Märkte',
-    lead: 'Wir produzieren und exportieren Schnittholz nach Europa: besäumte Eichenbretter, sortiert nach schriftlicher Spezifikation, Kiefernbauholz und Parkett aus massiver Eiche. Qualitätskontrolle in jeder Stufe, exportfertig verpackt und dokumentiert.',
-    insetCaption: 'Besäumtes Eichenbrett · Klasse I · 30 mm',
-    scrollLabel: 'Zum Abschnitt Produkte springen',
-    imageAlt: 'Pakete ukrainischen Schnittholzes gestapelt auf dem Exportplatz',
+    eyebrow: 'Ukraine · Parketthersteller & Exporteur',
+    titleLead: 'Mehrschichtparkett aus Eiche',
+    titleAccent: 'Diele, Chevron, Fischgrät',
+    lead: 'Europäische Eiche auf einem 14-mm-Element mit 3,2 mm Nutzschicht, sortiert nach A-B oder C und mit offenen Preisen pro Quadratmeter. Von uns produziert, oberflächenbehandelt und verpackt, geliefert in ganz Europa.',
+    insetCaption: 'Chevron, verlegt',
+    priceBadge: 'Preisliste ab',
+    imageAlt: 'Ausstellungswand mit Chevron- und Fischgrät-Parkettmustern aus Eiche',
   },
 
   stats: [
-    {
-      value: '4',
-      label: 'Sortierklassen',
-      detail: 'Klassen I–IV, geprüft nach unserer schriftlichen Eichenspezifikation.',
-    },
-    {
-      value: '5',
-      label: 'Standardquerschnitte Eiche',
-      detail: 'Breiten von 80 bis 230 mm, durchgehend 30 mm Dicke.',
-    },
-    {
-      value: '12',
-      label: 'Parkett-Farbtöne',
-      detail: 'Chevron-Eichenparkett, von weiß geölt bis dunkles Espresso.',
-    },
-    {
-      value: 'EU',
-      label: 'Liefergebiet',
-      detail: 'Regelmäßige Komplettladungen und Container in ganz Europa.',
-    },
+    { value: '3', label: 'Formate', detail: 'Landhausdiele, Chevron und Fischgrät.' },
+    { value: '2', label: 'Sortierungen', detail: 'A-B Select und C Rustikal, getrennt bepreist.' },
+    { value: '3,2 mm', label: 'Nutzschicht Eiche', detail: 'Auf 14 mm — dick genug zum Abschleifen und Erneuern.' },
+    { value: '12', label: 'Farbtöne', detail: 'Chevron von weiß geölt bis Espresso.' },
   ],
 
   about: {
-    eyebrow: 'Über das Unternehmen',
-    title: 'Ein ukrainischer Hersteller, ausgerichtet auf europäische Einkäufer',
-    lead: 'Wir bieten ein breites Sortiment an Massivholzprodukten, gefertigt nach aktuellen Qualitätsstandards und den Anforderungen internationaler Märkte — und wir steuern den gesamten Weg vom Rundholz bis zum beladenen LKW.',
+    eyebrow: 'Über uns',
+    title: 'Ein ukrainischer Parketthersteller für europäische Kunden',
+    lead: 'Wir fertigen Mehrschichtböden aus Eiche in drei Formaten und zwei Sortierungen — und steuern den ganzen Weg von der Eichenlamelle bis zum beladenen LKW.',
     action: 'So produzieren wir',
     quote:
       '„Wir setzen auf langfristige Partnerschaften und garantieren bei jedem Auftrag hohe Produktqualität.“',
     highlights: [
       {
         title: 'Produktion und Export aus einer Hand',
-        body: 'Wir sind auf Herstellung und Export von Schnittholz nach Europa spezialisiert und decken den gesamten Weg ab — von der Rundholzannahme bis zum beladenen LKW. Das bedeutet eine Verantwortungsstelle für Ihren Auftrag statt einer Kette von Zwischenhändlern.',
+        body: 'Wir produzieren die Elemente, behandeln die Oberfläche und versenden selbst. Das heißt: ein Ansprechpartner für Ihren Auftrag — keine Kette von Zwischenhändlern zwischen Werk und Lager.',
       },
       {
-        title: 'Kontrolle in jeder Stufe',
-        body: 'Jede Produktionsstufe wird kontrolliert — von der Rohstoffauswahl über Einschnitt, Trocknung und Sortierung bis zu Verpackung und Lieferung. Jede Partie wird gegen eine schriftliche Spezifikation geprüft, bevor sie das Werk verlässt.',
+        title: 'Jedes Element sortiert',
+        body: 'Jedes Element wird vor dem Verpacken nach A-B oder C sortiert, sodass eine Nachbestellung in derselben Sortierung denselben Boden ergibt — Partie für Partie, Objekt für Objekt.',
       },
       {
-        title: 'Exportfertig nach europäischen Anforderungen',
-        body: 'Alle Produkte durchlaufen die Qualitätskontrolle, erfüllen europäische Anforderungen und sind exportfertig: nach Klasse sortiert, umbändelt, markiert und dokumentiert, damit Abfertigung und Entladung ohne Überraschungen ablaufen.',
+        title: 'Exportfertig nach EU-Anforderungen',
+        body: 'Nach Format und Sortierung in Kartons auf Paletten verpackt, gekennzeichnet und dokumentiert — damit eine Sendung ohne Überraschungen verzollt und entladen wird.',
       },
     ],
-    tags: ['Eigene Produktion', 'Schriftliche Spezifikationen', 'Exportdokumente'],
+    tags: ['Eigene Produktion', 'Offene Preisliste', 'Exportdokumente'],
   },
 
   catalog: {
-    eyebrow: 'Produktkatalog',
-    title: 'Drei Produktlinien, ein Standard',
-    lead: 'Besäumte Eichenbretter sind unser Kerngeschäft. Daneben liefern wir Kiefernbauholz und Parkett aus massiver Eiche — alles von uns produziert, sortiert und verpackt.',
-    action: 'Vollständige Preisliste anfragen',
+    eyebrow: 'Parkettsortiment',
+    title: 'Format, Sortierung und Maß wählen',
+    lead: 'Drei Formate in zwei Sortierungen, alle auf demselben 14-mm-Mehrschichtelement. Wählen Sie eine Kombination, um Preis pro Quadratmeter, Maße und Aufnahmen aus unserer Linie zu sehen — und senden Sie sie als Anfrage oder WhatsApp-Nachricht.',
     footnote:
-      'Sonderquerschnitte, Sonderlängen und Klassenmischungen fertigen wir auf Auftrag — senden Sie uns Ihre Spezifikation, wir bestätigen Machbarkeit und Preis.',
-    cardLabels: {
-      woodType: 'Holzart',
-      sizes: 'Verfügbare Maße',
-      grade: 'Sortierklasse',
+      'Andere Breiten, Längen, Oberflächen und Sortierungsmischungen fertigen wir auf Bestellung — senden Sie Ihre Spezifikation, wir bestätigen Machbarkeit und Preis.',
+    formatStep: 'Format',
+    gradeStep: 'Sortierung',
+    sizeStep: 'Maß',
+    priceLabel: 'Preis',
+    priceNote: 'Pro m², laut aktueller Preisliste. Der Endpreis wird im Angebot bestätigt.',
+    specs: { thickness: 'Stärke', wearLayer: 'Nutzschicht', width: 'Breite', length: 'Länge' },
+    randomLengths: 'Wechsellängen',
+    fixedLengths: 'Stablängen',
+    details: 'Alles zu {product}',
+  },
+
+  priceList: {
+    eyebrow: 'Preisliste',
+    title: 'Alle Formate und Sortierungen auf einen Blick',
+    lead: 'Die vollständige Liste, Zeile für Zeile, in Euro pro Quadratmeter. Alle Elemente 14 mm mit 3,2 mm Nutzschicht aus Eiche.',
+    size: 'Maß',
+    footnote:
+      'Preise pro Quadratmeter und unverbindlich: Der Endbetrag hängt von Menge, Oberfläche und Lieferbedingungen ab und wird im Angebot bestätigt.',
+  },
+
+  // TO CONFIRM — die Beschreibungen folgen der üblichen Lesart von A-B und C;
+  // durch die schriftlichen Sortierregeln des Unternehmens ersetzen.
+  grades: {
+    AB: {
+      name: 'Select',
+      summary: 'Ruhige, gleichmäßige Maserung für einen klaren, einheitlichen Boden.',
+      traits: [
+        'Gleichmäßige Farbe, geringe Unterschiede zwischen den Elementen',
+        'Nur kleine, gesunde Äste, vereinzelt',
+        'Minimaler Splint',
+        'Für moderne und minimalistische Räume',
+      ],
+    },
+    C: {
+      name: 'Rustikal',
+      summary: 'Lebhafte Maserung, Äste und Farbspiel — der natürlichste Look.',
+      traits: [
+        'Ausgeprägte Maserung und natürliche Farbunterschiede',
+        'Größere gesunde Äste und gekittete Risse',
+        'Splint zulässig',
+        'Ein charaktervoller Boden zu einem niedrigeren Preis',
+      ],
     },
   },
 
@@ -144,15 +177,15 @@ export const de: Dictionary = {
   compliance: {
     eyebrow: 'Nachweise und Dokumentation',
     title: 'EUDR-bereit: Geodaten der Flächen und DDS-Referenz je Sendung',
-    lead: 'Seit Anwendung der EU-Entwaldungsverordnung darf ein Importeur Holz ohne flächenbezogene Herkunftsdaten und Sorgfaltserklärung nicht auf dem EU-Markt in Verkehr bringen. Wir stellen dieses Paket mit der Sendung zusammen, nicht erst auf Nachfrage.',
+    lead: 'Seit Anwendung der EU-Entwaldungsverordnung darf ein Importeur Holzfußböden ohne flächenbezogene Herkunftsdaten und Sorgfaltserklärung nicht auf dem EU-Markt in Verkehr bringen. Wir stellen dieses Paket mit der Sendung zusammen, nicht erst auf Nachfrage.',
     eudr: {
       badge: 'EUDR',
       title: 'Was Sie mit jeder Sendung erhalten',
-      body: 'Die Verordnung (EU) 2023/1115 macht den Importeur dafür verantwortlich, nachzuweisen, dass das Holz entwaldungsfrei und legal geerntet ist. Dieser Nachweis muss vom Lieferanten kommen, deshalb erstellen wir ihn als Teil des Auftrags und nicht als Papierkram am Ende.',
+      body: 'Die Verordnung (EU) 2023/1115 macht den Importeur dafür verantwortlich, nachzuweisen, dass die Eiche entwaldungsfrei und legal geerntet ist. Dieser Nachweis muss vom Lieferanten kommen, deshalb erstellen wir ihn als Teil des Auftrags und nicht als Papierkram am Ende.',
       points: [
         'Geokoordinaten der Erntefläche für die jeweilige Partie',
-        'Holzart, Volumen und Ernteland je Paket, passend zur Packliste',
-        'Legalitätsnachweis der Ernte, rückverfolgbar vom Stamm bis zum Paket',
+        'Holzart, Volumen und Ernteland der Partie, passend zur Packliste',
+        'Legalitätsnachweis der Ernte, rückverfolgbar vom Stamm bis zur Palette',
         'DDS-Referenz für Ihre Meldung im EU-TRACES-System',
       ],
       note: 'Senden Sie Spezifikation und Zielort — wir bestätigen den genauen Dokumentensatz für Ihre Importroute vor der Beauftragung.',
@@ -160,15 +193,9 @@ export const de: Dictionary = {
     documentsTitle: 'Exportdokumente',
     documents: [
       {
-        icon: 'shield',
-        title: 'Pflanzengesundheitszeugnis',
-        body: 'Wird vom staatlichen Pflanzenschutzdienst für jede Schnittholzsendung ausgestellt, die die Ukraine verlässt.',
-        status: 'Je Sendung',
-      },
-      {
         icon: 'box',
         title: 'ISPM-15 Hitzebehandlung',
-        body: 'Markierung für Holzverpackungen, Unterlagen und Paletten zur Ladungssicherung.',
+        body: 'Markierung der Holzpaletten und Unterlagen, auf denen die Kartons reisen.',
         status: 'Je Sendung',
       },
       {
@@ -180,7 +207,7 @@ export const de: Dictionary = {
       {
         icon: 'stack',
         title: 'Packliste und Spezifikation',
-        body: 'Volumen, Querschnitt und Klasse je Paket, übereinstimmend mit der Markierung auf der Bänderung, damit der Wareneingang die Lieferung gegen die Rechnung prüfen kann.',
+        body: 'Format, Maß, Sortierung und Quadratmeter je Palette, übereinstimmend mit den Kartonetiketten, damit der Wareneingang die Lieferung gegen die Rechnung prüfen kann.',
         status: 'Bei jeder Ladung',
       },
       {
@@ -197,129 +224,112 @@ export const de: Dictionary = {
 
   process: {
     eyebrow: 'Qualität und Produktion',
-    title: 'Fünf kontrollierte Stufen, vom Stamm bis zur Beladung',
-    lead: 'Wir kontrollieren jede Produktionsstufe — von der Rohstoffauswahl bis zu Verpackung und Lieferung. Jede Stufe hat eine festgelegte Prüfung, bevor das Material weitergeht.',
+    title: 'Vier kontrollierte Stufen, von der Lamelle bis zur Palette',
+    lead: 'Jedes Element durchläuft dieselbe Linie und dieselben Prüfungen, bevor es verpackt wird. Die Bilder und Clips unten stammen aus unserer eigenen Produktion.',
     steps: [
       {
         icon: 'oak',
-        title: 'Rohstoffauswahl',
-        body: 'Stämme werden nach Holzart, Durchmesser und Gesundheit ausgewählt, bevor sie die Sägelinie erreichen. Material mit Markfehlern, Insektenbefall oder Dampfschaden wird bei der Annahme aussortiert — dort ist die Fehlerbeseitigung am günstigsten.',
+        title: 'Nutzschicht aus Eiche',
+        body: 'Eichenlamellen werden nach Maserung und Farbe ausgewählt und als 3,2-mm-Nutzschicht mit einer stabilen Trägerlage verbunden — so entsteht ein 14-mm-Mehrschichtelement.',
       },
       {
         icon: 'factory',
-        title: 'Einschnitt und Fertigung',
-        body: 'Besäumte Bretter werden auf feste Querschnitte geschnitten — 30 mm Dicke in Breiten von 80 bis 230 mm — mit sauberen, parallelen Kanten und rechtwinklig gekappten Enden. Kiefernquerschnitte fertigen wir nach den Maßen des jeweiligen Projekts.',
+        title: 'Zuschnitt und Profilierung',
+        body: 'Die Elemente werden ins Format geschnitten — Dielen in Wechsellängen, Fischgrätstäbe mit geraden Enden, Chevron-Rohlinge mit schrägen Enden — und so profiliert, dass die Fugen dicht schließen.',
       },
       {
-        icon: 'shield',
-        title: 'Trocknung und Qualitätskontrolle',
-        body: 'Die Bretter werden zur kontrollierten Trocknung gestapelt und anschließend Stück für Stück nach unserer schriftlichen Spezifikation sortiert: Astgröße und -art, Splintholz, eingewachsene Rinde, Risse. Markröhre, Holzwurmbefall, Dampfschaden und Stirnrisse sind in keiner Klasse zulässig.',
+        icon: 'layers',
+        title: 'Oberflächenbehandlung',
+        body: 'Schleifen, Bürsten und eine natürliche oder farbige Oberfläche auf der Walzenlinie, damit jedes Element eines Auftrags dieselbe Oberfläche trägt.',
       },
       {
         icon: 'box',
-        title: 'Verpackung',
-        body: 'Jede Klasse wird separat in gleichmäßige Pakete verpackt, umbändelt, kantengeschützt und mit Maß, Klasse und Volumen markiert, damit der Wareneingang eine Lieferung in Minuten prüfen kann.',
-      },
-      {
-        icon: 'truck',
-        title: 'Export und Lieferung',
-        body: 'Wir beladen Komplettladungen und Container mit vollständigen Exportdokumenten und halten Sie vom Versand bis zur Entladung überall in Europa auf dem Laufenden.',
+        title: 'Sortierung und Verpackung',
+        body: 'Jedes Element wird nach A-B oder C sortiert, nach Format und Sortierung in Kartons verpackt, palettiert und für den schnellen Wareneingang gekennzeichnet.',
       },
     ],
     callout: {
-      title: 'Schriftliche Spezifikationen statt mündlicher Zusagen',
-      body: 'Unsere Sortierregeln für Eiche legen genau fest, was jede Klasse zulässt — Astgröße und -art, Splintholz, eingewachsene Rinde — und was nie akzeptiert wird: Markröhre, Dampfschaden, Holzwurmbefall, Mikrorisse, Stirnrisse und doppeltes Splintholz.',
-      action: 'Sortierregeln lesen',
+      title: 'Eine offene Preisliste statt „Preis auf Anfrage“',
+      body: 'Jedes Format, jedes Maß und jede Sortierung hat einen veröffentlichten Preis pro Quadratmeter. Was Sie in der Auswahl sehen, ist die Zeile, nach der wir anbieten.',
+      action: 'Zur Preisliste',
     },
     capacityTitle: 'Produktionskapazität',
     capacityLead:
-      'Die Zahlen, die zu prüfen sind, bevor Sie eine Produktionssaison einem Lieferanten anvertrauen.',
-    // TO CONFIRM — die Produktion muss diese Werte vor dem Launch liefern.
+      'Die Zahlen, die sich zu prüfen lohnen, bevor Sie eine Saison an Projekten auf einen Lieferanten planen.',
+    // TO CONFIRM — Angaben der Produktion. Werte mit `TBC` werden nicht angezeigt.
     capacity: [
       {
         value: 'TBC',
-        unit: 'm³ / Monat',
-        label: 'Ausstoß Eichenschnittholz',
-        detail: 'Besäumte Bretter mit 30 mm über alle fünf Standardquerschnitte.',
+        unit: 'm² / Monat',
+        label: 'Parkettausstoß',
+        detail: 'Über alle drei Formate und beide Sortierungen.',
       },
       {
         value: 'TBC',
-        unit: 'm³ / Schicht',
-        label: 'Durchsatz Sägelinie',
-        detail: 'Von der Rundholzannahme zum besäumten, gekappten Brett.',
+        unit: 'm² / Schicht',
+        label: 'Oberflächenlinie',
+        detail: 'Geschliffene und behandelte Elemente pro Schicht.',
       },
       {
-        value: 'TBC',
-        unit: 'Kammern',
-        label: 'Trocknungskapazität',
-        detail: 'Kammern im Betrieb, mit dem Volumen je Charge.',
+        value: '3',
+        unit: 'Formate',
+        label: 'Diele, Chevron, Fischgrät',
+        detail: 'Alle auf einer 14-mm-Mehrschichtkonstruktion.',
       },
       {
-        value: 'TBC',
-        unit: 'm³ / Charge',
-        label: 'Kammerfüllung',
-        detail: 'Getrocknetes Volumen je Zyklus — es bestimmt die Partiegröße mit einheitlicher Holzfeuchte.',
-      },
-      {
-        value: '5',
-        unit: 'Querschnitte',
-        label: 'Standardquerschnitte Eiche',
-        detail: 'Breiten 80, 115, 150, 170 und 230 mm — laufend vorrätig, nicht auf Auftrag geschnitten.',
-      },
-      {
-        value: '4',
-        unit: 'Klassen',
-        label: 'Sortierklassen',
-        detail: 'Klassen I–IV, Stück für Stück nach der schriftlichen Spezifikation geprüft.',
+        value: '2',
+        unit: 'Sortierungen',
+        label: 'A-B und C',
+        detail: 'Jedes Element vor dem Verpacken sortiert.',
       },
     ],
     capacityNote:
-      'Jedes Stück wird vor dem Verpacken nach der schriftlichen Spezifikation sortiert, sodass eine Nachbestellung derselben Klasse in Ihrem Betrieb dieselbe Ausbeute liefert.',
+      'Jedes Element wird vor dem Verpacken sortiert, deshalb ergibt eine Nachbestellung in derselben Sortierung denselben Boden.',
   },
 
   advantages: {
-    eyebrow: 'Unsere Stärken',
-    title: 'Warum europäische Einkäufer mit uns arbeiten',
-    lead: 'Alles Folgende sind Zusagen, an denen wir gemessen werden: Qualität, Menge, Logistik und Preis.',
+    eyebrow: 'Unsere Vorteile',
+    title: 'Warum europäische Kunden mit uns arbeiten',
+    lead: 'Alles Folgende sind Zusagen, an denen wir gemessen werden: Qualität, Konstruktion, Logistik und Preis.',
     items: [
       {
         icon: 'oak',
-        title: 'Langsam gewachsenes Holz',
-        body: 'Langsam gewachsene ukrainische Eiche und Kiefer mit dichter, gleichmäßiger Struktur — der Rohstoff hinter der Festigkeit und Haltbarkeit, für die uns Kunden wählen.',
+        title: 'Europäische Eiche, ukrainische Produktion',
+        body: 'Dichte, langsam gewachsene Eiche mit gleichmäßiger Maserung für die Nutzschicht — das Material, das einem Boden Optik und Lebensdauer gibt.',
       },
       {
         icon: 'shield',
-        title: 'Europäische Qualitätsstandards',
-        body: 'Die Produkte werden nach aktuellen Qualitätsstandards und internationalen Marktanforderungen gefertigt und nach einer dokumentierten Spezifikation mit definierten Toleranzen sortiert.',
+        title: 'Formstabile Mehrschichtkonstruktion',
+        body: 'Ein 14-mm-Element mit 3,2 mm Nutzschicht aus Eiche arbeitet mit den Jahreszeiten weniger als Massivholz, und die Deckschicht ist dick genug zum Abschleifen und Erneuern.',
       },
       {
-        icon: 'stack',
-        title: 'Produktion in großen Mengen',
-        body: 'Stabile Liefermengen mit wiederholbarer Sortierung, sodass Sie eine Produktionssaison auf uns planen können, statt Spotpartien nachzujagen.',
+        icon: 'layers',
+        title: 'Drei Formate, eine Konstruktion',
+        body: 'Diele, Chevron und Fischgrät haben denselben Aufbau, sodass sich Formate in einem Projekt ohne Höhenversatz an der Schwelle kombinieren lassen.',
       },
       {
         icon: 'truck',
-        title: 'Verlässliche Logistik',
-        body: 'Termingerechte Lieferung in ganz Europa per Komplettladung oder Container, mit Verpackung und Exportpapieren vor dem Versand.',
+        title: 'Zuverlässige Logistik',
+        body: 'Termingerechte Lieferung in ganz Europa per Komplettladung oder Container, Verpackung und Exportpapiere vor dem Versand vorbereitet.',
       },
       {
         icon: 'tag',
-        title: 'Wettbewerbsfähige Preise',
-        body: 'Preise direkt vom Hersteller mit transparenten Preislisten nach Sortierklasse — keine Händlermarge zwischen Sägewerk und Ihrem Lager.',
+        title: 'Transparente Preise',
+        body: 'Ein veröffentlichter Preis pro Quadratmeter für jedes Format, Maß und jede Sortierung — direkt vom Hersteller, ohne Händlermarge.',
       },
       {
         icon: 'partners',
         title: 'Individuelle Betreuung',
-        body: 'Maße, Klassen und Verpackung nach Ihrer Spezifikation. Wir setzen auf langfristige Partnerschaften und behandeln jeden Auftrag als Teil davon.',
+        body: 'Breiten, Längen, Oberflächen und Verpackung passend zu Ihrem Projekt. Wir setzen auf langfristige Partnerschaften und behandeln jeden Auftrag als Teil davon.',
       },
     ],
   },
 
   gallery: {
     eyebrow: 'Galerie',
-    title: 'Unser Holz, fotografiert im Versandzustand',
-    lead: 'Sieben Aufnahmen statt eines Kontaktbogens: die Kante eines sortierten Bretts, die Pakete, in denen es den Platz verlässt, der Bestand hinter einer Nachbestellung. Aufgenommen auf unserem eigenen Platz und in unserer Werkstatt, nicht bei einer Bildagentur gekauft.',
-    action: 'Alle zwölf Parkett-Farbtöne ansehen',
+    title: 'Unser Parkett in Bild und Video',
+    lead: 'Der Showroom, verlegte Böden und unsere eigene Oberflächenlinie — Fotos und kurze Clips aus der Produktion, keine Bildagentur.',
+    action: 'Alle zwölf Chevron-Farbtöne ansehen',
   },
 
   exportSection: {
@@ -369,30 +379,31 @@ export const de: Dictionary = {
       EE: 'Estland',
       DK: 'Dänemark',
     },
-    originLabel: 'Unser Platz',
+    originLabel: 'Produktion',
     ringLabel: '{km} km',
     mapNote:
-      'Die Ringe zeigen die Luftlinie vom Platz, nicht die Straßenentfernung — sie zeigen die Reichweite, kein Angebot. Fragen Sie die Lieferzeit für Ihre genaue Adresse an, wir bestätigen sie.',
+      'Die Ringe zeigen die Luftlinie von der Produktion, nicht die Straßenentfernung — sie zeigen die Reichweite, kein Angebot. Fragen Sie die Lieferzeit für Ihre genaue Adresse an, wir bestätigen sie.',
     loadsTitle: 'Was in eine Ladung passt',
     loadsLead:
-      'Fracht wird je Ladung berechnet, nicht je Kubikmeter — die günstigste Bestellung ist deshalb meist eine volle.',
+      'Fracht wird je Ladung berechnet, nicht je Quadratmeter — die günstigste Bestellung ist deshalb meist eine volle.',
+    // TO CONFIRM — m² je Ladung hängen vom Palettenformat ab. Ausgeblendet, solange `TBC`.
     loads: [
       {
-        value: '22–24',
-        unit: 'm³',
+        value: 'TBC',
+        unit: 'm²',
         label: 'Komplettladung',
-        detail: 'Standard-Planenauflieger 13,6 m mit umbändelten Paketen — die übliche EU-Straßenlieferung.',
+        detail: 'Standard-Planenauflieger 13,6 m mit palettierten Kartons — die übliche EU-Straßenlieferung.',
       },
       {
-        value: '25–28',
-        unit: 'm³',
+        value: 'TBC',
+        unit: 'm²',
         label: '40-Fuß-Container',
         detail: 'Für anschließende Seefracht oder Ziele außerhalb der Straßenreichweite.',
       },
       {
         // TO CONFIRM — kaufmännische Entscheidung, keine Messung.
         value: 'TBC',
-        unit: 'm³',
+        unit: 'm²',
         label: 'Mindestbestellmenge',
         detail: 'Unterhalb einer Komplettladung konsolidieren wir mit einer weiteren Sendung in dieselbe Richtung.',
       },
@@ -413,7 +424,7 @@ export const de: Dictionary = {
     leadTimeNote:
       'Grenzübergang und Zollabfertigung sind in den Zeiten oben enthalten. Verfügbare Lieferbedingungen: EXW, FCA, CPT und DAP — bei DAP steht die Ware an Ihrem Tor, Abgaben geregelt.',
     casesTitle: 'Letzte Sendungen',
-    casesLead: 'Anonymisiert, aber real: die Querschnitte, Mengen und Routen, die wir tatsächlich verladen.',
+    casesLead: 'Anonymisiert, aber real: die Formate, Mengen und Routen, die wir tatsächlich verladen.',
     // TO CONFIRM — aus den Versandunterlagen befüllen. Ausgeblendet solange `TBC`.
     cases: [
       { volume: 'TBC', spec: 'TBC', destination: 'TBC', terms: 'DAP', days: 'TBC' },
@@ -430,68 +441,71 @@ export const de: Dictionary = {
   },
 
   faq: {
-    eyebrow: 'Häufige Fragen',
-    title: 'Klassen, Mengen, Dokumente und Lieferung',
+    eyebrow: 'Fragen von Einkäufern',
+    title: 'Sortierungen, Maße, Preise und Lieferung',
     lead: 'Die Antworten, die wir am Telefon geben — hier schriftlich. Fehlt etwas, fragen Sie nach, wir ergänzen es.',
     items: [
       {
-        question: 'Was unterscheidet die Klassen I–IV?',
+        question: 'Was unterscheidet die Sortierungen A-B und C?',
         answer:
-          'Die Klasse ergibt sich daraus, was das Brett zeigen darf, und die Grenzen sind schriftlich festgelegt. Klasse I erlaubt Festäste bis 3–5 mm und sonst nichts; Klasse II ergänzt Festäste bis 25–35 mm, Schwarzäste bis 15–25 mm und 20–25 mm Splintholz; Klasse III erweitert dies auf Festäste bis 35 mm bei schmalen Querschnitten und bis 70 mm bei 230 mm Breite, zusätzlich eingewachsene Rinde; Klasse IV, gefertigt in 230 mm, erlaubt Festäste bis 120 mm. Markröhre, Dampfschaden, Holzwurmbefall, Mikrorisse, Stirnrisse und doppeltes Splintholz sind in keiner Klasse zulässig.',
+          'A-B (Select) ist die ruhigere Sortierung: gleichmäßige Farbe, kleine gesunde Äste und minimaler Splint. C (Rustikal) ist die lebhafte: ausgeprägte Maserung, größere gesunde Äste, gekittete Risse und Splint sind zulässig. Beides ist dasselbe Element — 14 mm mit 3,2 mm Nutzschicht aus Eiche — getrennt bepreist; Sie wählen also die Optik, nicht ein anderes Produkt.',
       },
       {
-        question: 'Welche Querschnitte und Längen produzieren Sie?',
+        question: 'Welche Formate und Maße produzieren Sie?',
         answer:
-          'Besäumte Eichenbretter werden mit fester Dicke von 30 mm in fünf Breiten geschnitten — 80, 115, 150, 170 und 230 mm — mit festen Längen je Querschnitt im Bereich 320 bis 2 450 mm. Kiefernbauholz schneiden wir nach Ihrer Querschnittsliste statt nach festem Katalog.',
+          'Landhausdielen in 125 × 600–1 400, 145 × 800–1 600 und 195 × 1 700–2 500 mm in Wechsellängen; Chevron und Fischgrät in 125 mm Breite mit Stäben von 500, 600 und 700 mm. Alle Formate sind 14 mm stark mit 3,2 mm Nutzschicht aus Eiche.',
       },
       {
-        question: 'Fertigen Sie Sonderquerschnitte oder Klassenmischungen?',
+        question: 'Wie ist das Element aufgebaut?',
         answer:
-          'Ja. Sonderquerschnitte, Sonderlängen und Klassenmischungen fertigen wir auf Auftrag — senden Sie die Spezifikation, wir bestätigen Machbarkeit und Preis, bevor Sie sich binden.',
+          'Es ist Mehrschichtparkett: eine 3,2 mm starke Nutzschicht aus europäischer Eiche auf einer stabilen Trägerlage, 14 mm gesamt. Die Deckschicht ist dick genug zum Abschleifen und Erneuern, und der Schichtaufbau arbeitet bei Feuchteänderungen weniger als Massivholz.',
       },
       {
-        question: 'Welche Holzfeuchte liefern Sie?',
+        question: 'Wie werden Preise angegeben?',
+        answer: `Pro Quadratmeter, nach Format, Maß und Sortierung — von ${from}/m² für Diele 125 mm in Sortierung C bis ${top}/m² für Chevron A-B. Der Endbetrag hängt von Menge, Oberfläche und Lieferbedingungen ab und wird im Angebot bestätigt.`,
+      },
+      {
+        question: 'Fertigen Sie andere Maße, Oberflächen oder Sortierungsmischungen?',
         answer:
-          'Kammergetrocknet oder lufttrocken, je Auftrag festgelegt. Nennen Sie uns Zielfeuchte und Toleranz, wir bestätigen sie im Angebot — die Trocknung beeinflusst sowohl den Preis als auch die Partiegröße, die wir auf eine Spezifikation halten können.',
+          'Ja. Andere Breiten und Längen, geölt oder lackiert, natur oder farbig, sowie Sortierungsmischungen fertigen wir auf Bestellung — senden Sie die Spezifikation, wir bestätigen Machbarkeit und Preis, bevor Sie sich festlegen.',
       },
       {
         question: 'Liefern Sie EUDR-Geodaten und eine DDS-Referenz?',
         answer:
-          'Ja. Jede Sendung wird mit den Koordinaten der Erntefläche, Holzart, Volumen und Ernteland je Paket, dem Legalitätsnachweis der Ernte und der DDS-Referenz für Ihre EU-Meldung geliefert. Bestätigen Sie Ihre Importroute mit uns, dann nennen wir den genauen Dokumentensatz vor der Beauftragung.',
+          'Ja. Jede Sendung wird mit den Koordinaten der Erntefläche, Holzart, Volumen und Ernteland, dem Legalitätsnachweis der Ernte und der DDS-Referenz für Ihre EU-Meldung geliefert. Bestätigen Sie Ihre Importroute mit uns, dann nennen wir den genauen Dokumentensatz vor der Beauftragung.',
       },
       {
         question: 'Mit welchen Incoterms arbeiten Sie?',
         answer:
-          'EXW, FCA, CPT und DAP. DAP ist die übliche Wahl für EU-Käufer, die die Ware ohne eigene Frachtorganisation an ihrem Tor wollen; FCA passt zu Käufern mit eigenem Spediteur.',
+          'EXW, FCA, CPT und DAP. DAP ist die übliche Wahl für EU-Kunden, die die Ware ohne eigene Frachtorganisation ans Tor geliefert haben möchten; FCA passt für Kunden mit eigenem Spediteur.',
       },
       {
-        question: 'Wie wird das Holz verpackt und markiert?',
+        question: 'Wie wird das Parkett verpackt?',
         answer:
-          'Jede Klasse wird separat in gleichmäßige, umbändelte Pakete mit Kantenschutz verpackt, mit Querschnitt, Klasse und Volumen markiert und ebenso auf der Packliste geführt — so prüft der Wareneingang eine Lieferung in Minuten gegen die Rechnung, statt sie umzustapeln.',
-      },
-      {
-        question: 'Wie werden Preise kalkuliert und wie lange gelten sie?',
-        answer:
-          'Je Kubikmeter, nach Querschnitt und Klasse — unsere veröffentlichte Eichenpreisliste reicht von 700 €/m³ für gemischte Klasse 80 × 30 mm bis 2 650 €/m³ für Klasse I bei 230 mm. Der Endpreis hängt von Menge, Trocknung und Lieferbedingungen ab und wird je Partie im Angebot bestätigt.',
+          'In Kartons nach Format und Sortierung, auf Paletten, foliert und gekennzeichnet mit Format, Maß, Sortierung und Quadratmetern — genauso in der Packliste, damit der Wareneingang eine Lieferung in Minuten gegen die Rechnung prüfen kann.',
       },
       {
         question: 'Senden Sie Muster vor einer Bestellung?',
         answer:
-          'Ja. Für Parkett senden wir Farbmuster vor der Auftragsbestätigung, für Schnittholz können wir sortierte Musterbretter senden, damit Sie unsere Sortierung gegen Ihren eigenen Standard prüfen, bevor Sie eine Ladung beauftragen.',
+          'Ja. Wir senden Muster der Sortierung und Oberfläche vor der Auftragsbestätigung, damit Sie das Element vor der Festlegung auf eine Ladung mit Ihrem eigenen Standard vergleichen können.',
+      },
+      {
+        question: 'Kann ich per WhatsApp bestellen?',
+        answer:
+          'Ja. Senden Sie Format, Sortierung, Maß und Menge — oder einfach ein Foto des Grundrisses — und wir antworten mit einem Angebot. Die Auswahl auf dieser Seite füllt die Nachricht für Sie vor.',
       },
       {
         question: 'In welchen Sprachen arbeiten Sie?',
-        answer:
-          'Deutsch, Englisch, Polnisch und Ukrainisch — in der Korrespondenz und in den Dokumenten.',
+        answer: 'Deutsch, Englisch, Polnisch und Ukrainisch — in Korrespondenz und Dokumenten.',
       },
       {
         question: 'Wie hoch ist Ihre Mindestbestellmenge?',
-        // TO CONFIRM — kaufmännische Entscheidung. Ausgeblendet bis zur Antwort.
+        // TO CONFIRM — kaufmännische Entscheidung. Bis zur Antwort ausgeblendet.
         answer: 'TBC',
       },
       {
         question: 'Wie lang ist die Lieferzeit nach Deutschland oder Polen?',
-        // TO CONFIRM — siehe exportSection.leadTimes. Ausgeblendet bis zur Antwort.
+        // TO CONFIRM — siehe exportSection.leadTimes. Bis zur Antwort ausgeblendet.
         answer: 'TBC',
       },
     ],
@@ -500,10 +514,11 @@ export const de: Dictionary = {
   contact: {
     eyebrow: 'Angebot anfragen',
     title: 'Sagen Sie uns, was Sie brauchen',
-    lead: 'Senden Sie Querschnitte, Klassen und Mengen. Wenn Sie noch unsicher sind, beschreiben Sie den Einsatzzweck — wir schlagen die wirtschaftlichste Spezifikation vor.',
+    lead: 'Senden Sie Formate, Sortierungen und Mengen. Wenn Sie noch unsicher sind, beschreiben Sie das Projekt — wir schlagen die wirtschaftlichste Spezifikation vor.',
     labels: {
       email: 'E-Mail',
       phone: 'Telefon',
+      whatsapp: 'WhatsApp',
       production: 'Produktion & Export',
       hours: 'Geschäftszeiten',
       languages: 'Wir sprechen',
@@ -513,6 +528,9 @@ export const de: Dictionary = {
       hours: 'Mo–Fr, 08:00–18:00 (EET)',
       languages: 'Deutsch, Englisch, Polnisch, Ukrainisch',
     },
+    whatsappTitle: 'Schneller per WhatsApp',
+    whatsappBody:
+      'Senden Sie Format, Sortierung und Menge — oder einfach ein Foto des Grundrisses — und wir antworten mit Angebot und Verfügbarkeit.',
     noteBefore: 'Lieber per E-Mail? Schreiben Sie direkt an ',
     noteAfter:
       ' und legen Sie Ihre Spezifikation bei — wir antworten auf Deutsch, Englisch oder Polnisch.',
@@ -522,35 +540,35 @@ export const de: Dictionary = {
     name: 'Name *',
     namePlaceholder: 'Thomas Müller',
     company: 'Firma',
-    companyPlaceholder: 'Holzhandel GmbH',
+    companyPlaceholder: 'Parkett GmbH',
     country: 'Land',
     countryPlaceholder: 'Deutschland',
     email: 'E-Mail *',
     emailPlaceholder: 'einkauf@firma.de',
     phone: 'Telefon',
     phonePlaceholder: '+49 000 000 000',
-    product: 'Produkt',
-    productPlaceholder: 'Produkt wählen…',
-    productMixed: 'Gemischt / mehrere Produkte',
-    grade: 'Sortierklasse',
+    product: 'Format',
+    productPlaceholder: 'Format wählen…',
+    productMixed: 'Mehrere Formate',
+    grade: 'Sortierung',
     gradeAny: 'Beliebig / bitte beraten',
-    dimensions: 'Maße (D × B × L)',
-    dimensionsPlaceholder: '30 × 230 × 2 050 mm',
-    volume: 'Menge pro Monat',
-    volumePlaceholder: 'z. B. 40 m³',
-    moisture: 'Holzfeuchte',
-    moistureOptions: {
+    dimensions: 'Maß (B × L × Stärke)',
+    dimensionsPlaceholder: '125 × 600–1 400 × 14/3,2 mm',
+    volume: 'Menge',
+    volumePlaceholder: 'z. B. 250 m²',
+    finish: 'Oberfläche',
+    finishOptions: {
       any: 'Beliebig / bitte beraten',
-      kd: 'Kammergetrocknet (KD)',
-      ad: 'Lufttrocken (AD)',
-      fresh: 'Frisch geschnitten',
+      unfinished: 'Unbehandelt',
+      oiled: 'Geölt',
+      lacquered: 'Lackiert',
     },
     destination: 'Zielort',
     destinationPlaceholder: 'Stadt oder Hafen, z. B. Hamburg',
     incoterms: 'Lieferbedingungen',
     incotermsAny: 'Noch nicht entschieden',
     message: 'Nachricht *',
-    messagePlaceholder: 'Was sonst das Angebot beeinflusst — Toleranzen, Verpackung, Termine…',
+    messagePlaceholder: 'Was sonst das Angebot beeinflusst — Farbton, Verpackung, Termine…',
     submit: 'Anfrage senden',
     sending: 'Wird gesendet…',
     required: 'Mit * markierte Felder sind Pflichtfelder.',
@@ -575,11 +593,11 @@ export const de: Dictionary = {
       country: 'Land',
       email: 'E-Mail',
       phone: 'Telefon',
-      product: 'Produkt',
-      grade: 'Sortierklasse',
+      product: 'Format',
+      grade: 'Sortierung',
       dimensions: 'Maße',
-      volume: 'Menge / Monat',
-      moisture: 'Holzfeuchte',
+      volume: 'Menge',
+      finish: 'Oberfläche',
       destination: 'Zielort',
       incoterms: 'Lieferbedingungen',
       notSpecified: 'Nicht angegeben',
@@ -587,47 +605,37 @@ export const de: Dictionary = {
   },
 
   productPage: {
-    aboutTitle: 'Über dieses Produkt',
+    aboutTitle: 'Über dieses Format',
+    configureTitle: 'Sortierung und Maß wählen',
     specsEyebrow: 'Technische Daten',
     specsTitle: 'Spezifikation',
     specsLead:
-      'Wird je Auftrag bestätigt — senden Sie Ihren Bedarf, wir nennen die genauen Werte im Angebot.',
+      'Je Auftrag bestätigt — senden Sie Ihre Anforderung, wir nennen die genauen Werte im Angebot.',
     pricesEyebrow: 'Preisliste',
-    pricesTitle: 'Preise nach Querschnitt und Klasse',
-    pricesLead:
-      'Unsere veröffentlichte Preisliste. Die Querschnitte sind fest; die Längen je Querschnitt sind wie aufgeführt verfügbar.',
-    gradesEyebrow: 'Sortierung',
-    gradesTitle: 'Was jede Klasse zulässt',
+    pricesTitle: 'Preise nach Maß und Sortierung',
+    pricesLead: 'Direkt aus unserer Preisliste, in Euro pro Quadratmeter.',
+    gradesEyebrow: 'Sortierungen',
+    gradesTitle: 'A-B oder C: was sich ändert',
     gradesLead:
-      'Direkt aus unserer schriftlichen Spezifikation für besäumtes Eichenschnittholz. Die Toleranzen unterscheiden sich zwischen schmalen und breiten Querschnitten.',
+      'Dasselbe Element in zwei Sortierungen. Die Sortierung bestimmt, wie ruhig oder lebhaft die Oberfläche wirkt — und den Preis.',
     finishesEyebrow: 'Farbtöne',
-    finishesTitle: 'Zwölf Produktionstöne',
+    finishesTitle: 'Zwölf Produktionsfarbtöne',
     finishesLead:
-      'Jeder Ton wird auf dieselbe Chevron-Eichenlamelle aufgebracht, sodass Sie Töne innerhalb eines Projekts mischen können, ohne Lieferant oder Format zu wechseln.',
+      'Jeder Farbton wird auf denselben Chevron-Stab aus Eiche aufgebracht, sodass Sie Töne in einem Projekt kombinieren können, ohne Lieferant oder Format zu wechseln.',
     inquiryEyebrow: 'Anfrage',
     inquiryTitle: 'Angebot anfragen: {product}',
     inquiryLead:
-      'Nennen Sie die benötigten Querschnitte, Klassen und Mengen. Wir antworten mit Verfügbarkeit, Preis und Lieferzeit für Ihren Zielort.',
+      'Nennen Sie Sortierung, Maß und Menge. Wir antworten mit Verfügbarkeit, Preis und Lieferzeit für Ihr Ziel.',
     relatedEyebrow: 'Ebenfalls im Programm',
-    relatedTitle: 'Weitere Produktlinien',
-    priceInformation: 'Preisinformation',
-    seePriceList: 'Preisliste ansehen',
-    permitted: 'Zulässig',
-    notPermitted: 'In keiner Klasse zulässig',
-    availableLengths: 'Verfügbare Längen',
-    priceColumn: 'Preis',
-    gradeColumn: 'Klasse',
-    gradeLabel: 'Klasse {code}',
-    mixedGrade: 'Gemischte Klasse',
-    priceFootnote:
-      'Die Preise gelten je Kubikmeter und sind indikativ: der Endbetrag hängt von Menge, Trocknung und Lieferbedingungen ab und wird je Partie im Angebot bestätigt.',
+    relatedTitle: 'Weitere Formate',
+    seePriceList: 'Zur vollständigen Preisliste',
   },
 
   footer: {
-    products: 'Produkte',
+    products: 'Parkett',
     company: 'Unternehmen',
-    exportOffice: 'Exportabteilung',
-    claim: 'Schnittholz aus der Ukraine für den europäischen Markt.',
+    exportOffice: 'Exportbüro',
+    claim: 'Mehrschichtparkett aus Eiche aus der Ukraine für den europäischen Markt.',
     rights: 'Alle Rechte vorbehalten.',
   },
 
@@ -640,229 +648,24 @@ export const de: Dictionary = {
   },
 
   products: {
-    'oak-edged-boards': {
-      name: 'Besäumte Eichenbretter',
-      kicker: 'Kernprodukt',
-      category: 'Besäumtes Schnittholz',
-      species: 'Europäische Eiche (Quercus robur)',
-      tagline: 'Sortiertes Eichenschnittholz in fünf festen Querschnitten, Preis nach Klasse.',
+    'oak-chevron-parquet': {
+      name: 'Eiche Chevron-Parkett',
+      shortName: 'Chevron',
+      kicker: 'Französisches Fischgrät',
+      category: 'Mehrschichtparkett',
+      tagline: 'Stäbe mit schrägen Enden, die sich zu einem durchgehenden V treffen — das klassische französische Muster.',
       shortDescription:
-        'Unser Kerngeschäft: besäumte Eichenbretter, bekannt für Festigkeit, Haltbarkeit und natürliche Optik — sortiert von Klasse I bis IV nach schriftlicher Spezifikation.',
+        'Chevron aus Eiche als Mehrschichtparkett, 125 mm breit, Stäbe 500, 600 und 700 mm, Sortierungen A-B und C, zwölf Farbtöne.',
       description: [
-        'Besäumte Eichenbretter sind das Rückgrat unserer Produktion. Jedes Brett wird mit fester Dicke von 30 mm in einer von fünf Breiten geschnitten — 80, 115, 150, 170 oder 230 mm — mit parallelen Kanten, rechtwinklig gekappten Enden und einem definierten Längenbereich je Querschnitt.',
-        'Die Sortierung ist keine Ermessensfrage. Jedes Stück wird gegen schriftliche Toleranzen für Fest- und Schwarzäste, Splintholz, eingewachsene Rinde und Risse geprüft, und die Grenzen unterscheiden sich zwischen den schmalen (150/170 mm) und breiten (230 mm) Querschnitten. Markröhre, Holzwurmbefall, Dampfschaden, Mikrorisse, Stirnrisse und doppeltes Splintholz sind in keiner Klasse zulässig.',
-        'Das Ergebnis ist ein Produkt, das Sie wiederholt mit Sicherheit einkaufen können: dieselbe Klasse liefert in Ihrem Betrieb dieselbe Ausbeute, Partie für Partie.',
+        'Chevron-Stäbe haben schräg geschnittene Enden, sodass das Muster als durchgehendes V mit gerader Mittelfuge läuft — der Boden der Pariser Altbauwohnung und das architektonischste unserer drei Formate.',
+        'Jeder Stab ist 125 mm breit und 500, 600 oder 700 mm lang, auf unserer 14-mm-Mehrschichtkonstruktion mit 3,2 mm Nutzschicht aus europäischer Eiche. Derselbe Aufbau wie bei Diele und Fischgrät — die Formate treffen an der Schwelle ohne Absatz aufeinander.',
+        'Zwölf Produktionsfarbtöne stehen zur Wahl, von weiß geölt und Greige über Natur und Honig bis Nuss, Schokolade und dunkles Espresso.',
       ],
-      keyFacts: [
-        { label: 'Dicke', value: '30 mm' },
-        { label: 'Breiten', value: '80 / 115 / 150 / 170 / 230 mm' },
-        { label: 'Längen', value: '320 – 2 450 mm' },
-        { label: 'Klassen', value: 'I, II, III, IV' },
-      ],
-      priceNote:
-        'Ab 700 €/m³ (80 × 30 mm, gemischte Klasse). Klasse I in 230 mm ab 2 650 €/m³.',
-      sizesSummary: '30 × 80–230 mm, Längen 320–2 450 mm',
-      gradesSummary: 'Klassen I–IV und Pakete gemischter Klasse',
       advantages: [
-        'Fünf feste Querschnitte laufend vorrätig — Nachbestellungen kommen identisch an',
-        'Klassentoleranzen schriftlich dokumentiert, nicht telefonisch vereinbart',
-        'Preisliste nach Klasse, Sie zahlen nur für die Qualität, die Sie brauchen',
-        'Nach Klasse verpackt und markiert für eine schnelle Wareneingangsprüfung',
-      ],
-      specs: [
-        {
-          group: 'Material',
-          items: [
-            { label: 'Holzart', value: 'Europäische Eiche (Quercus robur)' },
-            { label: 'Produktart', value: 'Besäumtes Schnittholz, auf Wunsch gehobelt' },
-            { label: 'Herkunft', value: 'Ukraine' },
-            { label: 'Sortierung', value: 'Klassen I–IV nach Werksspezifikation' },
-          ],
-        },
-        {
-          group: 'Maße',
-          items: [
-            { label: 'Dicke', value: '30 mm' },
-            { label: 'Breiten', value: '80, 115, 150, 170, 230 mm' },
-            { label: 'Längenbereich', value: '320 – 2 450 mm, feste Längen je Querschnitt' },
-            { label: 'Kanten / Enden', value: 'Beidseitig besäumt, Enden rechtwinklig gekappt' },
-          ],
-        },
-        {
-          group: 'Lieferung',
-          items: [
-            // TO CONFIRM — Trocknungsgrad
-            { label: 'Holzfeuchte', value: 'Kammergetrocknet oder lufttrocken — bei Anfrage angeben' },
-            { label: 'Verpackung', value: 'Umbändelte Pakete, nach Querschnitt und Klasse sortiert' },
-            { label: 'Markierung', value: 'Querschnitt, Klasse und Volumen je Paket' },
-            { label: 'Bedingungen', value: 'EXW / FCA / CPT / DAP' },
-          ],
-        },
-      ],
-      gradeBands: [
-        {
-          widths: 'Breiten 150 und 170 mm',
-          grades: [
-            { code: 'I', name: 'Klasse I', allowances: ['Festäste bis 3–5 mm'] },
-            {
-              code: 'II',
-              name: 'Klasse II',
-              allowances: [
-                'Festäste bis 25 mm',
-                'Schwarzäste bis 15 mm, mindestens 10 mm von der Kante entfernt',
-                'Splintholz 20 mm, ohne Durchtritt auf eine Seite',
-              ],
-            },
-            {
-              code: 'III',
-              name: 'Klasse III',
-              allowances: [
-                'Festäste bis 35 mm',
-                'Schwarzäste bis 25 mm, mindestens 10 mm von der Kante entfernt',
-                'Eingewachsene Rinde bis 3 × 50 mm',
-                'Splintholz 35 mm auf einer Seite, 10 mm durchtretend auf der anderen',
-              ],
-            },
-          ],
-        },
-        {
-          widths: 'Breite 230 mm',
-          grades: [
-            { code: 'I', name: 'Klasse I', allowances: ['Festäste bis 5 mm'] },
-            {
-              code: 'II',
-              name: 'Klasse II',
-              allowances: [
-                'Festäste 30–35 mm',
-                'Schwarzäste bis 25 mm, mindestens 10 mm von der Kante entfernt',
-                'Splintholz 25 mm, ohne Durchtritt auf eine Seite',
-                'Eingewachsene Rinde bis 50 mm',
-              ],
-            },
-            {
-              code: 'III',
-              name: 'Klasse III',
-              allowances: [
-                'Festäste bis 70 mm',
-                'Schwarzäste bis 40 mm, mindestens 10 mm von der Kante entfernt',
-                'Eingewachsene Rinde bis 3 × 80 mm',
-                'Splintholz 10 mm auf der Sichtseite, 30 mm auf der Rückseite',
-              ],
-            },
-            {
-              code: 'IV',
-              name: 'Klasse IV',
-              allowances: [
-                'Festäste bis 120 mm, mindestens 10 mm von der Kante entfernt',
-                'Eingewachsene Rinde bis 5 × 100 mm',
-                'Splintholz 20 mm auf der Sichtseite, unbegrenzt auf der Rückseite',
-              ],
-            },
-          ],
-        },
-      ],
-      notPermitted: [
-        'Markröhre / Kern',
-        'Dampfschaden',
-        'Holzwurmbefall',
-        'Mikrorisse',
-        'Stirnrisse',
-        'Doppeltes Splintholz',
-      ],
-    },
-
-    'pine-construction-timber': {
-      name: 'Kiefernbauholz',
-      kicker: 'Mengengeschäft',
-      category: 'Bauholz',
-      species: 'Gemeine Kiefer (Pinus sylvestris)',
-      tagline: 'Bretter, Latten und Kanthölzer für Wohn-, Gewerbe- und Industriebau.',
-      shortDescription:
-        'Kiefernbauholz für Wohn-, Gewerbe- und Industriebau — nach Ihren Querschnitten geschnitten und in großen, wiederholbaren Mengen geliefert.',
-      description: [
-        'Wir liefern Kiefernholz für Bau und Ausbau: besäumte Bretter, Latten, Sparren und Kanthölzer. Die Querschnitte werden nach Ihrer Spezifikation gefertigt statt in einen festen Katalog gepresst, was Kiefer zu unserer flexibelsten Produktlinie macht.',
-        'Kiefer arbeitet zuverlässig und verhält sich vorhersehbar: leicht, auf der Baustelle einfach zu befestigen und zu schneiden, und nach der Trocknung formstabil. Sie ist die natürliche Wahl für Ständerwerk, Schalung, Dachkonstruktionen, Balkenlagen, Verpackungen und den Innenausbau.',
-        'Weil Kiefer in Mengen läuft, zeigt sich hier unsere Produktionsgröße. Bündel werden gleichmäßig umbändelt und auf konstante Längen geschnitten, sodass ein LKW voll wird — was die Frachtkosten je Kubikmeter senkt.',
-      ],
-      keyFacts: [
-        { label: 'Produkte', value: 'Bretter, Latten, Kanthölzer' },
-        { label: 'Querschnitte', value: 'Nach Spezifikation' },
-        { label: 'Längen', value: 'Bis 6 000 mm' }, // TO CONFIRM
-        { label: 'Lieferung', value: 'Komplettladungen' },
-      ],
-      priceNote: 'Preis auf Anfrage — Kalkulation je Kubikmeter gegen Ihre Querschnittsliste.',
-      sizesSummary: 'Querschnitte und Längen auf Auftrag',
-      gradesSummary: 'Bauqualität, Sortierung auf Anfrage',
-      advantages: [
-        'Querschnitte nach Ihrer Zeichnung statt nach festem Katalog',
-        'Stabile Liefermengen für mehrphasige Bauprojekte',
-        'Gleichmäßige Bündel, die effizient laden und schnell entladen',
-        'Geeignet für Tragwerk, Schalung, Verpackung und Innenausbau',
-      ],
-      specs: [
-        {
-          group: 'Material',
-          items: [
-            { label: 'Holzart', value: 'Gemeine Kiefer (Pinus sylvestris)' },
-            { label: 'Produktart', value: 'Besäumte Bretter, Latten, Kanthölzer' },
-            { label: 'Herkunft', value: 'Ukraine' },
-            {
-              label: 'Anwendungen',
-              value: 'Ständerwerk, Dach, Schalung, Ausbau, Verpackung',
-            },
-          ],
-        },
-        {
-          // TO CONFIRM — indikative Bereiche, mit der Produktion abstimmen
-          group: 'Maße',
-          items: [
-            { label: 'Brettdicke', value: '25 – 50 mm' },
-            { label: 'Brettbreite', value: '100 – 200 mm' },
-            { label: 'Kantholzquerschnitte', value: '50 × 50 bis 150 × 150 mm' },
-            { label: 'Längen', value: '3 000 – 6 000 mm' },
-          ],
-        },
-        {
-          group: 'Lieferung',
-          items: [
-            { label: 'Holzfeuchte', value: 'Frisch geschnitten oder getrocknet — bei Anfrage angeben' },
-            { label: 'Verpackung', value: 'Umbändelte Bündel, kantengeschützt' },
-            { label: 'Verladung', value: 'Komplettladung oder 40-Fuß-Container' },
-            { label: 'Bedingungen', value: 'EXW / FCA / CPT / DAP' },
-          ],
-        },
-      ],
-      gradeBands: [],
-      notPermitted: [],
-    },
-
-    'oak-parquet-boards': {
-      name: 'Parkett aus Massivholz',
-      kicker: '12 Farbtöne',
-      category: 'Bodenbelag',
-      species: 'Europäische Eiche',
-      tagline: 'Chevron-Eichenparkett, das eine elegante Optik mit langer Nutzungsdauer verbindet.',
-      shortDescription:
-        'Parkett aus Massivholz mit eleganter Optik, Verlässlichkeit und langer Nutzungsdauer — Eiche im Chevron-Format in zwölf Farbtönen.',
-      description: [
-        'Unser Parkett entsteht aus derselben Eiche, die wir selbst einschneiden und sortieren, gefräst im Chevron-Format, damit der fertige Boden als durchgehendes Muster wirkt und nicht als Fläche einzelner Dielen.',
-        'Zwölf Farbtöne werden produziert, von weiß geölt und Greige über natürliche Eiche und Honig bis Walnuss, Schokolade und dunkles Espresso. Dieselbe Lamelle bedient damit ein helles skandinavisches Interieur ebenso wie ein dunkles, formelles — ohne Lieferantenwechsel.',
-        'Beim Parkett zeigt die Eiche, woher ihr Ruf kommt: strapazierfähig unter Verkehr, reparierbar statt Wegwerfware, und nach einem Jahrzehnt besser aussehend als viele Böden am ersten Tag.',
-      ],
-      keyFacts: [
-        { label: 'Muster', value: 'Chevron' },
-        { label: 'Holzart', value: 'Europäische Eiche' },
-        { label: 'Farbtöne', value: '12 Standardtöne' },
-        { label: 'Format', value: 'Nach Spezifikation' },
-      ],
-      priceNote: 'Preis auf Anfrage — Kalkulation je Quadratmeter nach Farbton und Format.',
-      sizesSummary: 'Chevron-Format, Maße nach Spezifikation',
-      gradesSummary: 'Select und Rustikal, 12 Farbtöne',
-      advantages: [
-        'Zwölf Produktionstöne von weiß geölt bis dunkles Espresso',
-        'Chevron-Format für enge, wiederholbare Fugen gefräst',
-        'Aus unserer eigenen sortierten Eiche — ein Lieferant vom Stamm bis zum Boden',
-        'Strapazierfähig und reparierbar, auf lange Nutzungsdauer ausgelegt',
+        'Schräge Enden, präzise gefräst für dichte, wiederholbare Fugen',
+        'Drei Stablängen, um das Muster dem Raum anzupassen',
+        'Zwölf Produktionsfarbtöne, Sondertöne auf Anfrage',
+        'Derselbe 14-mm-Aufbau wie Diele und Fischgrät',
       ],
       specs: [
         {
@@ -870,18 +673,18 @@ export const de: Dictionary = {
           items: [
             { label: 'Holzart', value: 'Europäische Eiche' },
             { label: 'Muster', value: 'Chevron (französisches Fischgrät)' },
-            { label: 'Farbtöne', value: '12 Standardtöne, Sondertöne auf Anfrage' },
+            { label: 'Aufbau', value: 'Mehrschicht, 14 mm mit 3,2 mm Nutzschicht Eiche' },
             { label: 'Herkunft', value: 'Ukraine' },
           ],
         },
         {
-          // TO CONFIRM — Aufbau, Dicke und Nutzschicht
           group: 'Format',
           items: [
-            { label: 'Aufbau', value: 'Massiv oder Mehrschicht — bei Anfrage angeben' },
-            { label: 'Dicke', value: 'Nach Spezifikation' },
-            { label: 'Breite / Länge', value: 'Nach Spezifikation' },
-            { label: 'Oberfläche', value: 'Geölt oder lackiert, auf Wunsch gebürstet' },
+            { label: 'Breite', value: '125 mm' },
+            { label: 'Stablängen', value: '500 / 600 / 700 mm' },
+            { label: 'Sortierungen', value: 'A-B Select, C Rustikal' },
+            // TO CONFIRM — Oberflächenoptionen
+            { label: 'Oberfläche', value: 'Geölt oder lackiert, gebürstet auf Anfrage' },
           ],
         },
         {
@@ -889,52 +692,152 @@ export const de: Dictionary = {
           items: [
             { label: 'Verpackung', value: 'Kartons auf Paletten, foliert' },
             { label: 'Verkaufseinheit', value: 'Quadratmeter' },
-            { label: 'Bemusterung', value: 'Farbmuster vor der Auftragsbestätigung' },
-            { label: 'Bedingungen', value: 'EXW / FCA / CPT / DAP' },
+            { label: 'Muster', value: 'Sortierungs- und Farbmuster vor Auftragsbestätigung' },
+            { label: 'Lieferbedingungen', value: 'EXW / FCA / CPT / DAP' },
           ],
         },
       ],
-      gradeBands: [],
-      notPermitted: [],
+    },
+
+    'oak-plank-flooring': {
+      name: 'Eichen-Landhausdiele',
+      shortName: 'Diele',
+      kicker: 'Drei Breiten',
+      category: 'Mehrschichtdiele',
+      tagline: 'Lange, ruhige Dielen in 125, 145 und 195 mm — der vielseitigste Eichenboden.',
+      shortDescription:
+        'Landhausdiele aus Eiche als Mehrschichtparkett in drei Breiten und Wechsellängen bis 2 500 mm, Sortierungen A-B und C.',
+      description: [
+        'Die Landhausdiele passt in fast jeden Raum: lange Dielen im wilden Verband, die Maserung in Raumlänge. Wir fertigen drei Breiten — 125, 145 und 195 mm — damit das Format der Diele dem Maßstab des Raums folgen kann.',
+        'Die Längen wechseln innerhalb jeder Breite — 600–1 400 mm bei 125, 800–1 600 mm bei 145 und 1 700–2 500 mm bei 195 mm —, sodass die Stöße nicht in einer Linie liegen und der Boden wie gewachsenes Holz wirkt, nicht wie Fliesen.',
+        'Jede Diele ist 14-mm-Mehrschichtparkett aus Eiche mit 3,2 mm Nutzschicht, auf unserer eigenen Linie natur oder farbig behandelt und einzeln nach A-B oder C sortiert.',
+      ],
+      advantages: [
+        'Drei Breiten, von klassischen 125 mm bis zur breiten 195-mm-Diele',
+        'Wechsellängen bis 2 500 mm für einen natürlichen Verband',
+        'Natur- oder Farbtöne auf der eigenen Linie',
+        'Derselbe 14-mm-Aufbau wie Chevron und Fischgrät',
+      ],
+      specs: [
+        {
+          group: 'Material',
+          items: [
+            { label: 'Holzart', value: 'Europäische Eiche' },
+            { label: 'Format', value: 'Landhausdiele, wilder Verband' },
+            { label: 'Aufbau', value: 'Mehrschicht, 14 mm mit 3,2 mm Nutzschicht Eiche' },
+            { label: 'Herkunft', value: 'Ukraine' },
+          ],
+        },
+        {
+          group: 'Format',
+          items: [
+            { label: 'Breiten', value: '125 / 145 / 195 mm' },
+            { label: 'Längen', value: '600–1 400 / 800–1 600 / 1 700–2 500 mm' },
+            { label: 'Sortierungen', value: 'A-B Select, C Rustikal' },
+            // TO CONFIRM — Oberflächenoptionen
+            { label: 'Oberfläche', value: 'Natur oder farbig, geölt oder lackiert' },
+          ],
+        },
+        {
+          group: 'Lieferung',
+          items: [
+            { label: 'Verpackung', value: 'Kartons auf Paletten, foliert' },
+            { label: 'Verkaufseinheit', value: 'Quadratmeter' },
+            { label: 'Muster', value: 'Sortierungs- und Farbmuster vor Auftragsbestätigung' },
+            { label: 'Lieferbedingungen', value: 'EXW / FCA / CPT / DAP' },
+          ],
+        },
+      ],
+    },
+
+    'oak-herringbone-parquet': {
+      name: 'Eiche Fischgrätparkett',
+      shortName: 'Fischgrät',
+      kicker: 'Klassisches Fischgrät',
+      category: 'Mehrschichtparkett',
+      tagline: 'Stäbe mit geraden Enden im Zickzack verlegt — das klassische Fischgrätmuster.',
+      shortDescription:
+        'Fischgrät aus Eiche als Mehrschichtparkett, 125 mm breit, Stäbe 500, 600 und 700 mm, Sortierungen A-B und C.',
+      description: [
+        'Fischgrätstäbe haben gerade Enden: Jeder Stab stößt an die Längsseite des nächsten, sodass das Muster im Zickzack springt, statt sich in einer geraden Fuge zu treffen. Der klassische Parkettboden, der die Fugen eines belebten Raums besser verbirgt als jedes andere Verlegebild.',
+        'Die Stäbe sind 125 mm breit und 500, 600 oder 700 mm lang, auf unserer 14-mm-Mehrschichtkonstruktion mit 3,2 mm Nutzschicht aus europäischer Eiche — derselbe Aufbau wie bei Diele und Chevron.',
+        'Bei gleichem Maß und gleicher Sortierung liegt Fischgrät preislich unter Chevron — der wirtschaftlichste Weg zu einem gemusterten Boden in unserem Sortiment.',
+      ],
+      advantages: [
+        'Stäbe mit geraden Enden für das traditionelle Zickzack',
+        'Drei Stablängen, um das Muster dem Raum anzupassen',
+        'Der wirtschaftlichste Musterboden im Sortiment',
+        'Derselbe 14-mm-Aufbau wie Diele und Chevron',
+      ],
+      specs: [
+        {
+          group: 'Material',
+          items: [
+            { label: 'Holzart', value: 'Europäische Eiche' },
+            { label: 'Muster', value: 'Fischgrät' },
+            { label: 'Aufbau', value: 'Mehrschicht, 14 mm mit 3,2 mm Nutzschicht Eiche' },
+            { label: 'Herkunft', value: 'Ukraine' },
+          ],
+        },
+        {
+          group: 'Format',
+          items: [
+            { label: 'Breite', value: '125 mm' },
+            { label: 'Stablängen', value: '500 / 600 / 700 mm' },
+            { label: 'Sortierungen', value: 'A-B Select, C Rustikal' },
+            // TO CONFIRM — Oberflächenoptionen
+            { label: 'Oberfläche', value: 'Geölt oder lackiert, gebürstet auf Anfrage' },
+          ],
+        },
+        {
+          group: 'Lieferung',
+          items: [
+            { label: 'Verpackung', value: 'Kartons auf Paletten, foliert' },
+            { label: 'Verkaufseinheit', value: 'Quadratmeter' },
+            { label: 'Muster', value: 'Sortierungs- und Farbmuster vor Auftragsbestätigung' },
+            { label: 'Lieferbedingungen', value: 'EXW / FCA / CPT / DAP' },
+          ],
+        },
+      ],
     },
   },
 
   photos: {
-    oakGradeA: {
-      alt: 'Besäumte Eichenbretter der Klasse I mit sauberer, gleichmäßiger Struktur',
-      caption: 'Besäumte Eichenbretter — Klasse I',
+    showroom: {
+      alt: 'Ausstellungswand mit Chevron- und Fischgrät-Parkettmustern aus Eiche',
+      caption: 'Showroom — Chevron und Fischgrät',
     },
-    oakGradeB: {
-      alt: 'Besäumte Eichenbretter der Klasse II mit kleinen gesunden Ästen',
-      caption: 'Besäumte Eichenbretter — Klasse II',
+    interiorPlank: {
+      alt: 'Breite Eichendielen im Flur, im Schlafzimmer dahinter Chevron',
+      caption: 'Diele und Chevron, verlegt',
     },
-    oakGradeC: {
-      alt: 'Besäumte Eichenbretter der Klasse III mit Ästen und Splintholz',
-      caption: 'Besäumte Eichenbretter — Klasse III',
+    chevronInterior: {
+      alt: 'Chevron-Parkett aus Eiche, natur, verlegt im Flur unter einer Treppe',
+      caption: 'Chevron, Eiche natur',
     },
-    oakEdge: {
-      alt: 'Kantendetail eines gehobelten Eichenbretts, 30 mm dick',
-      caption: 'Kantendetail — 30 mm Eiche',
+    plankSelect: {
+      alt: 'Helle Eichendielen der Sortierung A-B, gestapelt auf einer Palette',
+      caption: 'Diele — Sortierung A-B Select',
     },
-    machined: {
-      alt: 'Bearbeitete Eichen- und Kiefernbretter, gestapelt vor dem Verpacken',
-      caption: 'Bearbeitete Bretter vor dem Verpacken',
+    herringboneShowroom: {
+      alt: 'Zwei Fischgrät-Parkettmuster aus Eiche im Showroom',
+      caption: 'Fischgrät — Muster im Showroom',
     },
-    pinePacks: {
-      alt: 'Umbändelte Kiefernbrettpakete, gestapelt auf dem Platz',
-      caption: 'Kiefernbrettpakete, ladefertig',
+    plankFinishingLinePoster: {
+      alt: 'Eichendielen auf den Walzen der Oberflächenlinie',
+      caption: 'Diele auf der Oberflächenlinie',
     },
-    pineBundles: {
-      alt: 'Kiefernlatten und -bretter, gebündelt für den Export',
-      caption: 'Gebündelte Kiefernquerschnitte',
+    plankShortBoardsPoster: {
+      alt: 'Eichenelemente verlassen die Oberflächenmaschine',
+      caption: 'Elemente am Ende der Linie',
     },
-    pineBeams: {
-      alt: 'Kiefernkanthölzer und -bretter, gestapelt im Sägewerk',
-      caption: 'Kiefernkanthölzer',
+    chevronBlanksPoster: {
+      alt: 'Gestapelte Chevron-Rohlinge mit schrägen Enden',
+      caption: 'Chevron-Rohlinge, zugeschnitten und profiliert',
     },
-    pineYard: {
-      alt: 'Große Stapel Kiefernholz auf dem Exportplatz',
-      caption: 'Platzbestand — Kiefernholz',
+    plankTonedLinePoster: {
+      alt: 'Grau getönte Eichendielen auf der Walzenlinie',
+      caption: 'Getönte Diele auf der Linie',
     },
     parquet1: {
       alt: 'Chevron-Eichenparkett im Farbton Smoked Cognac',
@@ -983,6 +886,25 @@ export const de: Dictionary = {
     parquet12: {
       alt: 'Chevron-Eichenparkett im Farbton Chocolate',
       caption: 'Parkett — Chocolate',
+    },
+  },
+
+  videos: {
+    plankFinishingLine: {
+      alt: 'Video: Eichendielen laufen über die Oberflächenlinie',
+      caption: 'Diele auf der Oberflächenlinie',
+    },
+    plankShortBoards: {
+      alt: 'Video: Eichenelemente verlassen die Oberflächenmaschine',
+      caption: 'Elemente am Ende der Linie',
+    },
+    chevronBlanks: {
+      alt: 'Video: Chevron-Rohlinge mit schrägen Enden nach dem Profilieren',
+      caption: 'Chevron-Rohlinge',
+    },
+    plankTonedLine: {
+      alt: 'Video: grau getönte Eichendielen auf der Walzenlinie',
+      caption: 'Getönte Diele auf der Linie',
     },
   },
 

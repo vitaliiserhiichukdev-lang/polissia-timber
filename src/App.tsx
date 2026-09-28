@@ -1,17 +1,19 @@
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import ScrollManager from './components/layout/ScrollManager'
+import WhatsAppButton from './components/layout/WhatsAppButton'
 import Home from './pages/Home'
 import ProductPage from './pages/ProductPage'
 import NotFound from './pages/NotFound'
+import usePrefersReducedMotion from './hooks/usePrefersReducedMotion'
 import { defaultLocale, locales } from './i18n/routing'
 import { useI18n } from './i18n/useI18n'
 
 export default function App() {
   const location = useLocation()
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = usePrefersReducedMotion()
   const { t } = useI18n()
 
   return (
@@ -54,6 +56,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <WhatsAppButton />
     </>
   )
 }

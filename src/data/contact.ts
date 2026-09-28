@@ -21,14 +21,27 @@ export const brand = {
   /** Grouped for reading; `phoneHref` is the dialable form for `tel:`. */
   phone: '+380 99 130 74 07',
   phoneHref: '+380991307407',
+  /**
+   * WhatsApp account, in the form wa.me expects: country code and number,
+   * digits only. TO CONFIRM — currently the office phone.
+   */
+  whatsapp: '380991307407',
   site: 'https://polissiatimber.com',
   incoterms: ['EXW', 'FCA', 'CPT', 'DAP'],
 } as const
 
-export type ProductSlug = 'oak-edged-boards' | 'pine-construction-timber' | 'oak-parquet-boards'
+/** A wa.me link, optionally opening the chat with a pre-filled message. */
+export const whatsappHref = (text?: string): string =>
+  `https://wa.me/${brand.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ''}`
+
+/**
+ * One product page per parquet format. The order is the order of the catalogue,
+ * the footer and the format picker.
+ */
+export type ProductSlug = 'oak-chevron-parquet' | 'oak-plank-flooring' | 'oak-herringbone-parquet'
 
 export const productSlugs: ProductSlug[] = [
-  'oak-edged-boards',
-  'pine-construction-timber',
-  'oak-parquet-boards',
+  'oak-chevron-parquet',
+  'oak-plank-flooring',
+  'oak-herringbone-parquet',
 ]

@@ -31,6 +31,12 @@
   --color-forest-500: #2f5340;
   --color-forest-300: #6d8c78;
 
+  /* WhatsApp. The brand green fails text contrast against white, so text
+     buttons use the darker tone (5.3:1); the lighter one is only ever behind
+     the icon, where 3:1 is the bar. */
+  --color-whatsapp: #1fa855;
+  --color-whatsapp-700: #117a5b;
+
   /* Semantic.
      Contrast on the dark sections is the constraint here, not taste: body text
      is read by purchasing staff on office monitors, so `inverse-muted` is held
@@ -306,6 +312,15 @@
   }
 
   .btn-oak::after {
+    background-color: var(--color-ink-900);
+  }
+
+  .btn-whatsapp {
+    background-color: var(--color-whatsapp-700);
+    color: #fff;
+  }
+
+  .btn-whatsapp::after {
     background-color: var(--color-ink-900);
   }
 

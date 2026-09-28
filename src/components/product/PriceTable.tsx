@@ -1,86 +1,94 @@
+import Link from '../ui/LocaleLink'
 import Reveal from '../ui/Reveal'
-import { formatNumber } from '../../data/pricing'
+import FormatPattern from './FormatPattern'
+import { gradeCodes, gradeDisplay } from '../../data/pricing'
 import { useI18n } from '../../i18n/useI18n'
-import type { ResolvedPriceGroup } from '../../i18n/content'
+import type { ResolvedProduct } from '../../i18n/content'
 
 interface PriceTableProps {
-  groups: ResolvedPriceGroup[]
+  products: ResolvedProduct[]
+  /** Link each format's heading to its page — on for the home page. */
+  linkFormats?: boolean
 }
 
 /**
- * The company price list: one card per section, because in the source list the
- * price depends on section and grade — not on length.
+ * The price sheet as one table: a row group per format, a row per size, a
+ * column per grade. It mirrors the company's own list line for line, so a
+ * buyer can check a quote against it without translating between layouts.
  */
-export default function PriceTable({ groups }: PriceTableProps) {
-  const { t } = useI18n()
+export default function PriceTable({ products, linkFormats = false }: PriceTableProps) {
+  const { t, formatPrice } = useI18n()
 
-  if (groups.length === 0) return null
+  if (products.length === 0) return null
 
   return (
-    <div className="flex flex-col gap-5">
-      {groups.map((group, i) => (
-        <Reveal key={group.section} delay={i * 0.06}>
-          <div className="card-surface overflow-hidden">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-sand-50 px-5 py-4">
-              <h3 className="font-display text-xl text-ink-900">{group.section}</h3>
-              <span className="text-xs font-semibold tracking-[0.12em] text-muted uppercase">
-                {t.common.priceUnit}
-              </span>
-            </div>
-
-            <div className="px-5 py-4">
-              <p className="text-xs font-semibold tracking-[0.1em] text-muted uppercase">
-                {t.productPage.availableLengths}
-              </p>
-              <ul className="mt-2 flex flex-wrap gap-2">
-                {group.lengths.map((length) => (
-                  <li key={length} className="chip tabular-nums">
-                    {length}
-                  </li>
+    <Reveal>
+      <div className="card-surface overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <caption className="sr-only">
+              {t.priceList.title} ({t.common.priceUnit})
+            </caption>
+            <thead>
+              <tr className="border-b border-line text-left text-xs tracking-[0.1em] text-muted uppercase">
+                <th scope="col" className="px-4 py-3.5 font-semibold md:px-6">
+                  {t.priceList.size}
+                </th>
+                {gradeCodes.map((code) => (
+                  <th key={code} scope="col" className="px-4 py-3.5 text-right font-semibold md:px-6">
+                    <span className="block font-display text-base tracking-normal text-ink-900 normal-case">
+                      {gradeDisplay[code]}
+                    </span>
+                    {t.grades[code].name}
+                  </th>
                 ))}
-              </ul>
-            </div>
+              </tr>
+            </thead>
 
-            <div className="overflow-x-auto">
-              <table className="w-full border-t border-line text-sm">
-                <caption className="sr-only">
-                  {group.section} — {t.productPage.pricesTitle} ({t.common.priceUnit})
-                </caption>
-                <thead>
-                  <tr className="text-left text-xs tracking-[0.1em] text-muted uppercase">
-                    <th scope="col" className="px-5 py-3 font-semibold">
-                      {t.productPage.gradeColumn}
+            {products.map((product) => (
+              <tbody key={product.slug} className="divide-y divide-line border-b border-line last:border-0">
+                <tr className="bg-sand-50">
+                  <th scope="colgroup" colSpan={gradeCodes.length + 1} className="px-4 py-3 text-left md:px-6">
+                    <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      <FormatPattern slug={product.slug} size={22} className="shrink-0 text-oak-600" />
+                      {linkFormats ? (
+                        <Link
+                          to={`/products/${product.slug}`}
+                          className="font-display text-lg text-ink-900 transition-colors hover:text-oak-600"
+                        >
+                          {product.name}
+                        </Link>
+                      ) : (
+                        <span className="font-display text-lg text-ink-900">{product.name}</span>
+                      )}
+                      <span className="text-xs font-normal text-muted">
+                        {product.keyFacts[0].value} · {t.catalog.specs.wearLayer.toLowerCase()}{' '}
+                        {product.keyFacts[1].value}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+                {product.sizes.map((size) => (
+                  <tr key={size.key} className="transition-colors hover:bg-sand-50/60">
+                    <th scope="row" className="px-4 py-3.5 text-left font-medium text-ink-900 md:px-6">
+                      <span className="tabular-nums">{size.label}</span>
+                      <span className="block text-xs font-normal text-muted">{size.lengthNote}</span>
                     </th>
-                    <th scope="col" className="px-5 py-3 text-right font-semibold">
-                      {t.productPage.priceColumn}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-line">
-                  {group.prices.map((row) => (
-                    <tr key={row.code} className="transition-colors hover:bg-sand-50">
-                      <th scope="row" className="px-5 py-3.5 text-left font-medium text-ink-900">
-                        {row.label}
-                      </th>
-                      <td className="px-5 py-3.5 text-right tabular-nums">
-                        {row.price === null ? (
-                          <span className="chip">{t.common.onRequest}</span>
-                        ) : (
-                          <span className="font-semibold text-ink-900">
-                            € {formatNumber(row.price)}
-                          </span>
-                        )}
+                    {gradeCodes.map((code) => (
+                      <td key={code} className="px-4 py-3.5 text-right tabular-nums md:px-6">
+                        <span className="font-semibold whitespace-nowrap text-ink-900">
+                          {formatPrice(size.prices[code])}
+                        </span>
                       </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </Reveal>
-      ))}
-
-      <p className="max-w-3xl text-xs leading-relaxed text-muted">{t.productPage.priceFootnote}</p>
-    </div>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            ))}
+          </table>
+        </div>
+      </div>
+      <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted">{t.priceList.footnote}</p>
+    </Reveal>
   )
 }

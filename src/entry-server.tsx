@@ -21,7 +21,7 @@ import type { Locale } from './i18n/types'
 
 /** Every URL the build should emit, with the logical path it renders. */
 export interface PrerenderTarget {
-  /** URL as served, e.g. `/uk/products/oak-edged-boards`. */
+  /** URL as served, e.g. `/uk/products/oak-chevron-parquet`. */
   url: string
   locale: Locale
   /** Locale-independent path the head is keyed off. */

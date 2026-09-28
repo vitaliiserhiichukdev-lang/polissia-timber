@@ -3,6 +3,28 @@
   "buildCommand": "yarn build",
   "outputDirectory": "dist",
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/products/oak-parquet-boards",
+      "destination": "/products/oak-chevron-parquet",
+      "permanent": true
+    },
+    {
+      "source": "/:locale(de|pl|uk)/products/oak-parquet-boards",
+      "destination": "/:locale/products/oak-chevron-parquet",
+      "permanent": true
+    },
+    {
+      "source": "/products/:slug(oak-edged-boards|pine-construction-timber)",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/:locale(de|pl|uk)/products/:slug(oak-edged-boards|pine-construction-timber)",
+      "destination": "/:locale",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
